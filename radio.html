@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Church Radio - Church of Christ, Aka Road</title>
+    <meta name="description" content="Learn about the Church of Christ, Aka Road radio station. Coming soon with spiritual content for the community.">
+    
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <style>
+        .radio-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .radio-main {
+            background: linear-gradient(135deg, #1e3a8a 0%, #003d82 100%);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            text-align: center;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .radio-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .radio-status {
+            background: #e5e7eb;
+            color: #666;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: #d4af37;
+            color: #1e3a8a;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .radio-info-section {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid #d4af37;
+        }
+
+        .radio-info-section h3 {
+            margin-top: 0;
+            color: #1e3a8a;
+        }
+
+        .info-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: left;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-item h4 {
+            margin: 0 0 0.5rem 0;
+            color: #1e3a8a;
+        }
+
+        .info-item p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .info-item strong {
+            color: #1e3a8a;
+        }
+
+        .notification-banner {
+            background: #fff3cd;
+            border: 1px solid #ffecb5;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .notification-banner h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+
+        .notification-banner p {
+            color: #856404;
+            margin: 0.5rem 0 0 0;
+        }
+
+        .about-radio {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 3rem;
+        }
+
+        .about-radio h3 {
+            color: #1e3a8a;
+        }
+
+        .about-radio p {
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .contact-cta {
+            background: #1e3a8a;
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .contact-cta h3 {
+            margin-top: 0;
+            color: white;
+        }
+
+        .contact-cta p {
+            margin: 1rem 0;
+        }
+
+        .contact-cta a {
+            display: inline-block;
+            background: #d4af37;
+            color: #1e3a8a;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .contact-cta a:hover {
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 1000px) {
+            .radio-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .schedule-table th {
+            background: #1e3a8a;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .schedule-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+            color: #555;
+        }
+
+        .schedule-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .schedule-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .frequency-badge {
+            background: #d4af37;
+            color: #1e3a8a;
+            padding: 0.3rem 0.7rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .time-badge {
+            background: #e8f4f8;
+            color: #1e3a8a;
+            padding: 0.3rem 0.7rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .radio-main {
+                padding: 2rem 1rem;
+            }
+
+            .radio-icon {
+                font-size: 3rem;
+            }
+
+            .schedule-table {
+                font-size: 0.9rem;
+            }
+
+            .schedule-table th,
+            .schedule-table td {
+                padding: 0.75rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <img src="img/CHURCH LOGO PNG.png" alt="Church of Christ Logo" class="logo-image">
+                </div>
+                <button class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="about.html" class="nav-link">About</a></li>
+                    <li><a href="sermons.html" class="nav-link">Sermons</a></li>
+                    <li><a href="events.html" class="nav-link">Events</a></li>
+                    <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+                    <li><a href="livestream.html" class="nav-link">Livestream</a></li>
+                    <li><a href="radio.html" class="nav-link active">Radio</a></li>
+                    <li><a href="give.html" class="nav-link highlight">Give</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="header-content">
+            <h1 class="fade-in-up">Church of Christ Radio</h1>
+            <p class="fade-in-up" style="animation-delay: 0.2s">Bringing spiritual content to our community</p>
+        </div>
+    </header>
+
+    <!-- Notification Banner -->
+    <section class="section">
+        <div class="container">
+            <div class="notification-banner scroll-reveal">
+                <h4>📻 Now Broadcasting</h4>
+                <p>Church of Christ, Aka Road is now live on multiple radio stations! Tune in to hear our sermons, Bible studies, and spiritual programs.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Radio Section -->
+    <section class="section">
+        <div class="container">
+            <div class="radio-container">
+                <!-- Radio Info -->
+                <div class="scroll-reveal">
+                    <div class="radio-main">
+                        <div class="radio-icon">📻</div>
+                        <h2>Church of Christ Radio Station</h2>
+                        <p style="font-size: 1rem; margin: 1rem 0;">Spreading God's Word Through the Airwaves</p>
+                        <div class="status-badge">Now LIVE</div>
+                        <p style="font-style: italic; color: #e0e0e0;">Available on multiple FM frequencies throughout the week</p>
+                    </div>
+                </div>
+
+                <!-- Sidebar Information -->
+                <div class="scroll-reveal" style="animation-delay: 0.1s;">
+                    <div class="radio-info-section">
+                        <h3>📡 Broadcast Schedule</h3>
+                        
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th>Radio Station</th>
+                                    <th>Frequency</th>
+                                    <th>Broadcast Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Atlantic FM</strong></td>
+                                    <td><span class="frequency-badge">104.5 FM</span></td>
+                                    <td><span class="time-badge">Sunday 8:00 AM</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Planet FM</strong></td>
+                                    <td><span class="frequency-badge">101.1 FM</span></td>
+                                    <td><span class="time-badge">Tuesday 6:15 PM</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>XL FM</strong></td>
+                                    <td><span class="frequency-badge">106.9 FM</span></td>
+                                    <td><span class="time-badge">Wednesday 6:45 PM</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tangsió FM</strong></td>
+                                    <td><span class="frequency-badge">102.7 FM</span></td>
+                                    <td><span class="time-badge">Friday 7:15 PM</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Details Section -->
+    <section class="section">
+        <div class="container">
+            <div class="about-radio scroll-reveal">
+                <h3>Our Radio Ministry</h3>
+                <p>
+                    Church of Christ, Aka Road is excited to announce our radio broadcasting initiative! Through partnerships with local FM stations, we're bringing inspiring spiritual content directly into the homes and cars of our community members throughout the week.
+                </p>
+                <p>
+                    Our radio programs feature:
+                </p>
+                <ul style="color: #555; line-height: 2;">
+                    <li>✓ Powerful sermons and biblical teachings</li>
+                    <li>✓ Inspirational worship music</li>
+                    <li>✓ Testimonies of faith and transformation</li>
+                    <li>✓ Practical spiritual guidance</li>
+                    <li>✓ Community announcements and event updates</li>
+                </ul>
+                <p>
+                    <strong>Tune in on any of the listed stations at the scheduled times above</strong> to join us for fellowship and spiritual growth.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact CTA -->
+    <section class="section">
+        <div class="container">
+            <div class="contact-cta scroll-reveal">
+                <h3>Join Us on the Radio</h3>
+                <p>Tune in to any of our broadcast stations at the scheduled times above. Have questions? Get in touch with us!</p>
+                <a href="contact.html">Contact Us</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Church of Christ, Aka Road</h4>
+                    <p>Spreading God's love through community, fellowship, and authentic ministry.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="sermons.html">Sermons</a></li>
+                        <li><a href="events.html">Events</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <p>
+                        📍 Aka Road, Uyo<br>
+                        📞 <a href="tel:+234812209800">+234 812 209 8001</a><br>
+                        📧 <a href="mailto:coc144akaroad@gmail.com">coc144akaroad@gmail.com</a>
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Church of Christ, Aka Road, Uyo. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
