@@ -1,0 +1,731 @@
+/* ===================================
+   RESPONSIVE DESIGN
+   =================================== */
+
+/* ===================================
+   TABLET BREAKPOINT (768px)
+   =================================== */
+
+@media (max-width: 768px) {
+    body {
+        font-size: 15px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    .container {
+        padding: 0 1.5rem;
+    }
+
+    .section {
+        padding: 2.5rem 0;
+    }
+
+    /* Navigation */
+    .nav-menu {
+        gap: 1rem;
+    }
+
+    .nav-link.highlight {
+        padding: 0.4rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .hamburger.active span:nth-child(1) {
+        transform: rotate(-45deg) translate(-6px, 8px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+        transform: rotate(45deg) translate(-6px, -7px);
+    }
+
+    .nav-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        flex-direction: column;
+        padding: 1rem;
+        gap: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .nav-menu.active {
+        max-height: 500px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-menu li {
+        padding: 1rem;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .nav-menu li:last-child {
+        border-bottom: none;
+    }
+
+    /* Hero */
+    .hero {
+        height: auto;
+        padding: 4rem 0;
+        margin-top: 50px;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    /* Two Column Layouts */
+    .two-column,
+    .about-content,
+    .contact-grid,
+    .sermon-card {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    /* Quick Info */
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    /* Gallery Grid */
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    /* Timeline */
+    .history-timeline::before {
+        left: 20px;
+    }
+
+    .timeline-item,
+    .timeline-item:nth-child(odd),
+    .timeline-item:nth-child(even) {
+        width: 100%;
+        margin-left: 0;
+        text-align: left;
+        padding-left: 60px;
+        position: relative;
+    }
+
+    .timeline-dot {
+        left: 20px;
+    }
+
+    /* Events Grid */
+    .events-grid,
+    .events-detailed-grid,
+    .values-grid,
+    .ministry-sections,
+    .beliefs-list,
+    .series-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    /* Team Grid */
+    .team-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    /* Newsletter */
+    .newsletter-form {
+        flex-direction: column;
+    }
+
+    .newsletter-form input,
+    .newsletter-form button {
+        width: 100%;
+    }
+
+    /* Sermon Card */
+    .sermon-list-item {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .sermon-list-image {
+        min-height: 200px;
+    }
+
+    /* Footer */
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .footer-section {
+        text-align: center;
+    }
+
+    .social-links {
+        justify-content: center;
+    }
+
+    /* Page Header */
+    .page-header {
+        padding: 100px 1.5rem 2rem;
+    }
+
+    .page-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .page-header p {
+        font-size: 0.95rem;
+    }
+
+    /* Donation Container */
+    .donation-container {
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+    }
+
+    .amount-buttons {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+    }
+
+    .amount-btn {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .donation-methods {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+
+    .method-card {
+        padding: 1rem;
+    }
+
+    .method-icon {
+        font-size: 1.5rem;
+    }
+
+    .method-name {
+        font-size: 0.85rem;
+    }
+
+    /* Contact Form */
+    .contact-form-wrapper,
+    .contact-info {
+        padding: 0;
+    }
+
+    /* Map */
+    .map-container {
+        height: 300px;
+    }
+
+    /* Lightbox */
+    .lightbox-image {
+        max-height: 70vh;
+    }
+
+    .lightbox-close {
+        top: 10px;
+        right: 15px;
+        font-size: 2rem;
+    }
+
+    .lightbox-nav button {
+        padding: 0.5rem;
+        font-size: 1rem;
+    }
+}
+
+/* ===================================
+   MOBILE BREAKPOINT (480px)
+   =================================== */
+
+@media (max-width: 480px) {
+    html,
+    body {
+        font-size: 14px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+        line-height: 1.3;
+    }
+
+    h2 {
+        font-size: 1.2rem;
+    }
+
+    h3 {
+        font-size: 1rem;
+    }
+
+    .container {
+        padding: 0 1rem;
+    }
+
+    .section {
+        padding: 1.5rem 0;
+    }
+
+    .section-header {
+        margin-bottom: 1.5rem;
+    }
+
+    /* Navigation */
+    .navbar {
+        z-index: 999;
+    }
+
+    .nav-content {
+        flex-wrap: wrap;
+        padding: 0.8rem 0;
+    }
+
+    .logo {
+        font-size: 1.1rem;
+        gap: 0.3rem;
+    }
+
+    .logo-symbol {
+        font-size: 1.5rem;
+    }
+
+    .logo-text {
+        display: none;
+    }
+
+    /* Hero */
+    .hero {
+        margin-top: 45px;
+        padding: 3rem 1rem;
+    }
+
+    .hero-title {
+        font-size: 1.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Buttons */
+    .btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .btn-large {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    /* Cards */
+    .info-card {
+        padding: 1rem;
+    }
+
+    .value-card,
+    .belief-item,
+    .timeline-content,
+    .ministry-card {
+        padding: 1rem;
+    }
+
+    /* Event Card */
+    .event-card {
+        padding: 1rem;
+    }
+
+    .event-date {
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .date-day {
+        font-size: 1.3rem;
+    }
+
+    /* Sermon Cards */
+    .sermon-card,
+    .sermon-list-item {
+        grid-template-columns: 1fr;
+    }
+
+    .sermon-list-image {
+        min-height: 150px;
+    }
+
+    .sermon-info,
+    .sermon-list-info {
+        padding: 1.5rem 1rem;
+    }
+
+    /* Gallery */
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+
+    /* Form Elements */
+    .two-column {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 0.6rem;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+
+    .custom-amount {
+        flex-direction: column;
+    }
+
+    .custom-amount span {
+        display: none;
+    }
+
+    .custom-amount input::before {
+        content: '$';
+    }
+
+    /* Newsletter Form */
+    .newsletter-form {
+        gap: 0.5rem;
+    }
+
+    .newsletter-form input {
+        padding: 0.6rem;
+    }
+
+    /* Donation Methods */
+    .donation-methods {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .method-card {
+        padding: 0.75rem;
+    }
+
+    .method-icon {
+        font-size: 1.2rem;
+    }
+
+    .method-name {
+        font-size: 0.75rem;
+    }
+
+    /* Footer */
+    .footer {
+        padding: 2rem 0 0.5rem;
+    }
+
+    .footer-section {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .footer-section h3 {
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .footer-section p,
+    .footer-section ul li {
+        font-size: 0.85rem;
+    }
+
+    .footer-bottom {
+        padding-top: 1rem;
+        font-size: 0.8rem;
+    }
+
+    /* Page Header */
+    .page-header {
+        padding: 80px 1rem 1.5rem;
+    }
+
+    .page-header h1 {
+        font-size: 1.3rem;
+    }
+
+    .page-header p {
+        font-size: 0.85rem;
+    }
+
+    /* Lightbox */
+    .lightbox-close {
+        font-size: 1.5rem;
+        top: 5px;
+        right: 10px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .lightbox-nav {
+        padding: 0 10px;
+    }
+
+    .lightbox-nav button {
+        padding: 0.4rem;
+        font-size: 1rem;
+        width: 40px;
+        height: 40px;
+        min-width: unset;
+    }
+
+    /* Status Messages */
+    .error-message {
+        font-size: 0.75rem;
+    }
+
+    /* Animations */
+    .fade-in-up,
+    .scroll-reveal,
+    .slide-in-left,
+    .slide-in-right {
+        animation-duration: 0.5s;
+    }
+
+    /* Reduced blur for performance */
+    .info-card {
+        backdrop-filter: none;
+    }
+
+    /* Contact Details */
+    .event-details {
+        padding: 0.75rem;
+        margin: 0.75rem 0;
+    }
+
+    .event-details p {
+        font-size: 0.85rem;
+        margin-bottom: 0.25rem;
+    }
+
+    /* Donation Form */
+    .donation-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .donation-section h3 {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .amount-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+
+    .amount-btn {
+        padding: 0.6rem 0.3rem;
+        font-size: 0.8rem;
+    }
+
+    .donation-frequency {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .frequency-option {
+        justify-content: flex-start;
+    }
+
+    /* Series Cards */
+    .series-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .series-card {
+        padding: 1rem;
+    }
+}
+
+/* ===================================
+   SMALL PHONES (320px and below)
+   =================================== */
+
+@media (max-width: 320px) {
+    .container {
+        padding: 0 0.75rem;
+    }
+
+    h1 {
+        font-size: 1.2rem;
+    }
+
+    h2 {
+        font-size: 1rem;
+    }
+
+    .btn {
+        font-size: 0.8rem;
+        padding: 0.5rem 0.8rem;
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+
+    .amount-buttons {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-title {
+        font-size: 1.2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.8rem;
+    }
+}
+
+/* ===================================
+   LANDSCAPE ORIENTATION
+   =================================== */
+
+@media (max-height: 500px) {
+    .hero {
+        height: auto;
+        padding: 2rem 0;
+        margin-top: 50px;
+    }
+
+    .hero-title {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+
+    .hero-buttons {
+        gap: 0.5rem;
+    }
+
+    /* Mobile Navigation in Landscape */
+    .nav-menu.active {
+        max-height: 300px;
+    }
+}
+
+/* ===================================
+   PRINT STYLES
+   =================================== */
+
+@media print {
+    .navbar,
+    .hamburger,
+    .newsletter,
+    .cta-section,
+    .footer {
+        display: none;
+    }
+
+    body {
+        background: white;
+        color: black;
+    }
+
+    a {
+        color: #1e3a8a;
+        text-decoration: underline;
+    }
+
+    .btn {
+        border: 2px solid #333;
+        color: #000;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        page-break-after: avoid;
+    }
+
+    p {
+        orphans: 3;
+        widows: 3;
+    }
+}
+
+/* ===================================
+   DARK MODE (if implemented)
+   =================================== */
+
+@media (prefers-color-scheme: dark) {
+    /* Users with dark mode preference can add dark styles here */
+}
+
+/* ===================================
+   REDUCED MOTION
+   =================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ===================================
+   HIGH CONTRAST MODE
+   =================================== */
+
+@media (prefers-contrast: more) {
+    .btn {
+        border-width: 3px;
+    }
+
+    .info-card {
+        border: 2px solid #1e3a8a;
+    }
+}

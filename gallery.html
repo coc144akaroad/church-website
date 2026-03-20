@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Church of Christ, Aka Road, Uyo</title>
+    <meta name="description" content="View photos and memories from Church of Christ, Aka Road, Uyo events and community gatherings.">
+    
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <style>
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            aspect-ratio: 1;
+            cursor: pointer;
+            background: #f0f0f0;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(30, 58, 138, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-icon {
+            font-size: 2.5rem;
+            color: white;
+            animation: bounce 0.6s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Lightbox Modal */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-image {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+        }
+
+        .lightbox-caption {
+            color: white;
+            margin-top: 1rem;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            color: white;
+            font-size: 3rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            background: none;
+            border: none;
+            padding: 0;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-close:hover {
+            color: #d4af37;
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        .lightbox-nav button {
+            pointer-events: all;
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            border: none;
+            padding: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background 0.3s ease;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-nav button:hover {
+            background: rgba(212, 175, 55, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <img src="img/CHURCH LOGO PNG.png" alt="Church of Christ Logo" class="logo-image">
+                </div>
+                <button class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="about.html" class="nav-link">About</a></li>
+                    <li><a href="sermons.html" class="nav-link">Sermons</a></li>
+                    <li><a href="events.html" class="nav-link">Events</a></li>
+                    <li><a href="gallery.html" class="nav-link active">Gallery</a></li>
+                    <li><a href="livestream.html" class="nav-link">Livestream</a></li>
+                    <li><a href="give.html" class="nav-link highlight">Give</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="header-content">
+            <h1 class="fade-in-up">Church Gallery</h1>
+            <p class="fade-in-up" style="animation-delay: 0.2s">Memories from our community and events</p>
+        </div>
+    </header>
+
+    <!-- Gallery Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="scroll-reveal">Photo Gallery</h2>
+            </div>
+            
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Gallery items will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox Modal -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+            <div class="lightbox-nav">
+                <button onclick="previousImage()">❮</button>
+                <button onclick="nextImage()">❯</button>
+            </div>
+            <img class="lightbox-image" id="lightboxImage" src="" alt="Gallery image">
+            <div class="lightbox-caption" id="lightboxCaption"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Church of Christ<br>Aka Road, Uyo</h3>
+                    <p>Aka Road<br>Uyo, Akwa Ibom State<br>Nigeria</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Hours</h3>
+                    <p><strong>Sunday:</strong> 9:00 AM - 1:00 PM<br><strong>Tue/Thu:</strong> 6:00 PM - 7:30 PM<br><strong>Saturday:</strong> 6:00 PM - 7:00 PM</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="sermons.html">Sermons</a></li>
+                        <li><a href="events.html">Events</a></li>
+                        <li><a href="livestream.html">Livestream</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/churchofchristaka/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">f</a>
+                        <a href="https://www.instagram.com/coc_144akard/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">📷</a>
+                        <a href="https://x.com/coc_akaroad" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">𝕏</a>
+                        <a href="https://wa.me/2349090090481" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">💬</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 Church of Christ, Aka Road, Uyo. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/animations.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        // Gallery data with placeholder colors
+        const galleryItems = [
+            { id: 1, title: "Sunday Worship Service", emoji: "🙏", category: "Worship" },
+            { id: 2, title: "Community Outreach", emoji: "🤝", category: "Outreach" },
+            { id: 3, title: "Youth Group Activities", emoji: "🎉", category: "Youth" },
+            { id: 4, title: "Prayer Meeting", emoji: "📖", category: "Events" },
+            { id: 5, title: "Easter Celebration", emoji: "✝️", category: "Special" },
+            { id: 6, title: "Baptism Service", emoji: "💧", category: "Sacraments" },
+            { id: 7, title: "Church Choir", emoji: "🎵", category: "Music" },
+            { id: 8, title: "Community Dinner", emoji: "🍽️", category: "Fellowship" },
+            { id: 9, title: "Bible Study Group", emoji: "📚", category: "Education" },
+            { id: 10, title: "Mission Trip", emoji: "🌍", category: "Missions" },
+            { id: 11, title: "Children's Ministry", emoji: "👶", category: "Children" },
+            { id: 12, title: "Church Building", emoji: "🏢", category: "Facility" }
+        ];
+
+        let currentImageIndex = 0;
+
+        // Create placeholder image
+        function createPlaceholderImage(emoji, title) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 400;
+            canvas.height = 400;
+            const ctx = canvas.getContext('2d');
+            
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, 400, 400);
+            gradient.addColorStop(0, '#1e3a8a');
+            gradient.addColorStop(1, '#d4af37');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 400, 400);
+            
+            // Emoji
+            ctx.font = '120px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(emoji, 200, 180);
+            
+            // Title
+            ctx.font = '24px Arial';
+            ctx.fillStyle = 'white';
+            ctx.fillText(title, 200, 350);
+            
+            return canvas.toDataURL();
+        }
+
+        function renderGallery() {
+            const grid = document.getElementById('galleryGrid');
+            grid.innerHTML = '';
+
+            galleryItems.forEach((item, index) => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item scroll-reveal';
+                galleryItem.style.animationDelay = (index * 0.05) + 's';
+
+                const imageUrl = createPlaceholderImage(item.emoji, item.title);
+
+                galleryItem.innerHTML = `
+                    <img src="${imageUrl}" alt="${item.title}">
+                    <div class="gallery-overlay">
+                        <div class="gallery-icon">🔍</div>
+                    </div>
+                `;
+
+                galleryItem.addEventListener('click', () => openLightbox(index));
+                grid.appendChild(galleryItem);
+            });
+
+            initScrollReveal();
+        }
+
+        function openLightbox(index) {
+            currentImageIndex = index;
+            const item = galleryItems[index];
+            const imageUrl = createPlaceholderImage(item.emoji, item.title);
+            
+            document.getElementById('lightboxImage').src = imageUrl;
+            document.getElementById('lightboxCaption').textContent = item.title;
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function nextImage() {
+            currentImageIndex = (currentImageIndex + 1) % galleryItems.length;
+            openLightbox(currentImageIndex);
+        }
+
+        function previousImage() {
+            currentImageIndex = (currentImageIndex - 1 + galleryItems.length) % galleryItems.length;
+            openLightbox(currentImageIndex);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('lightbox').classList.contains('active')) {
+                if (e.key === 'ArrowRight') nextImage();
+                if (e.key === 'ArrowLeft') previousImage();
+                if (e.key === 'Escape') closeLightbox();
+            }
+        });
+
+        // Close lightbox when clicking outside the image
+        document.getElementById('lightbox').addEventListener('click', (e) => {
+            if (e.target.id === 'lightbox') closeLightbox();
+        });
+
+        renderGallery();
+    </script>
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events - Church of Christ, Aka Road</title>
+    <meta name="description" content="Discover upcoming events and gatherings at Church of Christ, Aka Road.">
+    
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <img src="img/CHURCH LOGO PNG.png" alt="Church of Christ Logo" class="logo-image">
+                </div>
+                <button class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="about.html" class="nav-link">About</a></li>
+                    <li><a href="sermons.html" class="nav-link">Sermons</a></li>
+                    <li><a href="events.html" class="nav-link active">Events</a></li>
+                    <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+                    <li><a href="livestream.html" class="nav-link">Livestream</a></li>
+                    <li><a href="give.html" class="nav-link highlight">Give</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="header-content">
+            <h1 class="fade-in-up">Upcoming Events</h1>
+            <p class="fade-in-up" style="animation-delay: 0.2s">Join us for worship, fellowship, and spiritual growth</p>
+        </div>
+    </header>
+
+    <!-- Events Section -->
+    <section class="section">
+        <div class="container">
+            <div class="events-detailed-grid" id="eventsGrid">
+                <!-- Events will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Church of Christ<br>Aka Road, Uyo</h3>
+                    <p>Aka Road<br>Uyo, Akwa Ibom State<br>Nigeria</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Hours</h3>
+                    <p><strong>Sunday:</strong> 9:00 AM - 1:00 PM<br><strong>Tue/Thu:</strong> 6:00 PM - 7:30 PM<br><strong>Saturday:</strong> 6:00 PM - 7:00 PM</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="sermons.html">Sermons</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="livestream.html">Livestream</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/churchofchristaka/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">f</a>
+                        <a href="https://www.instagram.com/coc_144akard/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">📷</a>
+                        <a href="https://x.com/coc_akaroad" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">𝕏</a>
+                        <a href="https://wa.me/2349090090481" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">💬</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 Church of Christ, Aka Road, Uyo. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/animations.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        // Event data
+        const events = [
+            {
+                id: 1,
+                title: "Sunday Morning Worship Service",
+                date: new Date(2026, 2, 22, 9, 0), // March 22, 2026 9:00 AM
+                endTime: "1:00 PM",
+                location: "Main Sanctuary, Aka Road",
+                category: "Worship",
+                description: "Vibrant worship, dynamic preaching, and powerful presence of the Holy Spirit. All are welcome to experience God's love.",
+                capacity: "500",
+                registered: "350",
+                image: "🙏"
+            }
+        ];
+
+        function formatCountdown(targetDate) {
+            const now = new Date();
+            const difference = targetDate - now;
+
+            if (difference < 0) {
+                return "Event Started";
+            }
+
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((difference / 1000 / 60) % 60);
+
+            if (days > 0) {
+                return `${days}d ${hours}h`;
+            } else if (hours > 0) {
+                return `${hours}h ${minutes}m`;
+            } else {
+                return `${minutes}m`;
+            }
+        }
+
+        function renderEvents() {
+            const grid = document.getElementById('eventsGrid');
+            grid.innerHTML = '';
+
+            events.forEach((event, index) => {
+                const card = document.createElement('div');
+                card.className = 'event-detailed-card scroll-reveal';
+                card.style.animationDelay = (index * 0.1) + 's';
+
+                const dateStr = event.date.toLocaleDateString('en-US', { 
+                    weekday: 'short', 
+                    month: 'short', 
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+                const timeStr = event.date.toLocaleTimeString('en-US', { 
+                    hour: '2-digit', 
+                    minute: '2-digit'
+                });
+
+                card.innerHTML = `
+                    <div class="event-card-header">
+                        <div class="event-image">${event.image}</div>
+                        <div class="event-meta">
+                            <span class="event-category">${event.category}</span>
+                            <div class="event-countdown" data-target="${event.date.getTime()}">
+                                ${formatCountdown(event.date)}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="event-card-body">
+                        <h3>${event.title}</h3>
+                        <div class="event-details">
+                            <p><strong>📅</strong> ${dateStr}</p>
+                            <p><strong>🕐</strong> ${timeStr} - ${event.endTime}</p>
+                            <p><strong>📍</strong> ${event.location}</p>
+                        </div>
+                        <p class="event-description">${event.description}</p>
+                        <div class="event-registration">
+                            <div class="registration-bar">
+                                <div class="registration-fill" style="width: ${(event.registered/event.capacity)*100}%"></div>
+                            </div>
+                            <span class="registration-text">${event.registered} of ${event.capacity} registered</span>
+                        </div>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+
+            // Update countdowns every minute
+            updateCountdowns();
+            setInterval(updateCountdowns, 60000);
+
+            initScrollReveal();
+        }
+
+        function updateCountdowns() {
+            const countdowns = document.querySelectorAll('[data-target]');
+            countdowns.forEach(el => {
+                const targetTime = parseInt(el.dataset.target);
+                const targetDate = new Date(targetTime);
+                el.textContent = formatCountdown(targetDate);
+            });
+        }
+
+        renderEvents();
+    </script>
+    <script src="js/script.js"></script>
+</body>
+</html>

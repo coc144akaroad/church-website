@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Worship & Bible Study - Church of Christ, Aka Road</title>
+    <meta name="description" content="Join us for live worship and Bible study sessions at Church of Christ, Aka Road, Uyo.">
+    
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <style>
+        .livestream-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .livestream-main {
+            aspect-ratio: 16 / 9;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .livestream-main iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .livestream-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1e3a8a 0%, #003d82 100%);
+            color: white;
+            font-size: 2rem;
+        }
+
+        .livestream-status {
+            background: #d4af37;
+            color: #1e3a8a;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+
+        .livestream-status.offline {
+            background: #e5e7eb;
+            color: #666;
+            animation: none;
+        }
+
+        .schedule-section {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid #d4af37;
+        }
+
+        .schedule-section h3 {
+            margin-top: 0;
+            color: #1e3a8a;
+        }
+
+        .schedule-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .schedule-item:last-child {
+            border-bottom: none;
+        }
+
+        .schedule-item h4 {
+            margin: 0 0 0.5rem 0;
+            color: #1e3a8a;
+        }
+
+        .schedule-item p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .join-button {
+            display: inline-block;
+            width: 100%;
+            padding: 1rem;
+            background: #1e3a8a;
+            color: white;
+            text-align: center;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .join-button:hover {
+            background: #003d82;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(30, 58, 138, 0.3);
+        }
+
+        .social-links-inline {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            justify-content: center;
+        }
+
+        .social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #1e3a8a;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            background: #d4af37;
+            color: #1e3a8a;
+            transform: translateY(-3px);
+        }
+
+        .about-livestream {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 3rem;
+        }
+
+        .about-livestream h3 {
+            color: #1e3a8a;
+        }
+
+        @media (max-width: 1000px) {
+            .livestream-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .livestream-main {
+                aspect-ratio: 16 / 9;
+            }
+
+            .livestream-placeholder {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <img src="img/CHURCH LOGO PNG.png" alt="Church of Christ Logo" class="logo-image">
+                </div>
+                <button class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="about.html" class="nav-link">About</a></li>
+                    <li><a href="sermons.html" class="nav-link">Sermons</a></li>
+                    <li><a href="events.html" class="nav-link">Events</a></li>
+                    <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+                    <li><a href="livestream.html" class="nav-link active">Livestream</a></li>
+                    <li><a href="give.html" class="nav-link highlight">Give</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="header-content">
+            <h1 class="fade-in-up">Live Worship & Bible Study</h1>
+            <p class="fade-in-up" style="animation-delay: 0.2s">Join us online for spiritual growth and fellowship</p>
+        </div>
+    </header>
+
+    <!-- Main Livestream Section -->
+    <section class="section">
+        <div class="container">
+            <div class="livestream-container">
+                <!-- Livestream Video -->
+                <div class="scroll-reveal">
+                    <div class="livestream-status">🔴 LIVE NOW</div>
+                    <div class="livestream-main">
+                        <!-- Facebook Livestream Embed -->
+                        <iframe 
+                            src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fchurchofchristaka%2Fvideos%2F&show_text=0&width=500" 
+                            width="500" 
+                            height="281" 
+                            style="border:none;overflow:hidden" 
+                            scrolling="no" 
+                            frameborder="0" 
+                            allowfullscreen="true" 
+                            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                            title="Church of Christ Facebook Livestream">
+                        </iframe>
+                    </div>
+                    <p style="margin-top: 1rem; color: #666; text-align: center;">
+                        Not seeing the stream? <a href="https://www.facebook.com/churchofchristaka/" target="_blank" rel="noopener noreferrer">Visit our Facebook page</a>
+                    </p>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="scroll-reveal" style="animation-delay: 0.1s;">
+                    <div class="schedule-section">
+                        <h3>📅 Worship Activities</h3>
+                        
+                        <div class="schedule-item">
+                            <h4>Sunday Worship Service</h4>
+                            <p>Every Sunday<br>9:00 AM - 1:00 PM WAT</p>
+                        </div>
+
+                        <div class="schedule-item">
+                            <h4>Tuesday Bible Class</h4>
+                            <p>Every Tuesday<br>6:00 PM - 7:30 PM WAT</p>
+                        </div>
+
+                        <div class="schedule-item">
+                            <h4>Thursday Bible Class</h4>
+                            <p>Every Thursday<br>6:00 PM - 7:30 PM WAT</p>
+                        </div>
+
+                        <div class="schedule-item">
+                            <h4>Saturday Song Class</h4>
+                            <p>Every Saturday<br>6:00 PM - 7:00 PM WAT</p>
+                        </div>
+
+                        <a href="https://www.facebook.com/churchofchristaka/" target="_blank" rel="noopener noreferrer" class="join-button">Follow on Facebook</a>
+                    </div>
+
+                    <div class="schedule-section" style="margin-top: 1.5rem; border-left-color: #d4af37;">
+                        <h3>💬 Counselling Sessions</h3>
+                        <div class="schedule-item">
+                            <p><strong>2nd Monday of Month:</strong><br>5:00 PM - 6:30 PM WAT</p>
+                        </div>
+                        <div class="schedule-item">
+                            <p><strong>Tuesday & Thursday:</strong><br>5:00 PM - 6:00 PM WAT</p>
+                        </div>
+                        <p style="font-size: 0.9rem; color: #666; margin-top: 1rem; border-top: 1px solid #e0e0e0; padding-top: 1rem;">Professional counselling support available for spiritual guidance and personal growth.</p>
+                    </div>
+
+                    <div class="schedule-section" style="margin-top: 1.5rem; border-left-color: #1e3a8a;">
+                        <h3>📞 Contact Us</h3>
+                        <p><strong>Phone:</strong> <a href="tel:+234812209800" style="color: #1e3a8a; text-decoration: none;">+234 812 209 8001</a></p>
+                        <p><strong>WhatsApp:</strong> <a href="https://wa.me/2349090090481" target="_blank" rel="noopener noreferrer" style="color: #1e3a8a; text-decoration: none;">+234 909 009 0481</a></p>
+                        <p><strong>Email:</strong> <a href="mailto:coc144akaroad@gmail.com" style="color: #1e3a8a; text-decoration: none;">coc144akaroad@gmail.com</a></p>
+                        <p><strong>Location:</strong> Aka Road, Uyo<br>Akwa Ibom State, Nigeria</p>
+                    </div>
+
+                    <div class="social-links-inline">
+                        <a href="https://www.facebook.com/churchofchristaka/" target="_blank" rel="noopener noreferrer" class="social-icon" title="Facebook">f</a>
+                        <a href="https://www.instagram.com/coc_144akard/" target="_blank" rel="noopener noreferrer" class="social-icon" title="Instagram">📷</a>
+                        <a href="https://x.com/coc_akaroad" target="_blank" rel="noopener noreferrer" class="social-icon" title="X (Twitter)">𝕏</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Livestream -->
+    <section class="section">
+        <div class="container">
+            <div class="about-livestream scroll-reveal">
+                <h3>Join Our Online Community</h3>
+                <p>
+                    Whether you're near or far, you can join us for spiritual growth and fellowship. Our livestreams bring dynamic worship, inspiring messages, and prayer to your home. 
+                </p>
+                <p>
+                    <strong>What to Expect:</strong>
+                </p>
+                <ul style="color: #666; line-height: 1.8;">
+                    <li>✨ Uplifting worship and praise</li>
+                    <li>📖 Biblical teaching and scripture study</li>
+                    <li>🙏 Powerful prayer times</li>
+                    <li>👥 Community fellowship and interaction</li>
+                    <li>💪 Spiritual encouragement and growth</li>
+                </ul>
+                <p style="margin-top: 1.5rem;">
+                    We believe that distance is no barrier to spiritual connection. Join thousands who are experiencing God's presence through our online services.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Church of Christ, Aka Road</h3>
+                    <p>Aka Road<br>Uyo, Akwa Ibom State<br>Nigeria</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Service Times</h3>
+                    <p><strong>Sunday:</strong> 9:00 AM - 1:00 PM<br><strong>Tue/Thu:</strong> 6:00 PM - 7:30 PM<br><strong>Saturday:</strong> 6:00 PM - 7:00 PM</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="sermons.html">Sermons</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="events.html">Events</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/churchofchristaka/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">f</a>
+                        <a href="https://www.instagram.com/coc_144akard/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">📷</a>
+                        <a href="https://x.com/coc_akaroad" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">𝕏</a>
+                        <a href="https://wa.me/2349090090481" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">💬</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 Church of Christ, Aka Road, Uyo. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/animations.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

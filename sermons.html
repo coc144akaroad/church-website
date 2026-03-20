@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sermons - Church of Christ, Aka Road, Uyo</title>
+    <meta name="description" content="Browse our sermon library featuring biblical teaching and spiritual growth resources.">
+    
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <img src="img/CHURCH LOGO PNG.png" alt="Church of Christ Logo" class="logo-image">
+                </div>
+                <button class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="about.html" class="nav-link">About</a></li>
+                    <li><a href="sermons.html" class="nav-link active">Sermons</a></li>
+                    <li><a href="events.html" class="nav-link">Events</a></li>
+                    <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+                    <li><a href="livestream.html" class="nav-link">Livestream</a></li>
+                    <li><a href="give.html" class="nav-link highlight">Give</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="header-content">
+            <h1 class="fade-in-up">Sermon Library</h1>
+            <p class="fade-in-up" style="animation-delay: 0.2s">Biblical teaching for spiritual growth</p>
+        </div>
+    </header>
+
+    <!-- Sermons Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="scroll-reveal">Recent Sermons</h2>
+                <p class="scroll-reveal">Explore our latest messages on faith, hope, and biblical truth</p>
+            </div>
+            
+            <div class="sermons-list" id="sermonsList">
+                <!-- Sermons will be dynamically loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Series Section -->
+    <section class="section alternate-bg">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="scroll-reveal">Sermon Series</h2>
+            </div>
+            
+            <div class="series-grid">
+                <div class="series-card scroll-reveal">
+                    <h3>Living Abundantly</h3>
+                    <p class="series-count">8 Sermons</p>
+                    <p>How to experience the fullness of life that Jesus promised.</p>
+                    <button class="btn btn-secondary" onclick="filterSeriesSeries('Living Abundantly')">View Series</button>
+                </div>
+                
+                <div class="series-card scroll-reveal" style="animation-delay: 0.1s">
+                    <h3>Faith Foundations</h3>
+                    <p class="series-count">6 Sermons</p>
+                    <p>Building a strong spiritual foundation rooted in God's Word.</p>
+                    <button class="btn btn-secondary" onclick="filterSeriesSeries('Faith Foundations')">View Series</button>
+                </div>
+                
+                <div class="series-card scroll-reveal" style="animation-delay: 0.2s">
+                    <h3>The Gospel Story</h3>
+                    <p class="series-count">12 Sermons</p>
+                    <p>Journey through the life and teachings of Jesus Christ.</p>
+                    <button class="btn btn-secondary" onclick="filterSeriesSeries('The Gospel Story')">View Series</button>
+                </div>
+                
+                <div class="series-card scroll-reveal" style="animation-delay: 0.3s">
+                    <h3>Grace in Action</h3>
+                    <p class="series-count">5 Sermons</p>
+                    <p>Practical applications of God's grace in everyday life.</p>
+                    <button class="btn btn-secondary" onclick="filterSeriesSeries('Grace in Action')">View Series</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Church of Christ<br>Aka Road, Uyo</h3>
+                    <p>Aka Road<br>Uyo, Akwa Ibom State<br>Nigeria</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Hours</h3>
+                    <p><strong>Sunday:</strong> 9:00 AM - 1:00 PM<br><strong>Tue/Thu:</strong> 6:00 PM - 7:30 PM<br><strong>Saturday:</strong> 6:00 PM - 7:00 PM</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="sermons.html">Sermons</a></li>
+                        <li><a href="events.html">Events</a></li>
+                        <li><a href="livestream.html">Livestream</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/churchofchristaka/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">f</a>
+                        <a href="https://www.instagram.com/coc_144akard/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">📷</a>
+                        <a href="https://x.com/coc_akaroad" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">𝕏</a>
+                        <a href="https://wa.me/2349090090481" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">💬</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 Church of Christ, Aka Road, Uyo. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/animations.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        // Sample sermon data
+        const sermons = [
+            {
+                id: 1,
+                title: "Living by Faith, Not by Sight",
+                speaker: "Pastor John Smith",
+                date: "March 20, 2026",
+                series: "Faith Foundations",
+                description: "Discover how to navigate life's uncertainties through unwavering faith in God's promises. This powerful message explores 2 Corinthians 5:7 and offers practical insights for daily Christian living.",
+                videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                audioUrl: "#"
+            },
+            {
+                id: 2,
+                title: "The Power of Prayer",
+                speaker: "Pastor Sarah Johnson",
+                date: "March 13, 2026",
+                series: "Faith Foundations",
+                description: "Learn how prayer transforms our relationship with God and impacts the world around us. Discover the principles of effective prayer and how to develop a dynamic prayer life.",
+                videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                audioUrl: "#"
+            },
+            {
+                id: 3,
+                title: "Grace That Sustains",
+                speaker: "Pastor John Smith",
+                date: "March 6, 2026",
+                series: "Grace in Action",
+                description: "God's grace is not just for salvation; it sustains us daily. Explore how grace empowers us to overcome challenges and live victoriously in Christ.",
+                videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                audioUrl: "#"
+            },
+            {
+                id: 4,
+                title: "Finding Your Purpose",
+                speaker: "Pastor Michael Chen",
+                date: "February 27, 2026",
+                series: "Living Abundantly",
+                description: "Discover how to align your life with God's purpose and experience the joy of fulfilling His call on your life.",
+                videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                audioUrl: "#"
+            },
+            {
+                id: 5,
+                title: "The Resurrection Hope",
+                speaker: "Pastor John Smith",
+                date: "February 20, 2026",
+                series: "The Gospel Story",
+                description: "The resurrection of Jesus is the foundation of our faith. Understand what the resurrection means for our present and future.",
+                videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                audioUrl: "#"
+            },
+            {
+                id: 6,
+                title: "Love in Action",
+                speaker: "Pastor Sarah Johnson",
+                date: "February 13, 2026",
+                series: "Living Abundantly",
+                description: "Love is more than a feeling; it's a choice and an action. Learn how to express God's love authentically in your relationships.",
+                videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                audioUrl: "#"
+            }
+        ];
+
+        function renderSermons(sermonsToShow = sermons) {
+            const list = document.getElementById('sermonsList');
+            list.innerHTML = '';
+            
+            sermonsToShow.forEach((sermon, index) => {
+                const card = document.createElement('div');
+                card.className = 'sermon-list-item scroll-reveal';
+                card.style.animationDelay = (index * 0.1) + 's';
+                
+                card.innerHTML = `
+                    <div class="sermon-list-image">
+                        <div class="video-placeholder">
+                            <div class="play-icon-large">▶</div>
+                        </div>
+                    </div>
+                    <div class="sermon-list-info">
+                        <p class="sermon-series">${sermon.series}</p>
+                        <h3>${sermon.title}</h3>
+                        <p class="sermon-speaker">${sermon.speaker}</p>
+                        <p class="sermon-date">${sermon.date}</p>
+                        <p class="sermon-text">${sermon.description}</p>
+                        <div class="sermon-actions">
+                            <a href="${sermon.videoUrl}" target="_blank" class="btn btn-secondary">Watch Video</a>
+                            <a href="#" onclick="showSermonContent()" class="btn btn-text">Read Sermon Content</a>
+                        </div>
+                    </div>
+                `;
+                
+                list.appendChild(card);
+            });
+            
+            // Reinitialize scroll reveal animations
+            initScrollReveal();
+        }
+
+        function filterSeriesSeries(series) {
+            const filtered = sermons.filter(s => s.series === series);
+            renderSermons(filtered);
+            document.querySelector('.sermons-list').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Initial render
+        renderSermons();
+    </script>
+    <script src="js/script.js"></script>
+</body>
+</html>
