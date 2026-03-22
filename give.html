@@ -250,137 +250,35 @@
                 </div>
             </div>
 
-            <!-- Donation Form -->
-            <div class="donation-container scroll-reveal" style="margin-top: 3rem;">
-                <form id="donationForm" onsubmit="handleDonationSubmit(event)">
-                    <!-- Donation Amount Section -->
-                    <div class="donation-section">
-                        <h3>Select Amount</h3>
-                        <div class="amount-buttons">
-                            <button type="button" class="amount-btn" onclick="selectAmount(25)">$25</button>
-                            <button type="button" class="amount-btn" onclick="selectAmount(50)">$50</button>
-                            <button type="button" class="amount-btn" onclick="selectAmount(100)">$100</button>
-                            <button type="button" class="amount-btn" onclick="selectAmount(250)">$250</button>
-                            <button type="button" class="amount-btn" onclick="selectAmount(500)">$500</button>
-                            <button type="button" class="amount-btn" onclick="selectAmount('custom')">Custom</button>
-                        </div>
-                        <div class="custom-amount" id="customAmount" style="display: none;">
-                            <span>$</span>
-                            <input type="number" id="customAmountInput" placeholder="Enter amount" min="1" step="0.01">
-                        </div>
-                        <input type="hidden" id="selectedAmount" value="25">
-                    </div>
+            <!-- Donation Form Removed as Requested -->
+            <div class="donation-container scroll-reveal" style="margin-top: 3rem; text-align: center;">
+                <h2>Thank you for your interest in giving.</h2>
+                <p style="max-width: 700px; margin: 1rem auto; color: #333;">
+                    The donation form has been taken down. For giving support, please use bank transfer directly to our account below or contact us at <a href="mailto:info@churchofchristakaroad.org">info@churchofchristakaroad.org</a>.
+                </p>
+                <div style="background: #f8f9fa; border-radius: 10px; padding: 1.5rem; display: inline-block; text-align: left; max-width: 700px;">
+                    <p style="margin: .25rem 0;"><strong>Account Name:</strong> CHURCH OF CHRIST 144 AKA ROAD</p>
+                    <p style="margin: .25rem 0;"><strong>Bank Name:</strong> Zenith Bank PLC</p>
+                    <p style="margin: .25rem 0;"><strong>SWIFT:</strong> ZENITHBNK</p>
 
-                    <!-- Donation Frequency -->
-                    <div class="donation-section">
-                        <h3>Donation Frequency</h3>
-                        <div class="donation-frequency">
-                            <label class="frequency-option">
-                                <input type="radio" name="frequency" value="one-time" checked>
-                                <span>One-time Donation</span>
-                            </label>
-                            <label class="frequency-option">
-                                <input type="radio" name="frequency" value="monthly">
-                                <span>Monthly Giving</span>
-                            </label>
-                            <label class="frequency-option">
-                                <input type="radio" name="frequency" value="yearly">
-                                <span>Yearly Giving</span>
-                            </label>
-                        </div>
-                    </div>
+                    <label for="fundCategory" style="display: block; margin-top: 1rem; font-weight: 600;">Select transfer category:</label>
+                    <select id="fundCategory" style="width: 100%; padding: 0.7rem; border: 1px solid #ccc; border-radius: 8px; margin-top: .5rem;">
+                        <option value="firstDay">First Day of Week Collection</option>
+                        <option value="benevolence">Benevolence</option>
+                        <option value="project">Project</option>
+                        <option value="scholarship">Scholarship</option>
+                    </select>
 
-                    <!-- Payment Method -->
-                    <div class="donation-section">
-                        <h3>Select Payment Method & Transfer Category</h3>
-                        <div class="donation-methods">
-                            <div class="method-card selected" onclick="selectMethod('card')">
-                                <div class="method-icon">💳</div>
-                                <div class="method-name">Credit Card</div>
-                            </div>
-                            <div class="method-card" onclick="selectMethod('bank')">
-                                <div class="method-icon">🏦</div>
-                                <div class="method-name">Bank Transfer</div>
-                            </div>
-                        </div>
-                        <input type="hidden" id="selectedMethod" value="card">
-                    </div>
+                    <p style="margin: 1rem 0; font-size: 1.05rem;"><strong>Selected Account Number:</strong> <span id="selectedAccountNumber">1228088119</span></p>
 
-                    <!-- Bank Transfer Details -->
-                    <div class="donation-section" id="bankTransferSection" style="display: none; background: #f8f9fa; padding: 2rem; border-radius: 12px; border-left: 4px solid #1e3a8a;">
-                        <h3 style="color: #1e3a8a; margin-top: 0;">Bank Transfer Details</h3>
-                        <p style="color: #666; margin-bottom: 1.5rem;"><strong>Account Name:</strong> CHURCH OF CHRIST 144 AKA ROAD<br><strong>Bank Name:</strong> Zenith Bank PLC</p>
-                        
-                        <div style="margin-bottom: 1.5rem;">
-                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #1e3a8a;">Select Transfer Category:</label>
-                            <select id="transferCategory" style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;">
-                                <option value="">-- Choose a category --</option>
-                                <option value="firstDay">First Day of the Week Collection - 1228088119</option>
-                                <option value="benevolence">Benevolence - 1228598269</option>
-                                <option value="project">Project - 1013838701</option>
-                                <option value="scholarship">Scholarship - 1012254173</option>
-                            </select>
-                        </div>
+                    <button id="copyAccountBtn" type="button" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.65rem 1rem; background: #d4af37; color: #000; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">Copy Number</button>
+                    <p id="copyStatus" style="display: inline-block; margin-left: 1rem; color: #28a745;"></p>
 
-                        <div style="background: white; padding: 1rem; border-radius: 8px; border-left: 3px solid #d4af37;">
-                            <p style="margin: 0; color: #555;"><strong>Account Number:</strong> <span id="accountNumberDisplay" style="color: #1e3a8a; font-weight: 600;">Select a category above</span></p>
-                        </div>
-                    </div>
 
-                    <!-- Donor Information -->
-                    <div class="donation-section">
-                        <h3>Your Information</h3>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                            <div style="display: flex; flex-direction: column;">
-                                <label>First Name</label>
-                                <input type="text" id="firstName" placeholder="John" required>
-                            </div>
-                            <div style="display: flex; flex-direction: column;">
-                                <label>Last Name</label>
-                                <input type="text" id="lastName" placeholder="Doe" required>
-                            </div>
-                        </div>
-                        <div style="display: flex; flex-direction: column; margin-top: 1rem;">
-                            <label>Email</label>
-                            <input type="email" id="donorEmail" placeholder="john@example.com" required>
-                        </div>
-                        <div style="display: flex; align-items: center; margin-top: 1rem; gap: 0.5rem;">
-                            <input type="checkbox" id="anonymous" name="anonymous">
-                            <label for="anonymous" style="margin: 0; cursor: pointer;">I prefer to remain anonymous</label>
-                        </div>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <button type="submit" class="btn btn-primary btn-large" style="width: 100%; margin-top: 2rem;">
-                        Securely Proceed to Payment
-                    </button>
-                    <p id="donationStatus" style="margin-top: 1rem; text-align: center;"></p>
-
-                    <p style="font-size: 0.875rem; color: #666; margin-top: 1rem; text-align: center;">
-                        💳 Your payment information is secure and encrypted. Church of Christ, Aka Road is a registered 501(c)(3) nonprofit organization.
-                    </p>
-                </form>
-            </div>
-
-            <!-- Testimonials -->
-            <div class="testimonials scroll-reveal" style="margin-top: 3rem;">
-                <h2 style="margin-bottom: 2rem; color: #1e3a8a;">Impact Stories</h2>
-                
-                <div class="testimonial-item">
-                    <p class="testimonial-text">"By supporting the missions program, I've seen firsthand how our church is changing lives around the world. It's incredible to be part of something bigger than ourselves."</p>
-                    <p class="testimonial-author">— Michael R., Monthly Donor</p>
-                </div>
-
-                <div class="testimonial-item">
-                    <p class="testimonial-text">"Our youth group would not exist without generous donors who believe in our young people. Thank you for investing in the next generation of leaders."</p>
-                    <p class="testimonial-author">— Pastor Sarah, Youth Ministry Director</p>
-                </div>
-
-                <div class="testimonial-item">
-                    <p class="testimonial-text">"When my family was struggling, the church's benevolence fund helped us through a difficult time. We're now giving back because we know what generosity looks like."</p>
-                    <p class="testimonial-author">— Jennifer T., Member Since 2022</p>
                 </div>
             </div>
+
+
         </div>
     </section>
 
@@ -428,104 +326,42 @@
     <script src="js/animations.js"></script>
     <script src="js/utils.js"></script>
     <script>
-        let selectedAmount = 25;
-        let selectedMethod = 'card';
+        const accountMap = {
+            firstDay: '1228088119',
+            benevolence: '1228598269',
+            project: '1013838701',
+            scholarship: '1012254173'
+        };
 
-        function selectAmount(amount) {
-            selectedAmount = amount;
+        function updateSelectedAccount() {
+            const category = document.getElementById('fundCategory').value;
+            const number = accountMap[category] || '';
+            document.getElementById('selectedAccountNumber').textContent = number;
+            document.getElementById('copyStatus').textContent = '';
+        }
 
-            // Update button states
-            document.querySelectorAll('.amount-btn').forEach(btn => {
-                btn.classList.remove('active');
+        function copyAccountNumber() {
+            const number = document.getElementById('selectedAccountNumber').textContent;
+            navigator.clipboard.writeText(number).then(() => {
+                const status = document.getElementById('copyStatus');
+                status.textContent = 'Copied!';
+                setTimeout(() => { status.textContent = ''; }, 2000);
+            }).catch(() => {
+                alert('Copy failed. Please select and copy manually.');
             });
-
-            if (amount === 'custom') {
-                document.getElementById('customAmount').style.display = 'flex';
-            } else {
-                document.getElementById('customAmount').style.display = 'none';
-                document.getElementById('selectedAmount').value = amount;
-                event.target.classList.add('active');
-            }
         }
 
-        function selectMethod(method) {
-            selectedMethod = method;
-            document.querySelectorAll('.method-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-            event.target.closest('.method-card').classList.add('selected');
-            document.getElementById('selectedMethod').value = method;
-            
-            // Show/hide bank transfer section
-            const bankSection = document.getElementById('bankTransferSection');
-            if (method === 'bank') {
-                bankSection.style.display = 'block';
-            } else {
-                bankSection.style.display = 'none';
+        document.addEventListener('DOMContentLoaded', () => {
+            const select = document.getElementById('fundCategory');
+            const copyBtn = document.getElementById('copyAccountBtn');
+            if (select) {
+                select.addEventListener('change', updateSelectedAccount);
+                updateSelectedAccount();
             }
-        }
-
-        function updateAccountNumber() {
-            const category = document.getElementById('transferCategory').value;
-            const accountDisplay = document.getElementById('accountNumberDisplay');
-            
-            const accounts = {
-                'firstDay': '1228088119',
-                'benevolence': '1228598269',
-                'project': '1013838701',
-                'scholarship': '1012254173'
-            };
-            
-            if (category && accounts[category]) {
-                accountDisplay.textContent = accounts[category];
-            } else {
-                accountDisplay.textContent = 'Select a category above';
-            }
-        }
-
-        // Add event listener for transfer category
-        document.addEventListener('DOMContentLoaded', function() {
-            const categorySelect = document.getElementById('transferCategory');
-            if (categorySelect) {
-                categorySelect.addEventListener('change', updateAccountNumber);
+            if (copyBtn) {
+                copyBtn.addEventListener('click', copyAccountNumber);
             }
         });
-
-        function handleDonationSubmit(event) {
-            event.preventDefault();
-
-            // Get values
-            let amount = selectedAmount;
-            if (selectedAmount === 'custom') {
-                amount = document.getElementById('customAmountInput').value;
-                if (!amount || amount <= 0) {
-                    alert('Please enter a valid amount');
-                    return;
-                }
-            }
-
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const email = document.getElementById('donorEmail').value;
-            const frequency = document.querySelector('input[name="frequency"]:checked').value;
-            const isAnonymous = document.getElementById('anonymous').checked;
-
-            // Show success message (in a real scenario, this would process the payment)
-            const statusDiv = document.getElementById('donationStatus');
-            statusDiv.innerHTML = '<span style="color: #16a34a; font-weight: 600;">✓ Thank you for your donation! Your payment would be processed securely.</span>';
-
-            // Reset form after 2 seconds
-            setTimeout(() => {
-                document.getElementById('donationForm').reset();
-                statusDiv.innerHTML = '';
-                selectedAmount = 25;
-                selectAmount(25);
-            }, 3000);
-        }
-
-        // Initialize
-        selectAmount(25);
-        selectMethod('card');
     </script>
     <script src="js/script.js"></script>
 </body>
