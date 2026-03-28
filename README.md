@@ -12,7 +12,8 @@ A modern, fully-functional, production-ready church website built with vanilla H
 - **Gallery**: Photo gallery with lightbox preview functionality
 - **Contact**: Contact form with validation and embedded Google Maps
 - **Give/Donate**: Donation interface with multiple payment methods
-- **Leadership**: Pastoral and ministry team profiles with contact information
+- **Live Stream**: Watch live services and events
+- **Radio**: Audio broadcasting page
 
 ### Technical Features
 ✅ Fully responsive (mobile, tablet, desktop)
@@ -45,9 +46,10 @@ church-website/
 ├── gallery.html               # Photo gallery
 ├── contact.html               # Contact form + Maps
 ├── give.html                  # Donation page
-├── leadership.html            # Team profiles
+├── livestream.html            # Live stream page
+├── radio.html                 # Radio page
 │
-├── css/
+├── css:
 │   ├── main.css              # Main stylesheet (1200+ lines)
 │   ├── animations.css        # Animation keyframes
 │   └── responsive.css        # Mobile responsive styles
@@ -57,10 +59,7 @@ church-website/
 │   ├── animations.js         # Animation utilities
 │   └── utils.js              # Helper functions
 │
-├── assets/
-│   ├── images/               # Placeholder for images
-│   └── data/                 # Sample data (optional)
-│
+├── img/                      # Image assets for site media
 ├── README.md                 # This file
 └── .gitignore               # Git ignore file
 ```
@@ -106,7 +105,8 @@ No installation required! This project uses vanilla HTML, CSS, and JavaScript.
 | Gallery | `gallery.html` | Photo gallery with lightbox |
 | Contact | `contact.html` | Contact form + Google Maps |
 | Give | `give.html` | Donation interface |
-| Leadership | `leadership.html` | Team profiles (add link to navbar) |
+| Live Stream | `livestream.html` | Live streaming service page |
+| Radio | `radio.html` | Audio broadcast page |
 
 
 ### Update Colors
@@ -207,6 +207,12 @@ Get your embed code from: https://www.google.com/maps
 - For live forms, use a backend/form service
 - Recommended services: Formspree, Netlify Forms, Basin
 - Never hardcode sensitive information
+
+## ⚠️ Known Limitations
+- Contact form is front-end only; you must integrate a server-side service to send emails
+- Donate interface is demo-style; configure payment gateway (Stripe/PayPal) before production use
+- Live stream and radio pages may require additional backend/media service configuration
+- No database is included; content is static HTML and JS-driven
 
 ## 📊 Browser Support
 - Chrome/Edge (Latest)
