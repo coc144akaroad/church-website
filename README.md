@@ -108,14 +108,6 @@ No installation required! This project uses vanilla HTML, CSS, and JavaScript.
 | Give | `give.html` | Donation interface |
 | Leadership | `leadership.html` | Team profiles (add link to navbar) |
 
-## 🎨 Customization Guide
-
-### Update Church Information
-Edit each page's header and footer with your church details:
-- Church name: Replace "Church of Christ, Aka Road, Uyo"
-- Address: "123 Faith Street, Cityville, ST 12345"
-- Phone: "(555) 123-4567"
-- Email: "info@gracettruth.org"
 
 ### Update Colors
 Open `css/main.css` and adjust:
