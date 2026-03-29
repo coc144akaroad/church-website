@@ -61,45 +61,6 @@
         </div>
     </section>
 
-    <!-- Series Section -->
-    <section class="section alternate-bg">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="scroll-reveal">Sermon Series</h2>
-            </div>
-            
-            <div class="series-grid">
-                <div class="series-card scroll-reveal">
-                    <h3>Living Abundantly</h3>
-                    <p class="series-count">8 Sermons</p>
-                    <p>How to experience the fullness of life that Jesus promised.</p>
-                    <button class="btn btn-secondary" onclick="filterSeriesSeries('Living Abundantly')">View Series</button>
-                </div>
-                
-                <div class="series-card scroll-reveal" style="animation-delay: 0.1s">
-                    <h3>Faith Foundations</h3>
-                    <p class="series-count">6 Sermons</p>
-                    <p>Building a strong spiritual foundation rooted in God's Word.</p>
-                    <button class="btn btn-secondary" onclick="filterSeriesSeries('Faith Foundations')">View Series</button>
-                </div>
-                
-                <div class="series-card scroll-reveal" style="animation-delay: 0.2s">
-                    <h3>The Gospel Story</h3>
-                    <p class="series-count">12 Sermons</p>
-                    <p>Journey through the life and teachings of Jesus Christ.</p>
-                    <button class="btn btn-secondary" onclick="filterSeriesSeries('The Gospel Story')">View Series</button>
-                </div>
-                
-                <div class="series-card scroll-reveal" style="animation-delay: 0.3s">
-                    <h3>Grace in Action</h3>
-                    <p class="series-count">5 Sermons</p>
-                    <p>Practical applications of God's grace in everyday life.</p>
-                    <button class="btn btn-secondary" onclick="filterSeriesSeries('Grace in Action')">View Series</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
@@ -117,20 +78,25 @@
                 <div class="footer-section">
                     <h3>Quick Links</h3>
                     <ul>
+                        <li><a href="index.html">Home</a></li>
                         <li><a href="about.html">About Us</a></li>
                         <li><a href="sermons.html">Sermons</a></li>
                         <li><a href="events.html">Events</a></li>
+                        <li><a href="gallery.html">Gallery</a></li>
                         <li><a href="livestream.html">Livestream</a></li>
+                        <li><a href="radio.html">Radio</a></li>
+                        <li><a href="give.html">Give</a></li>
+                        <li><a href="contact.html">Contact</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-section">
                     <h3>Connect</h3>
                     <div class="social-links">
-                        <a href="https://www.facebook.com/churchofchristaka/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">f</a>
-                        <a href="https://www.instagram.com/coc_144akard/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">📷</a>
+                        <a href="https://www.facebook.com/churchofchristaka/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">📘</a>
+                        <a href="https://www.instagram.com/coc_144akard/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">📸</a>
                         <a href="https://x.com/coc_akaroad" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">𝕏</a>
-                        <a href="https://wa.me/2349090090481" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">💬</a>
+                        <a href="https://wa.me/2349090090481" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">💚</a>
                     </div>
                 </div>
             </div>
@@ -141,6 +107,21 @@
         </div>
     </footer>
 
+    <!-- Sermon Content Modal -->
+    <div id="sermonModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle"></h2>
+            <p id="modalSpeaker"></p>
+            <p id="modalDate"></p>
+            <div id="modalContent"></div>
+            <div class="modal-actions">
+                <button id="pdfDownload" class="btn btn-primary">Download PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="js/animations.js"></script>
     <script src="js/utils.js"></script>
     <script>
@@ -231,7 +212,7 @@
                         <p class="sermon-text">${sermon.description}</p>
                         <div class="sermon-actions">
                             <a href="${sermon.videoUrl}" target="_blank" class="btn btn-secondary">Watch Video</a>
-                            <a href="#" onclick="showSermonContent()" class="btn btn-text">Read Sermon Content</a>
+                            <a href="#" onclick="showSermonContent(${sermon.id})" class="btn btn-text">Read Sermon Content</a>
                         </div>
                     </div>
                 `;
@@ -247,6 +228,47 @@
             const filtered = sermons.filter(s => s.series === series);
             renderSermons(filtered);
             document.querySelector('.sermons-list').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function showSermonContent(id) {
+            const sermon = sermons.find(s => s.id === id);
+            if (!sermon) return;
+
+            document.getElementById('modalTitle').textContent = sermon.title;
+            document.getElementById('modalSpeaker').textContent = `Speaker: ${sermon.speaker}`;
+            document.getElementById('modalDate').textContent = `Date: ${sermon.date}`;
+            document.getElementById('modalContent').innerHTML = `
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+                <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+            `;
+            document.getElementById('pdfDownload').onclick = () => downloadAsPDF(sermon);
+            document.getElementById('sermonModal').style.display = 'block';
+        }
+
+        function downloadAsPDF(sermon) {
+            const element = document.getElementById('modalContent');
+            const opt = {
+                margin: 10,
+                filename: `${sermon.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+
+        function closeModal() {
+            document.getElementById('sermonModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('sermonModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
         }
 
         // Initial render

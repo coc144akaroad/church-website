@@ -43,6 +43,12 @@
 
     .hamburger {
         display: flex;
+        z-index: 1001;
+        margin-left: auto;
+    }
+
+    .nav-content {
+        position: relative;
     }
 
     .hamburger.active span:nth-child(1) {
@@ -69,10 +75,11 @@
         max-height: 0;
         overflow: hidden;
         transition: max-height 0.3s ease;
+        width: 100%;
     }
 
     .nav-menu.active {
-        max-height: 500px;
+        max-height: 600px;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
 
