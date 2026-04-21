@@ -22,7 +22,18 @@
      - Push your files to GitHub/GitLab
      - Click "New site from Git"
      - Select your repository
-     - Click "Deploy"
+   - Click "Deploy"
+
+    #### Gallery manifest (optional build step)
+
+    If you want the gallery to automatically pick up images pushed to `img/gallery`, add a small build step to generate a JSON manifest before deploy. Create a Netlify build command that runs:
+
+    ```bash
+    node scripts/generate-gallery.js
+    # then your normal build (if any)
+    ```
+
+    This writes `img/gallery/gallery.json` which the site will use to populate the carousel and gallery grid.
 
 3. **Configure Custom Domain**
    - In Site Settings → Domain settings

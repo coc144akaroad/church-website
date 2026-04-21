@@ -11,6 +11,10 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/responsive.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="img/CHURCH LOGO PNG1.ico">
@@ -53,6 +57,10 @@
                 <a href="events.html" class="btn btn-secondary">Visit Us</a>
             </div>
         </div>
+        <video class="hero-video" autoplay muted loop playsinline>
+            <source src="img/background.mp4" type="video/mp4">
+            <!-- Fallback image -->
+        </video>
         <div class="hero-overlay"></div>
     </header>
 
@@ -99,12 +107,7 @@
                 </div>
                 
                 <div class="about-image scroll-reveal">
-                    <div class="image-placeholder">
-                        <div class="placeholder-content">
-                            <span class="placeholder-icon">🏢</span>
-                            <p>Church Building</p>
-                        </div>
-                    </div>
+                    <img src="img/building.png" alt="Church Building" style="width:100%; height:400px; object-fit:cover; border-radius:12px; display:block;">
                 </div>
             </div>
         </div>
@@ -137,51 +140,214 @@
         </div>
     </section>
 
-    <!-- Events Preview -->
-    <section class="events-preview">
+    <!-- Events Preview (replicated from events.html) -->
+    <section class="section">
         <div class="container">
-            <div class="section-header">
-                <h2 class="scroll-reveal">Upcoming Events</h2>
-                <p class="scroll-reveal">Join us for worship, fellowship, and growth</p>
-            </div>
-            
-            <div class="events-grid">
-                <div class="event-card scroll-reveal">
-                    <div class="event-date">
-                        <span class="date-day">29</span>
-                        <span class="date-month">Mar</span>
-                    </div>
-                    <h3>Sunday Service</h3>
-                    <p class="event-time">9:00 AM - 01:00 PM</p>
-                    <p class="event-desc">Morning worship service</p>
-                </div>
-                
-                <div class="event-card scroll-reveal" style="animation-delay: 0.1s">
-                    <div class="event-date">
-                        <span class="date-day">31</span>
-                        <span class="date-month">Mar</span>
-                    </div>
-                    <h3>Bible Study</h3>
-                    <p class="event-time">6:00 PM - 7:30 PM</p>
-                    <p class="event-desc">Midweek Bible study</p>
-                </div>
-                
-                <div class="event-card scroll-reveal" style="animation-delay: 0.2s">
-                    <div class="event-date">
-                        <span class="date-day">07</span>
-                        <span class="date-month">Apr</span>
-                    </div>
-                    <h3>Community Service</h3>
-                    <p class="event-time">10:00 AM - 2:00 PM</p>
-                    <p class="event-desc">Local food bank volunteer opportunity</p>
-                </div>
-            </div>
-            
-            <div class="text-center" style="margin-top: 3rem;">
-                <a href="events.html" class="btn btn-primary">See All Events</a>
+            <div class="events-detailed-grid" id="eventsGrid">
+                <!-- Events will be loaded here -->
             </div>
         </div>
     </section>
+
+    <script>
+        // =========================
+        // EVENTS DATA (RECURRING)
+        // =========================
+        const events = [
+            {
+                id: 1,
+                title: "Sunday Morning Worship Service",
+                day: 0,
+                startHour: 9,
+                startMinute: 0,
+                endHour: 13,
+                endMinute: 0,
+                endTime: "1:00 PM",
+                location: "Church of Christ, Aka Road",
+                category: "Worship",
+                description: "Vibrant worship, dynamic preaching, and powerful presence of the Holy Spirit.",
+                capacity: "500",
+                registered: "350",
+                image: "🙏"
+            },
+            {
+                id: 2,
+                title: "Tuesday Bible Study",
+                day: 2,
+                startHour: 18,
+                startMinute: 0,
+                endHour: 19,
+                endMinute: 30,
+                endTime: "7:30 PM",
+                location: "Church of Christ, Aka Road",
+                category: "Bible Study",
+                description: "Deep dive into God's Word.",
+                capacity: "200",
+                registered: "120",
+                image: "📖"
+            },
+            {
+                id: 3,
+                title: "Thursday Bible Study",
+                day: 4,
+                startHour: 18,
+                startMinute: 0,
+                endHour: 19,
+                endMinute: 30,
+                endTime: "7:30 PM",
+                location: "Church of Christ, Aka Road",
+                category: "Bible Study",
+                description: "Midweek spiritual recharge.",
+                capacity: "200",
+                registered: "100",
+                image: "📖"
+            },
+            {
+                id: 4,
+                title: "Saturday Song Class",
+                day: 6,
+                startHour: 18,
+                startMinute: 0,
+                endHour: 19,
+                endMinute: 0,
+                endTime: "7:00 PM",
+                location: "Church of Christ, Aka Road",
+                category: "Prayer",
+                description: "Powerful time of prayer.",
+                capacity: "150",
+                registered: "80",
+                image: "🙏"
+            }
+        ];
+
+        // =========================
+        // CORE LOGIC
+        // =========================
+        function getNextOccurrence(day, hour, minute) {
+            const now = new Date();
+            const today = now.getDay();
+
+            let daysAhead = (day - today + 7) % 7;
+
+            const date = new Date(now);
+            date.setDate(now.getDate() + daysAhead);
+            date.setHours(hour, minute, 0, 0);
+
+            if (daysAhead === 0 && date < now) {
+                date.setDate(date.getDate() + 7);
+            }
+
+            return date;
+        }
+
+        function formatCountdown(startDate, endHour, endMinute) {
+            const now = new Date();
+            const endDate = new Date(startDate);
+            endDate.setHours(endHour, endMinute, 0, 0);
+
+            if (now < startDate) {
+                const diff = startDate - now;
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((diff / 1000 / 60) % 60);
+
+                if (days > 0) return `${days}d ${hours}h`;
+                if (hours > 0) return `${hours}h ${minutes}m`;
+                return `${minutes}m`;
+            }
+
+            if (now >= startDate && now <= endDate) {
+                return "🔴 Live Now";
+            }
+
+            const next = getNextOccurrence(startDate.getDay(), startDate.getHours(), startDate.getMinutes());
+            const diff = next - now;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+
+            return `Next: ${days}d ${hours}h`;
+        }
+
+        // =========================
+        // RENDER EVENTS
+        // =========================
+        function renderEvents() {
+            const grid = document.getElementById('eventsGrid');
+            grid.innerHTML = '';
+
+            events.forEach((event, index) => {
+                const eventDate = getNextOccurrence(event.day, event.startHour, event.startMinute);
+
+                const card = document.createElement('div');
+                card.className = 'event-detailed-card scroll-reveal';
+                card.style.animationDelay = (index * 0.1) + 's';
+
+                const dateStr = eventDate.toLocaleDateString('en-US', { 
+                    weekday: 'short', 
+                    month: 'short', 
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+
+                const timeStr = eventDate.toLocaleTimeString('en-US', { 
+                    hour: '2-digit', 
+                    minute: '2-digit'
+                });
+
+                card.innerHTML = `
+                    <div class="event-card-header">
+                        <div class="event-image">${event.image}</div>
+                        <div class="event-meta">
+                            <span class="event-category">${event.category}</span>
+                            <div class="event-countdown"
+                                data-day="${event.day}"
+                                data-hour="${event.startHour}"
+                                data-minute="${event.startMinute}"
+                                data-endhour="${event.endHour}"
+                                data-endminute="${event.endMinute}">
+                                ${formatCountdown(eventDate, event.endHour, event.endMinute)}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="event-card-body">
+                        <h3>${event.title}</h3>
+                        <div class="event-details">
+                            <p><strong>📅</strong> ${dateStr}</p>
+                            <p><strong>🕐</strong> ${timeStr} - ${event.endTime}</p>
+                            <p><strong>📍</strong> ${event.location}</p>
+                        </div>
+                        <p class="event-description">${event.description}</p>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+
+            updateCountdowns();
+            setInterval(updateCountdowns, 60000);
+            initScrollReveal();
+        }
+
+        // =========================
+        // UPDATE COUNTDOWNS
+        // =========================
+        function updateCountdowns() {
+            const countdowns = document.querySelectorAll('.event-countdown');
+
+            countdowns.forEach(el => {
+                const day = parseInt(el.dataset.day);
+                const hour = parseInt(el.dataset.hour);
+                const minute = parseInt(el.dataset.minute);
+                const endHour = parseInt(el.dataset.endhour);
+                const endMinute = parseInt(el.dataset.endminute);
+
+                const eventDate = getNextOccurrence(day, hour, minute);
+                el.textContent = formatCountdown(eventDate, endHour, endMinute);
+            });
+        }
+
+        renderEvents();
+    </script>
 
     <!-- Newsletter Section -->
     <section class="newsletter">
@@ -236,10 +402,10 @@
                 <div class="footer-section">
                     <h3>Connect With Us</h3>
                     <div class="social-links">
-                        <a href="https://www.facebook.com/churchofchristaka/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">📘</a>
-                        <a href="https://www.instagram.com/coc_144akard/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">📸</a>
-                        <a href="https://x.com/coc_akaroad" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">𝕏</a>
-                        <a href="https://wa.me/2349090090481" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">💚</a>
+                        <a href="https://www.facebook.com/churchofchristaka/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                        <a href="https://www.instagram.com/coc_144akard/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                        <a href="https://x.com/coc_akaroad" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                        <a href="https://wa.me/2349090090481" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
                     </div>
                 </div>
             </div>

@@ -13,7 +13,7 @@ html {
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     color: #333;
     background-color: #ffffff;
@@ -233,13 +233,17 @@ a:hover {
 }
 
 .hero::before {
-    content: '';
+    display: none;
+}
+
+/* Hero background video */
+.hero-video {
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, #1e3a8a, #003d82);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     z-index: 0;
 }
 
@@ -1069,6 +1073,86 @@ a:hover {
 .social-links a:hover {
     background: #d4af37;
     color: #1e3a8a;
+}
+
+/* Font Awesome icon styling: brighter icons with subtle hover */
+.social-links a i,
+.social-links-inline a i,
+.social-icon i {
+    color: #ffffff;
+    font-size: 1.15rem;
+    transition: transform 0.2s ease, opacity 0.2s ease, color 0.2s ease;
+    filter: brightness(1.05);
+}
+.social-links a:hover i,
+.social-links-inline a:hover i,
+.social-icon:hover i {
+    transform: scale(1.08);
+    opacity: 0.95;
+    color: #1e3a8a;
+}
+
+/* Make inline social icons (used on livestream page) match primary styling */
+.social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #1e3a8a;
+    color: white;
+    border: none;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: all 0.25s ease;
+}
+
+.social-icon:hover {
+    background: #d4af37;
+    color: #1e3a8a;
+    transform: translateY(-3px);
+}
+
+/* Text-style social links (used in contact page) */
+.social-link-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.75rem;
+    width: auto;
+    height: auto;
+    background: #1e3a8a;
+    color: #ffffff;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+}
+.social-link-text i { color: #ffffff; }
+.social-link-text:hover { background: #d4af37; color: #1e3a8a; }
+.social-link-text:hover i { color: #1e3a8a; }
+
+/* Carousel styles for Gallery */
+.gallery-carousel {
+    position: relative;
+    width: 100%;
+    height: 420px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+.gallery-carousel img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+.gallery-carousel img.active {
+    opacity: 1;
 }
 
 .footer-bottom {

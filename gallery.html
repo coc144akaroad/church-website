@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/responsive.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         .gallery-grid {
             display: grid;
@@ -257,10 +261,10 @@
                 <div class="footer-section">
                     <h3>Connect</h3>
                     <div class="social-links">
-                        <a href="https://www.facebook.com/churchofchristaka/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">📘</a>
-                        <a href="https://www.instagram.com/coc_144akard/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">📸</a>
-                        <a href="https://x.com/coc_akaroad" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">𝕏</a>
-                        <a href="https://wa.me/2349090090481" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">💚</a>
+                        <a href="https://www.facebook.com/churchofchristaka/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                        <a href="https://www.instagram.com/coc_144akard/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                        <a href="https://x.com/coc_akaroad" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                        <a href="https://wa.me/2349090090481" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
                     </div>
                 </div>
             </div>
@@ -274,100 +278,121 @@
     <script src="js/animations.js"></script>
     <script src="js/utils.js"></script>
     <script>
-        // Gallery data with placeholder colors
-        const galleryItems = [
-            { id: 1, title: "Sunday Worship Service", emoji: "🙏", category: "Worship" },
-            { id: 2, title: "Community Outreach", emoji: "🤝", category: "Outreach" },
-            { id: 3, title: "Youth Group Activities", emoji: "🎉", category: "Youth" },
-            { id: 4, title: "Prayer Meeting", emoji: "📖", category: "Events" },
-            { id: 5, title: "Baptism Service", emoji: "💧", category: "Sacraments" },
-            { id: 6, title: "Bible Study Group", emoji: "📚", category: "Education" },
-            { id: 7, title: "Children's Ministry", emoji: "👶", category: "Children" },
-            { id: 8, title: "Church Building", emoji: "🏢", category: "Facility" }
+    (async function(){
+        const grid = document.getElementById('galleryGrid');
+        grid.innerHTML = '';
+
+        const galleryItemsFallback = [
+            { title: "Sunday Worship Service", emoji: "🙏" },
+            { title: "Community Outreach", emoji: "🤝" },
+            { title: "Youth Group Activities", emoji: "🎉" },
+            { title: "Prayer Meeting", emoji: "📖" },
+            { title: "Baptism Service", emoji: "💧" },
+            { title: "Bible Study Group", emoji: "📚" },
+            { title: "Children's Ministry", emoji: "👶" },
+            { title: "Church Building", emoji: "🏢" }
         ];
 
-        let currentImageIndex = 0;
-
-        // Create placeholder image
         function createPlaceholderImage(emoji, title) {
             const canvas = document.createElement('canvas');
-            canvas.width = 400;
-            canvas.height = 400;
+            canvas.width = 800;
+            canvas.height = 600;
             const ctx = canvas.getContext('2d');
-            
-            // Background gradient
-            const gradient = ctx.createLinearGradient(0, 0, 400, 400);
+            const gradient = ctx.createLinearGradient(0,0,canvas.width,canvas.height);
             gradient.addColorStop(0, '#1e3a8a');
             gradient.addColorStop(1, '#d4af37');
             ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, 400, 400);
-            
-            // Emoji
+            ctx.fillRect(0,0,canvas.width,canvas.height);
+
             ctx.font = '120px Arial';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(emoji, 200, 180);
-            
-            // Title
-            ctx.font = '24px Arial';
             ctx.fillStyle = 'white';
-            ctx.fillText(title, 200, 350);
-            
+            ctx.fillText(emoji, canvas.width/2, canvas.height/2 - 20);
+
+            ctx.font = '28px Arial';
+            ctx.fillText(title, canvas.width/2, canvas.height - 60);
+
             return canvas.toDataURL();
         }
 
-        function renderGallery() {
-            const grid = document.getElementById('galleryGrid');
-            grid.innerHTML = '';
-
-            galleryItems.forEach((item, index) => {
-                const galleryItem = document.createElement('div');
-                galleryItem.className = 'gallery-item scroll-reveal';
-                galleryItem.style.animationDelay = (index * 0.05) + 's';
-
-                const imageUrl = createPlaceholderImage(item.emoji, item.title);
-
-                galleryItem.innerHTML = `
-                    <img src="${imageUrl}" alt="${item.title}">
-                    <div class="gallery-overlay">
-                        <div class="gallery-icon">🔍</div>
-                    </div>
-                `;
-
-                galleryItem.addEventListener('click', () => openLightbox(index));
-                grid.appendChild(galleryItem);
-            });
-
-            initScrollReveal();
+        let images = [];
+        try {
+            const res = await fetch('img/gallery/gallery.json', { cache: 'no-cache' });
+            if (res.ok) {
+                const data = await res.json();
+                images = data.map(item => (typeof item === 'string') ? { src: item, title: item.split('/').pop() } : item);
+            }
+        } catch (err) {
+            console.warn('Could not load gallery.json:', err);
         }
 
-        function openLightbox(index) {
-            currentImageIndex = index;
-            const item = galleryItems[index];
-            const imageUrl = createPlaceholderImage(item.emoji, item.title);
-            
-            document.getElementById('lightboxImage').src = imageUrl;
-            document.getElementById('lightboxCaption').textContent = item.title;
+        if (!images.length) {
+            images = galleryItemsFallback.map(item => ({ src: createPlaceholderImage(item.emoji, item.title), title: item.title }));
+        }
+
+        // insert carousel before grid
+        const carouselContainer = document.createElement('div');
+        carouselContainer.id = 'galleryCarousel';
+        carouselContainer.className = 'gallery-carousel';
+        const sectionContainer = document.querySelector('.section .container') || document.querySelector('.container');
+        sectionContainer.insertBefore(carouselContainer, document.getElementById('galleryGrid'));
+
+        images.forEach((img, idx) => {
+            const cimg = document.createElement('img');
+            cimg.src = img.src;
+            cimg.alt = img.title || '';
+            if (idx === 0) cimg.classList.add('active');
+            carouselContainer.appendChild(cimg);
+        });
+
+        images.forEach((item, index) => {
+            const galleryItem = document.createElement('div');
+            galleryItem.className = 'gallery-item scroll-reveal';
+            galleryItem.style.animationDelay = (index * 0.05) + 's';
+            galleryItem.innerHTML = `\
+                <img src="${item.src}" alt="${item.title || ''}">\
+                <div class="gallery-overlay">\
+                  <div class="gallery-icon"><i class="fas fa-search-plus" aria-hidden="true"></i></div>\
+                </div>`;
+            galleryItem.addEventListener('click', () => openLightbox(index));
+            grid.appendChild(galleryItem);
+        });
+
+        initScrollReveal();
+
+        let carouselIndex = 0;
+        const carouselImgs = carouselContainer.querySelectorAll('img');
+        if (carouselImgs.length > 1) {
+            setInterval(() => {
+                carouselImgs[carouselIndex].classList.remove('active');
+                carouselIndex = (carouselIndex + 1) % carouselImgs.length;
+                carouselImgs[carouselIndex].classList.add('active');
+            }, 5000);
+        }
+
+        window.currentImageIndex = 0;
+        window.openLightbox = function(index) {
+            window.currentImageIndex = index;
+            const item = images[index];
+            document.getElementById('lightboxImage').src = item.src;
+            document.getElementById('lightboxCaption').textContent = item.title || '';
             document.getElementById('lightbox').classList.add('active');
             document.body.style.overflow = 'hidden';
-        }
-
-        function closeLightbox() {
+        };
+        window.closeLightbox = function() {
             document.getElementById('lightbox').classList.remove('active');
             document.body.style.overflow = 'auto';
-        }
+        };
+        window.nextImage = function() {
+            window.currentImageIndex = (window.currentImageIndex + 1) % images.length;
+            openLightbox(window.currentImageIndex);
+        };
+        window.previousImage = function() {
+            window.currentImageIndex = (window.currentImageIndex - 1 + images.length) % images.length;
+            openLightbox(window.currentImageIndex);
+        };
 
-        function nextImage() {
-            currentImageIndex = (currentImageIndex + 1) % galleryItems.length;
-            openLightbox(currentImageIndex);
-        }
-
-        function previousImage() {
-            currentImageIndex = (currentImageIndex - 1 + galleryItems.length) % galleryItems.length;
-            openLightbox(currentImageIndex);
-        }
-
-        // Keyboard navigation
         document.addEventListener('keydown', (e) => {
             if (document.getElementById('lightbox').classList.contains('active')) {
                 if (e.key === 'ArrowRight') nextImage();
@@ -376,12 +401,11 @@
             }
         });
 
-        // Close lightbox when clicking outside the image
         document.getElementById('lightbox').addEventListener('click', (e) => {
             if (e.target.id === 'lightbox') closeLightbox();
         });
 
-        renderGallery();
+    })();
     </script>
     <script src="js/script.js"></script>
 </body>
