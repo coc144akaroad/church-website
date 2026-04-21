@@ -435,87 +435,7 @@ function initLivestreamEmbed() {
 // ADMIN: set embed URL from page
 // ===================================
 
-function initEmbedAdmin() {
-    try {
-        const params = new URLSearchParams(window.location.search);
-        const isAdmin = params.has('admin');
-        const panel = document.getElementById('embedAdmin');
-        const input = document.getElementById('embedInput');
-        const saveBtn = document.getElementById('embedSave');
-        const clearBtn = document.getElementById('embedClear');
-        const msg = document.getElementById('embedMsg');
-        const iframe = document.getElementById('livestreamEmbed');
-
-        if (!panel || !input || !saveBtn || !clearBtn || !iframe) return;
-
-        const showPanel = () => {
-            panel.classList.remove('hidden');
-            panel.setAttribute('aria-hidden', 'false');
-        };
-
-        const hidePanel = () => {
-            panel.classList.add('hidden');
-            panel.setAttribute('aria-hidden', 'true');
-        };
-
-        if (isAdmin) showPanel(); else hidePanel();
-
-        const normalizeYoutube = (url) => {
-            try {
-                const u = new URL(url);
-                if (u.hostname.includes('youtube.com')) {
-                    // watch?v= -> embed/
-                    if (u.searchParams.has('v')) {
-                        const id = u.searchParams.get('v');
-                        return `https://www.youtube.com/embed/${id}`;
-                    }
-                    // already embed URL
-                    if (u.pathname.startsWith('/embed/')) return url;
-                }
-                if (u.hostname === 'youtu.be') {
-                    const id = u.pathname.replace('/', '');
-                    return `https://www.youtube.com/embed/${id}`;
-                }
-            } catch (e) {
-                return url;
-            }
-            return url;
-        };
-
-        const setIframeSrc = (raw) => {
-            if (!raw) { iframe.removeAttribute('src'); return; }
-            const normalized = normalizeYoutube(raw.trim());
-            iframe.setAttribute('src', normalized);
-            localStorage.setItem('livestream_embed_src', normalized);
-            msg.textContent = 'Saved — embed set.';
-            setTimeout(() => { msg.textContent = ''; }, 3000);
-        };
-
-        // load from storage if present
-        const stored = localStorage.getItem('livestream_embed_src');
-        if (stored) iframe.setAttribute('src', stored);
-
-        // prefill input with stored or empty
-        input.value = stored || '';
-
-        saveBtn.addEventListener('click', () => {
-            const val = input.value.trim();
-            if (!val) { msg.textContent = 'Please enter a URL.'; return; }
-            try { setIframeSrc(val); } catch (e) { msg.textContent = 'Invalid URL'; }
-        });
-
-        clearBtn.addEventListener('click', () => {
-            input.value = '';
-            iframe.removeAttribute('src');
-            localStorage.removeItem('livestream_embed_src');
-            msg.textContent = 'Embed cleared.';
-            setTimeout(() => { msg.textContent = ''; }, 2500);
-        });
-
-    } catch (err) {
-        console.error('initEmbedAdmin error', err);
-    }
-}
+// Admin embed UI removed: embed management handled outside this script now.
 
 // (theme toggle removed)
 
@@ -543,7 +463,6 @@ function initializeApp() {
     initPerformanceMonitoring();
         // Livestream embed handling
         initLivestreamEmbed();
-        initEmbedAdmin();
 
     // Log initialization
     console.log('Church website initialized successfully');

@@ -90,14 +90,6 @@
         .fallback-link i { font-size: 1rem; }
 
         .hidden { display: none !important; }
-        .embed-admin {
-            margin-top: 1rem;
-            padding: 0.85rem;
-            border-radius: 8px;
-            background: #ffffff;
-            border: 1px solid #e6e6e6;
-            box-shadow: 0 6px 18px rgba(16,24,40,0.03);
-        }
 
         .livestream-status {
             background: #d4af37;
@@ -208,17 +200,7 @@
                             </div>
                         </div>
 
-                        <!-- Admin embed editor (visible when ?admin) -->
-                        <div id="embedAdmin" class="embed-admin hidden" aria-hidden="true">
-                            <label for="embedInput" style="font-weight:600; display:block; margin-bottom:6px;">Admin: Set livestream embed URL</label>
-                            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-                                <input id="embedInput" type="url" placeholder="Paste embed URL or watch/share link here" style="flex:1; padding:0.6rem; border-radius:6px; border:1px solid #ddd;" />
-                                <button id="embedSave" class="join-button" style="padding:0.6rem 1rem; width:auto;">Save</button>
-                                <button id="embedClear" class="join-button" style="background:#e5e7eb; color:#333; padding:0.6rem 1rem; width:auto;">Clear</button>
-                            </div>
-                            <p id="embedMsg" style="margin:8px 0 0 0; font-size:0.9rem; color:#666;"></p>
-                            <p style="margin:8px 0 0 0; font-size:0.85rem; color:#999;">Tip: Open this page with <code>?admin</code> to reveal this control.</p>
-                        </div>
+                        <!-- Admin controls removed -->
                     </div>
                     <p style="margin-top: 1rem; color: #666; text-align: center;">Join us live for worship and Bible study.</p>
                 </div>
