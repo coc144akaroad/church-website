@@ -48,24 +48,55 @@
             height: 100%;
             border: none;
             display: block;
+            background: transparent;
         }
 
-        .livestream-fallback {
-            position: absolute;
-            inset: 0;
+        .livestream-fallback-block {
+            margin-top: 0.7rem;
             display: flex;
-            align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #1e3a8a 0%, #003d82 100%);
-            color: white;
-            font-size: 1.6rem;
-            padding: 1rem;
-            text-align: center;
+            width: 100%;
         }
 
-        /* When an embed is present, hide the fallback */
-        .video-wrap.has-embed .livestream-fallback {
-            display: none;
+        .livestream-fallback-block .fallback-inner {
+            max-width: 720px;
+            padding: 0.6rem 0.8rem;
+            text-align: center;
+            background: transparent;
+        }
+
+        .fallback-links {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-top: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .fallback-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.9rem;
+            border-radius: 6px;
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .fallback-link.fb { background: #1877f2; }
+        .fallback-link.yt { background: #ff0000; }
+
+        .fallback-link i { font-size: 1rem; }
+
+        .hidden { display: none !important; }
+        .embed-admin {
+            margin-top: 1rem;
+            padding: 0.85rem;
+            border-radius: 8px;
+            background: #ffffff;
+            border: 1px solid #e6e6e6;
+            box-shadow: 0 6px 18px rgba(16,24,40,0.03);
         }
 
         .livestream-status {
@@ -83,87 +114,6 @@
             background: #e5e7eb;
             color: #666;
             animation: none;
-        }
-
-        .schedule-section {
-            background: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 12px;
-            border-left: 4px solid #d4af37;
-        }
-
-        .schedule-section h3 {
-            margin-top: 0;
-            color: #1e3a8a;
-        }
-
-        .schedule-item {
-            padding: 1rem 0;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .schedule-item:last-child {
-            border-bottom: none;
-        }
-
-        .schedule-item h4 {
-            margin: 0 0 0.5rem 0;
-            color: #1e3a8a;
-        }
-
-        .schedule-item p {
-            margin: 0;
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .join-button {
-            display: inline-block;
-            width: 100%;
-            padding: 1rem;
-            background: #1e3a8a;
-            color: white;
-            text-align: center;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            margin-top: 1.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .join-button:hover {
-            background: #003d82;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(30, 58, 138, 0.3);
-        }
-
-        .social-links-inline {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .social-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: transparent;
-            color: #1e3a8a;
-            text-decoration: none;
-            font-size: 1.2rem;
-            border: 1px solid #1e3a8a;
-            transition: all 0.3s ease;
-        }
-
-        .social-icon:hover {
-            background: #1e3a8a;
-            color: white;
-            transform: translateY(-3px);
         }
 
         .about-livestream {
@@ -194,8 +144,8 @@
                 min-height: 220px;
             }
 
-            .livestream-placeholder {
-                font-size: 1.1rem;
+            .livestream-fallback {
+                font-size: 1rem;
                 padding: 0.75rem;
             }
         }
@@ -247,7 +197,27 @@
                     <div class="livestream-main">
                         <div class="video-wrap" id="videoWrap">
                             <iframe id="livestreamEmbed" src="" title="Livestream" allowfullscreen></iframe>
-                            <div class="livestream-fallback">Replace the iframe src with your streaming embed URL (e.g. YouTube/Vimeo).</div>
+                        </div>
+                        <div id="fallbackLinks" class="livestream-fallback-block" role="status" aria-live="polite">
+                            <div class="fallback-inner">
+                                <p style="margin:0 0 0.5rem 0; font-size:1.05rem;">Can't see our live stream?</p>
+                                <div class="fallback-links">
+                                    <a class="fallback-link fb" href="https://www.facebook.com/churchofchristaka/" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f" aria-hidden="true"></i> Facebook</a>
+                                    <a class="fallback-link yt" href="https://www.youtube.com/@COCAKAROAD" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube" aria-hidden="true"></i> YouTube</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Admin embed editor (visible when ?admin) -->
+                        <div id="embedAdmin" class="embed-admin hidden" aria-hidden="true">
+                            <label for="embedInput" style="font-weight:600; display:block; margin-bottom:6px;">Admin: Set livestream embed URL</label>
+                            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+                                <input id="embedInput" type="url" placeholder="Paste embed URL or watch/share link here" style="flex:1; padding:0.6rem; border-radius:6px; border:1px solid #ddd;" />
+                                <button id="embedSave" class="join-button" style="padding:0.6rem 1rem; width:auto;">Save</button>
+                                <button id="embedClear" class="join-button" style="background:#e5e7eb; color:#333; padding:0.6rem 1rem; width:auto;">Clear</button>
+                            </div>
+                            <p id="embedMsg" style="margin:8px 0 0 0; font-size:0.9rem; color:#666;"></p>
+                            <p style="margin:8px 0 0 0; font-size:0.85rem; color:#999;">Tip: Open this page with <code>?admin</code> to reveal this control.</p>
                         </div>
                     </div>
                     <p style="margin-top: 1rem; color: #666; text-align: center;">Join us live for worship and Bible study.</p>
