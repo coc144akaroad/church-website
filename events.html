@@ -88,10 +88,10 @@
                 <div class="footer-section">
                     <h3>Connect</h3>
                     <div class="social-links">
-                        <a href="https://www.facebook.com/churchofchristaka/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">📘</a>
-                        <a href="https://www.instagram.com/coc_144akard/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">📸</a>
-                        <a href="https://x.com/coc_akaroad" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">𝕏</a>
-                        <a href="https://wa.me/2349090090481" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">💚</a>
+                        <a href="https://www.facebook.com/churchofchristaka/" target="_blank">📘</a>
+                        <a href="https://www.instagram.com/coc_144akard/" target="_blank">📸</a>
+                        <a href="https://x.com/coc_akaroad" target="_blank">𝕏</a>
+                        <a href="https://wa.me/2349090090481" target="_blank">💚</a>
                     </div>
                 </div>
             </div>
@@ -104,60 +104,148 @@
 
     <script src="js/animations.js"></script>
     <script src="js/utils.js"></script>
+
     <script>
-        // Event data
+        // =========================
+        // EVENTS DATA (RECURRING)
+        // =========================
         const events = [
             {
                 id: 1,
                 title: "Sunday Morning Worship Service",
-                date: new Date(2026, 2, 29, 9, 0), // March 29, 2026 9:00 AM
+                day: 0,
+                startHour: 9,
+                startMinute: 0,
+                endHour: 13,
+                endMinute: 0,
                 endTime: "1:00 PM",
                 location: "Church of Christ, Aka Road",
                 category: "Worship",
-                description: "Vibrant worship, dynamic preaching, and powerful presence of the Holy Spirit. All are welcome to experience God's love.",
+                description: "Vibrant worship, dynamic preaching, and powerful presence of the Holy Spirit.",
                 capacity: "500",
                 registered: "350",
+                image: "🙏"
+            },
+            {
+                id: 2,
+                title: "Tuesday Bible Study",
+                day: 2,
+                startHour: 18,
+                startMinute: 0,
+                endHour: 19,
+                endMinute: 30,
+                endTime: "7:30 PM",
+                location: "Church of Christ, Aka Road",
+                category: "Bible Study",
+                description: "Deep dive into God's Word.",
+                capacity: "200",
+                registered: "120",
+                image: "📖"
+            },
+            {
+                id: 3,
+                title: "Thursday Bible Study",
+                day: 4,
+                startHour: 18,
+                startMinute: 0,
+                endHour: 19,
+                endMinute: 30,
+                endTime: "7:30 PM",
+                location: "Church of Christ, Aka Road",
+                category: "Bible Study",
+                description: "Midweek spiritual recharge.",
+                capacity: "200",
+                registered: "100",
+                image: "📖"
+            },
+            {
+                id: 4,
+                title: "Saturday Prayer Meeting",
+                day: 6,
+                startHour: 18,
+                startMinute: 0,
+                endHour: 19,
+                endMinute: 0,
+                endTime: "7:00 PM",
+                location: "Church of Christ, Aka Road",
+                category: "Prayer",
+                description: "Powerful time of prayer.",
+                capacity: "150",
+                registered: "80",
                 image: "🙏"
             }
         ];
 
-        function formatCountdown(targetDate) {
+        // =========================
+        // CORE LOGIC
+        // =========================
+        function getNextOccurrence(day, hour, minute) {
             const now = new Date();
-            const difference = targetDate - now;
+            const today = now.getDay();
 
-            if (difference < 0) {
-                return "Event Started";
+            let daysAhead = (day - today + 7) % 7;
+
+            const date = new Date(now);
+            date.setDate(now.getDate() + daysAhead);
+            date.setHours(hour, minute, 0, 0);
+
+            if (daysAhead === 0 && date < now) {
+                date.setDate(date.getDate() + 7);
             }
 
-            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
-            const minutes = Math.floor((difference / 1000 / 60) % 60);
-
-            if (days > 0) {
-                return `${days}d ${hours}h`;
-            } else if (hours > 0) {
-                return `${hours}h ${minutes}m`;
-            } else {
-                return `${minutes}m`;
-            }
+            return date;
         }
 
+        function formatCountdown(startDate, endHour, endMinute) {
+            const now = new Date();
+            const endDate = new Date(startDate);
+            endDate.setHours(endHour, endMinute, 0, 0);
+
+            if (now < startDate) {
+                const diff = startDate - now;
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((diff / 1000 / 60) % 60);
+
+                if (days > 0) return `${days}d ${hours}h`;
+                if (hours > 0) return `${hours}h ${minutes}m`;
+                return `${minutes}m`;
+            }
+
+            if (now >= startDate && now <= endDate) {
+                return "🔴 Live Now";
+            }
+
+            const next = getNextOccurrence(startDate.getDay(), startDate.getHours(), startDate.getMinutes());
+            const diff = next - now;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+
+            return `Next: ${days}d ${hours}h`;
+        }
+
+        // =========================
+        // RENDER EVENTS
+        // =========================
         function renderEvents() {
             const grid = document.getElementById('eventsGrid');
             grid.innerHTML = '';
 
             events.forEach((event, index) => {
+                const eventDate = getNextOccurrence(event.day, event.startHour, event.startMinute);
+
                 const card = document.createElement('div');
                 card.className = 'event-detailed-card scroll-reveal';
                 card.style.animationDelay = (index * 0.1) + 's';
 
-                const dateStr = event.date.toLocaleDateString('en-US', { 
+                const dateStr = eventDate.toLocaleDateString('en-US', { 
                     weekday: 'short', 
                     month: 'short', 
                     day: 'numeric',
                     year: 'numeric'
                 });
-                const timeStr = event.date.toLocaleTimeString('en-US', { 
+
+                const timeStr = eventDate.toLocaleTimeString('en-US', { 
                     hour: '2-digit', 
                     minute: '2-digit'
                 });
@@ -167,8 +255,13 @@
                         <div class="event-image">${event.image}</div>
                         <div class="event-meta">
                             <span class="event-category">${event.category}</span>
-                            <div class="event-countdown" data-target="${event.date.getTime()}">
-                                ${formatCountdown(event.date)}
+                            <div class="event-countdown"
+                                data-day="${event.day}"
+                                data-hour="${event.startHour}"
+                                data-minute="${event.startMinute}"
+                                data-endhour="${event.endHour}"
+                                data-endminute="${event.endMinute}">
+                                ${formatCountdown(eventDate, event.endHour, event.endMinute)}
                             </div>
                         </div>
                     </div>
@@ -186,24 +279,32 @@
                 grid.appendChild(card);
             });
 
-            // Update countdowns every minute
             updateCountdowns();
             setInterval(updateCountdowns, 60000);
-
             initScrollReveal();
         }
 
+        // =========================
+        // UPDATE COUNTDOWNS
+        // =========================
         function updateCountdowns() {
-            const countdowns = document.querySelectorAll('[data-target]');
+            const countdowns = document.querySelectorAll('.event-countdown');
+
             countdowns.forEach(el => {
-                const targetTime = parseInt(el.dataset.target);
-                const targetDate = new Date(targetTime);
-                el.textContent = formatCountdown(targetDate);
+                const day = parseInt(el.dataset.day);
+                const hour = parseInt(el.dataset.hour);
+                const minute = parseInt(el.dataset.minute);
+                const endHour = parseInt(el.dataset.endhour);
+                const endMinute = parseInt(el.dataset.endminute);
+
+                const eventDate = getNextOccurrence(day, hour, minute);
+                el.textContent = formatCountdown(eventDate, endHour, endMinute);
             });
         }
 
         renderEvents();
     </script>
+
     <script src="js/script.js"></script>
 </body>
 </html>
