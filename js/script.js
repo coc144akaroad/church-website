@@ -368,6 +368,38 @@ function initPerformanceMonitoring() {
 }
 
 // ===================================
+// LIVESTREAM EMBED HANDLING
+// ===================================
+
+function initLivestreamEmbed() {
+    try {
+        const iframe = document.getElementById('livestreamEmbed');
+        const videoWrap = document.getElementById('videoWrap');
+        if (!iframe || !videoWrap) return;
+
+        const setState = () => {
+            const src = (iframe.getAttribute('src') || iframe.src || '').trim();
+            if (src) {
+                videoWrap.classList.add('has-embed');
+            } else {
+                videoWrap.classList.remove('has-embed');
+            }
+        };
+
+        // Initial
+        setState();
+
+        // Observe changes to the iframe src attribute (in case embed is set dynamically)
+        const mo = new MutationObserver(() => setState());
+        mo.observe(iframe, { attributes: true, attributeFilter: ['src'] });
+    } catch (err) {
+        console.error('initLivestreamEmbed error', err);
+    }
+}
+
+// (theme toggle removed)
+
+// ===================================
 // INITIALIZE ALL
 // ===================================
 
@@ -389,6 +421,8 @@ function initializeApp() {
     initKeyboardShortcuts();
     initAccessibility();
     initPerformanceMonitoring();
+        // Livestream embed handling
+        initLivestreamEmbed();
 
     // Log initialization
     console.log('Church website initialized successfully');

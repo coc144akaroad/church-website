@@ -17,37 +17,55 @@
     <style>
         .livestream-container {
             display: grid;
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: 1fr;
             gap: 2rem;
             margin-top: 2rem;
+            align-items: start;
         }
 
         .livestream-main {
-            aspect-ratio: 16 / 9;
-            height: 250px;
-            min-height: 180px;
+            width: 100%;
             background: #000;
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
-        .livestream-main iframe {
+        /* Responsive 16:9 wrapper using padding-top trick for consistent sizing */
+        .video-wrap {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-top: 56.25%; /* 16:9 */
+            background: #000;
+        }
+
+        .video-wrap iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             border: none;
+            display: block;
         }
 
-        .livestream-placeholder {
-            width: 100%;
-            height: 100%;
+        .livestream-fallback {
+            position: absolute;
+            inset: 0;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             background: linear-gradient(135deg, #1e3a8a 0%, #003d82 100%);
             color: white;
-            font-size: 2rem;
+            font-size: 1.6rem;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        /* When an embed is present, hide the fallback */
+        .video-wrap.has-embed .livestream-fallback {
+            display: none;
         }
 
         .livestream-status {
@@ -124,6 +142,7 @@
             gap: 1rem;
             margin-top: 1.5rem;
             justify-content: center;
+            flex-wrap: wrap;
         }
 
         .social-icon {
@@ -158,6 +177,12 @@
             color: #1e3a8a;
         }
 
+        @media (min-width: 1200px) {
+            .livestream-main {
+                min-height: 420px;
+            }
+        }
+
         @media (max-width: 1000px) {
             .livestream-container {
                 grid-template-columns: 1fr;
@@ -166,12 +191,12 @@
 
         @media (max-width: 768px) {
             .livestream-main {
-                aspect-ratio: 16 / 9;
-                height: 220px;
+                min-height: 220px;
             }
 
             .livestream-placeholder {
-                font-size: 1.2rem;
+                font-size: 1.1rem;
+                padding: 0.75rem;
             }
         }
     </style>
@@ -216,71 +241,18 @@
     <section class="section">
         <div class="container">
             <div class="livestream-container">
-                <!-- Livestream Video -->
+                <!-- Livestream Video (sidebar removed) -->
                 <div class="scroll-reveal">
                     <div class="livestream-status">🔴 LIVE NOW</div>
-                    <div class="livestream-main livestream-placeholder">
-                        <iframe id="livestreamEmbed" src="" title="Livestream" style="width:100%;height:100%;border:0;" allowfullscreen></iframe>
-                        <!-- Replace the iframe src with your streaming embed URL (e.g. YouTube/Vimeo). -->
+                    <div class="livestream-main">
+                        <div class="video-wrap" id="videoWrap">
+                            <iframe id="livestreamEmbed" src="" title="Livestream" allowfullscreen></iframe>
+                            <div class="livestream-fallback">Replace the iframe src with your streaming embed URL (e.g. YouTube/Vimeo).</div>
+                        </div>
                     </div>
-                    <p style="margin-top: 1rem; color: #666; text-align: center;">
-                        Join us live for worship and Bible study.
-                    </p>
+                    <p style="margin-top: 1rem; color: #666; text-align: center;">Join us live for worship and Bible study.</p>
                 </div>
-
-                <!-- Sidebar -->
-                <div class="scroll-reveal" style="animation-delay: 0.1s;">
-                    <div class="schedule-section">
-                        <h3>📅 Worship Activities</h3>
-                        
-                        <div class="schedule-item">
-                            <h4>Sunday Worship Service</h4>
-                            <p>Every Sunday<br>9:00 AM - 1:00 PM WAT</p>
-                        </div>
-
-                        <div class="schedule-item">
-                            <h4>Tuesday Bible Class</h4>
-                            <p>Every Tuesday<br>6:00 PM - 7:30 PM WAT</p>
-                        </div>
-
-                        <div class="schedule-item">
-                            <h4>Thursday Bible Class</h4>
-                            <p>Every Thursday<br>6:00 PM - 7:30 PM WAT</p>
-                        </div>
-
-                        <div class="schedule-item">
-                            <h4>Saturday Song Class</h4>
-                            <p>Every Saturday<br>6:00 PM - 7:00 PM WAT</p>
-                        </div>
-
-                        <a href="https://www.facebook.com/churchofchristaka/" target="_blank" rel="noopener noreferrer" class="join-button">Follow on Facebook</a>
-                    </div>
-
-                    <div class="schedule-section" style="margin-top: 1.5rem; border-left-color: #d4af37;">
-                        <h3>💬 Counselling Sessions</h3>
-                        <div class="schedule-item">
-                            <p><strong>2nd Monday of Month:</strong><br>5:00 PM - 6:30 PM WAT</p>
-                        </div>
-                        <div class="schedule-item">
-                            <p><strong>Tuesday & Thursday:</strong><br>5:00 PM - 6:00 PM WAT</p>
-                        </div>
-                        <p style="font-size: 0.9rem; color: #666; margin-top: 1rem; border-top: 1px solid #e0e0e0; padding-top: 1rem;">Professional counselling support available for spiritual guidance and personal growth.</p>
-                    </div>
-
-                    <div class="schedule-section" style="margin-top: 1.5rem; border-left-color: #1e3a8a;">
-                        <h3>📞 Contact Us</h3>
-                        <p><strong>Phone:</strong> <a href="tel:+234812209800" style="color: #1e3a8a; text-decoration: none;">+234 812 209 8001</a></p>
-                        <p><strong>WhatsApp:</strong> <a href="https://wa.me/2349090090481" target="_blank" rel="noopener noreferrer" style="color: #1e3a8a; text-decoration: none;">+234 909 009 0481</a></p>
-                        <p><strong>Email:</strong> <a href="mailto:coc144akaroad@gmail.com" style="color: #1e3a8a; text-decoration: none;">coc144akaroad@gmail.com</a></p>
-                        <p><strong>Location:</strong> 144 Aka Road, Uyo<br>Akwa Ibom State, Nigeria</p>
-                    </div>
-
-                    <div class="social-links-inline">
-                        <a href="https://www.facebook.com/churchofchristaka/" target="_blank" rel="noopener noreferrer" class="social-icon" title="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
-                        <a href="https://www.instagram.com/coc_144akard/" target="_blank" rel="noopener noreferrer" class="social-icon" title="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
-                        <a href="https://x.com/coc_akaroad" target="_blank" rel="noopener noreferrer" class="social-icon" title="X (Twitter)"><i class="fab fa-twitter" aria-hidden="true"></i></a>
-                    </div>
-                </div>
+            </div>
             </div>
         </div>
     </section>
