@@ -353,6 +353,16 @@ a:hover {
     margin-bottom: 0;
 }
 
+.info-card p a {
+    color: #d4af37;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.info-card p a:hover {
+    color: #f8d080;
+}
+
 /* ===================================
    PAGE HEADER
    =================================== */
