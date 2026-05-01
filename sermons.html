@@ -238,15 +238,85 @@
             const sermon = sermons.find(s => s.id === id);
             if (!sermon) return;
 
+            const sermonContents = {
+                1: `
+                    <h3>Scripture Reference: 2 Corinthians 5:7</h3>
+                    <p><strong>"For we live by faith, not by sight."</strong></p>
+                    <p>In our Christian journey, we often encounter situations that test our faith. The world tells us to trust only what we can see, measure, and control. However, the apostle Paul reminds us that living by faith means relying on God's promises even when circumstances appear challenging.</p>
+                    <h3>Understanding Faith</h3>
+                    <p>Faith is not blind hope or wishful thinking. Rather, it is a confident trust in God's character and His Word. Throughout Scripture, we see examples of men and women who walked by faith—Abraham leaving his homeland, Moses leading Israel through the wilderness, and countless others who faced impossible situations yet trusted God.</p>
+                    <p>When Abraham was called to leave everything he knew, he didn't have a detailed map or guarantee of success. He simply trusted God's promise. That's living by faith, not by sight.</p>
+                    <h3>Practical Application</h3>
+                    <p>In your daily life, this means making decisions based on God's Word rather than on your circumstances. It means praying when you're anxious, praising when you're struggling, and continuing forward even when the path is unclear. Living by faith doesn't mean ignoring reality; it means interpreting reality through the lens of God's promises.</p>
+                    <p>Today, whatever you're facing—financial uncertainty, health concerns, relationship struggles, or career decisions—remember that God is faithful. He invites you to trust Him completely and step forward with confidence, knowing that He is with you.</p>
+                `,
+                2: `
+                    <h3>Scripture Reference: 1 Thessalonians 5:17</h3>
+                    <p><strong>"Pray without ceasing."</strong></p>
+                    <p>Prayer is one of the most powerful yet often underutilized tools available to believers. It's our direct line of communication with God Almighty. Yet many Christians struggle with prayer, viewing it as a formal obligation rather than an intimate conversation with their Father.</p>
+                    <h3>The Essence of Prayer</h3>
+                    <p>Prayer isn't about using the right words or lengthy speeches. Jesus taught us that God values sincerity and earnestness over eloquence. Prayer is simply bringing your authentic self before God—your hopes, fears, dreams, and struggles—and laying them at His feet.</p>
+                    <p>In Matthew 6, Jesus teaches us the Lord's Prayer, which covers the essential elements: acknowledging God's greatness, seeking His kingdom, requesting our needs, forgiving others, and asking protection from temptation. This prayer reminds us that effective prayer centers on God's will and kingdom, not just our personal desires.</p>
+                    <h3>Prayer Transforms Everything</h3>
+                    <p>When we pray, we aren't trying to convince God to do what we want. Instead, prayer aligns our hearts with God's heart. It changes our perspective, strengthens our faith, and opens us to God's guidance and provision. Prayer is the vehicle through which God works in our lives and in the world.</p>
+                    <p>Start a consistent prayer practice today. Set aside time each morning or evening to pray. Share your burdens, thanksgiving, and intercessions with God. Watch as your life transforms through the power of prayer.</p>
+                `,
+                3: `
+                    <h3>Scripture Reference: 2 Corinthians 12:9</h3>
+                    <p><strong>"My grace is sufficient for you, for my power is made perfect in weakness."</strong></p>
+                    <p>We live in a world that glorifies strength and self-sufficiency. Yet the Christian message is countercultural: God's grace is most powerful in our weakness. This truth revolutionized Paul's understanding of his faith, and it can transform ours as well.</p>
+                    <h3>What Is God's Grace?</h3>
+                    <p>Grace is God's unmerited favor—the blessing we receive not because we've earned it, but because God loves us. It's what saves us through Christ, and it's what sustains us daily. Grace isn't just for our conversion; it's the continuous supply of God's strength, provision, and love throughout our lives.</p>
+                    <h3>The Paradox of Weakness and Strength</h3>
+                    <p>When Paul asked God to remove his thorn in the flesh (a source of suffering and weakness), God didn't remove it. Instead, God promised that His grace would be sufficient. In his weakness, Paul learned to depend on God's strength. This principle applies to us: our limitations, struggles, and failures become opportunities for God to demonstrate His power.</p>
+                    <h3>Living by Grace Daily</h3>
+                    <p>Grace sustains us through illness, loss, failure, and uncertainty. When you feel inadequate, remember that God's strength is perfected in your weakness. When you stumble, grace picks you up. When you're exhausted, grace provides renewal. This is not a one-time gift but a continuous stream of God's sustaining power.</p>
+                    <p>Whatever you're facing today, God's grace is sufficient. Lean into it, trust it, and experience the victory that comes through resting in God's power.</p>
+                `,
+                4: `
+                    <h3>Scripture Reference: Jeremiah 29:11</h3>
+                    <p><strong>"For I know the plans I have for you, declares the Lord, plans for welfare and not for evil, to give you a future and a hope."</strong></p>
+                    <p>One of life's deepest questions is: "What is my purpose?" Many people drift through life without a clear sense of direction or meaning. As Christians, we have an incredible foundation for finding purpose: God has a plan for each of us.</p>
+                    <h3>God's Purpose for You</h3>
+                    <p>God didn't create you by accident. He has a specific purpose for your life. This purpose isn't about achieving worldly success or accumulating possessions. Rather, God's purpose for you centers on becoming more like Christ and serving others in love.</p>
+                    <p>Your unique gifts, talents, personality, and life experiences have been sovereignly arranged by God. They equip you for the purpose He has for you. When you discover and embrace this purpose, life becomes meaningful and fulfilling.</p>
+                    <h3>How to Find Your Purpose</h3>
+                    <p>Finding your purpose begins with surrendering to God's lordship. Spend time in prayer asking God to reveal His will for your life. Study Scripture to understand God's values and priorities. Observe where you find joy, where you see needs you can meet, and where your passions intersect with God's heart.</p>
+                    <p>Your purpose may be expressed through your career, family, church, community, or service to others. It may be big and visible or quiet and humble. What matters is that your life aligns with God's kingdom and His eternal purposes.</p>
+                    <p>God has plans for you—plans for good, not evil. Surrender your life to Him today and discover the fulfillment that comes from living according to His purpose.</p>
+                `,
+                5: `
+                    <h3>Scripture Reference: 1 Corinthians 15:57</h3>
+                    <p><strong>"But thanks be to God, who gives us the victory through our Lord Jesus Christ."</strong></p>
+                    <p>The resurrection of Jesus is not merely a historical event—it's the foundation of Christian faith and hope. It validates everything Jesus taught, confirms His divine power, and assures us of our own resurrection and eternal life.</p>
+                    <h3>The Significance of the Resurrection</h3>
+                    <p>When Jesus rose from the dead on the third day, He accomplished what no one else could: He conquered sin and death. His resurrection proved that He is God's Son and that His sacrifice on the cross was sufficient for our salvation. Without the resurrection, Christianity would be just another failed religious movement.</p>
+                    <p>The early disciples were terrified and defeated when Jesus died. But after witnessing His resurrection, they became bold proclaimers, willing to face persecution and death. The resurrection transformed their despair into unshakeable confidence.</p>
+                    <h3>The Resurrection's Promise for Us</h3>
+                    <p>Jesus' resurrection is the guarantee of our resurrection. Paul assures us that all who believe in Christ will be raised to eternal life. This isn't a distant, abstract belief—it's a living hope that impacts how we live today.</p>
+                    <p>Because of the resurrection, we don't need to fear death or despair in our struggles. We're not living for this temporary world but for the eternal kingdom. This hope produces patience in suffering, joy in trials, and love for others.</p>
+                    <p>The resurrection reminds us that God's plans are bigger than our circumstances. Whatever you're facing, trust in the God who conquered death and rose victorious.</p>
+                `,
+                6: `
+                    <h3>Scripture Reference: 1 John 3:18</h3>
+                    <p><strong>"Dear children, let us not love with words or speech but with actions and in truth."</strong></p>
+                    <p>Love is the most frequently mentioned quality in the New Testament, yet it's often misunderstood. In our culture, love is often portrayed as a feeling or emotion. But biblical love—agape—is fundamentally an action and a commitment.</p>
+                    <h3>Love Is More Than Words</h3>
+                    <p>Anyone can say "I love you," but true love is demonstrated through actions. Jesus exemplified this by washing His disciples' feet, healing the sick, and ultimately dying for our sins. He didn't just preach about love; He lived it sacrificially.</p>
+                    <p>In our relationships, love in action means serving, listening, forgiving, and caring for others' needs. It means being patient when tested, showing kindness even when not reciprocated, and standing by others in their struggles.</p>
+                    <h3>Love in Our Communities</h3>
+                    <p>As a church, we're called to be known by our love. Not the mushy sentimentality we hear about, but practical, costly, sacrificial love. This means caring for the poor, visiting the sick, welcoming the stranger, and standing for justice.</p>
+                    <p>Love transforms relationships, families, churches, and communities. When people experience genuine, selfless love from believers, they encounter God's character. Love is the most powerful testimony to Christ.</p>
+                    <h3>Living Love Today</h3>
+                    <p>Ask God to help you express His love through your actions today. Whether it's helping a neighbor, comforting a friend, or serving at church, let your love be evident in what you do, not just what you say. This is how the world will know that Jesus is real.</p>
+                `
+            };
+
+            const content = sermonContents[id] || sermonContents[1];
             document.getElementById('modalTitle').textContent = sermon.title;
             document.getElementById('modalSpeaker').textContent = `Speaker: ${sermon.speaker}`;
             document.getElementById('modalDate').textContent = `Date: ${sermon.date}`;
-            document.getElementById('modalContent').innerHTML = `
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-                <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
-            `;
+            document.getElementById('modalContent').innerHTML = content;
             document.getElementById('pdfDownload').onclick = () => downloadAsPDF(sermon);
             document.getElementById('sermonModal').style.display = 'block';
         }
