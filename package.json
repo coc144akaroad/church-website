@@ -1,0 +1,11 @@
+{
+  "name": "church-website",
+  "version": "1.0.0",
+  "description": "Static church website with automated gallery manifest generation.",
+  "scripts": {
+    "generate-gallery": "node scripts/generate-gallery.js"
+  },
+  "engines": {
+    "node": ">=14"
+  }
+}

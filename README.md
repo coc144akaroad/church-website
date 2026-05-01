@@ -124,13 +124,22 @@ Open `css/main.css` and adjust:
 1. **Sermons**: Edit sermon data in `sermons.html` JavaScript section
 2. **Events**: Edit event data in `events.html` JavaScript section
 3. **Team**: Edit team data in `leadership.html` JavaScript section
-4. **Gallery**: Add your images and update gallery data
+4. **Gallery**: Add your images to `img/gallery/` and generate the manifest
+
+### Gallery Workflow
+The gallery is automated to load images from `img/gallery/gallery.json`.
+To add pictures:
+1. Place image files into `img/gallery/`
+2. Run `npm run generate-gallery` or `node scripts/generate-gallery.js`
+3. Open `gallery.html` from a local server
+
+This means you do not need to edit the gallery HTML manually after uploading.
 
 ### Replace Placeholder Images
-Currently uses emoji placeholders for demo. To add real images:
-1. Create `assets/images/` folder
-2. Add your images
-3. Update image paths in HTML files
+If the gallery manifest is missing, the page will show temporary placeholders instead. To use real images:
+1. Add your image files to `img/gallery/`
+2. Run the manifest generator
+3. Reload `gallery.html`
 
 ### Update Social Media Links
 Find social media links in footer and update:

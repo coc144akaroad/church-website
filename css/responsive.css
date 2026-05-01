@@ -43,7 +43,7 @@
 
     .hamburger {
         display: flex;
-        z-index: 1001;
+        z-index: 1003;
         margin-left: auto;
     }
 
@@ -70,21 +70,21 @@
         right: 0;
         background: white;
         flex-direction: column;
-        padding: 1rem;
+        padding: 0.5rem 0;
         gap: 0;
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease;
+        display: none;
         width: 100%;
+        z-index: 1002;
     }
 
-    .nav-menu.active {
-        max-height: 600px;
+    .nav-menu.active,
+    .hamburger.active + .nav-menu {
+        display: flex;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
 
     .nav-menu li {
-        padding: 1rem;
+        padding: 1rem 1.25rem;
         border-bottom: 1px solid #f0f0f0;
     }
 

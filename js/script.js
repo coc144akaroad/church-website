@@ -9,29 +9,42 @@
 function initNavigation() {
     const hamburger = document.getElementById('hamburger');
     const navMenu = document.getElementById('navMenu');
+    const navContent = document.querySelector('.nav-content');
 
-    if (!hamburger || !navMenu) return;
+    if (!hamburger || !navMenu || !navContent) return;
+    if (hamburger.dataset.navInit === 'true') return;
+    hamburger.dataset.navInit = 'true';
 
-    // Toggle menu on hamburger click
-    hamburger.addEventListener('click', () => {
+    const closeMenu = () => {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+        hamburger.setAttribute('aria-expanded', 'false');
+    };
+
+    const toggleMenu = () => {
+        const isOpen = !navMenu.classList.contains('active');
         hamburger.classList.toggle('active');
         navMenu.classList.toggle('active');
+        hamburger.setAttribute('aria-expanded', isOpen.toString());
+    };
+
+    document.addEventListener('click', (e) => {
+        if (e.target.closest('#hamburger')) {
+            e.preventDefault();
+            toggleMenu();
+            return;
+        }
+
+        if (!e.target.closest('.nav-content')) {
+            closeMenu();
+        }
     });
 
     // Close menu when a link is clicked
     navMenu.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {
-            hamburger.classList.remove('active');
-            navMenu.classList.remove('active');
+            closeMenu();
         });
-    });
-
-    // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('.nav-content')) {
-            hamburger.classList.remove('active');
-            navMenu.classList.remove('active');
-        }
     });
 }
 

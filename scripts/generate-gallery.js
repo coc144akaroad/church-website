@@ -15,7 +15,16 @@ const files = fs.readdirSync(galleryDir)
   .filter(f => allowedExt.includes(path.extname(f).toLowerCase()))
   .sort();
 
-const items = files.map(f => path.posix.join('img/gallery', f));
+const items = files.map(f => {
+  const title = path.basename(f, path.extname(f))
+    .replace(/[-_]+/g, ' ')
+    .replace(/\b\w/g, c => c.toUpperCase());
+
+  return {
+    src: path.posix.join('img/gallery', f),
+    title
+  };
+});
 
 fs.writeFileSync(outFile, JSON.stringify(items, null, 2), 'utf8');
 console.log(`Wrote ${outFile} with ${items.length} items.`);

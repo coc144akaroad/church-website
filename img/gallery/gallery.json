@@ -1,7 +1,22 @@
-﻿[
-    "img/gallery/1.jpg",
-    "img/gallery/2.jpg",
-    "img/gallery/3.jpg",
-    "img/gallery/4.jpg",
-    "img/gallery/5.jpg"
+[
+  {
+    "src": "img/gallery/1.jpg",
+    "title": "1"
+  },
+  {
+    "src": "img/gallery/2.jpg",
+    "title": "2"
+  },
+  {
+    "src": "img/gallery/3.jpg",
+    "title": "3"
+  },
+  {
+    "src": "img/gallery/4.jpg",
+    "title": "4"
+  },
+  {
+    "src": "img/gallery/5.jpg",
+    "title": "5"
+  }
 ]
