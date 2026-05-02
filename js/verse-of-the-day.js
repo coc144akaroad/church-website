@@ -147,10 +147,11 @@
         const controls = document.querySelectorAll('.daily-verse-controls');
         const pageUrl = window.location.href;
         const siteName = 'Church of Christ, Aka Road';
-        const shareText = `${verse.text} — ${verse.ref}\n\nFrom ${siteName}\n${pageUrl}`;
+        const quoteText = `${verse.text} — ${verse.ref} — From ${siteName}`;
+        const shareText = `${quoteText}\n\n${pageUrl}`;
         const waLink = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(shareText);
-        const twLink = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(`${verse.text} — ${verse.ref} — From ${siteName} ${pageUrl}`);
-        const fbLink = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(pageUrl) + '&quote=' + encodeURIComponent(`${verse.text} — ${verse.ref} — From ${siteName}`);
+        const twLink = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(`${quoteText} ${pageUrl}`);
+        const fbLink = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(pageUrl) + '&quote=' + encodeURIComponent(quoteText);
 
         controls.forEach(ctrl => {
             const waEl = ctrl.querySelector('.share-wa');

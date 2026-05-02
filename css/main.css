@@ -283,6 +283,22 @@ a:hover {
     background: rgba(255,255,255,0.12);
 }
 
+/* Share hint text shown near share buttons */
+.share-hint {
+    font-size: 0.95rem;
+    margin-top: 6px;
+    display: block;
+    font-weight: 600;
+    letter-spacing: 0.1px;
+    color: #333;
+}
+.hero .share-hint {
+    color: rgba(255,255,255,0.95);
+}
+.newsletter .share-hint {
+    color: #f3f4f6;
+}
+
 .verse-copied-tip {
     font-size: 0.9rem;
     margin-left: 8px;
