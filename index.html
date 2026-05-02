@@ -302,57 +302,17 @@
                 + '&location=' + encodeURIComponent(location || '');
         }
 
-        function formatICSDateUTC(d) {
-            const yyyy = d.getUTCFullYear();
-            const mm = String(d.getUTCMonth() + 1).padStart(2, '0');
-            const dd = String(d.getUTCDate()).padStart(2, '0');
-            const hh = String(d.getUTCHours()).padStart(2, '0');
-            const min = String(d.getUTCMinutes()).padStart(2, '0');
-            const ss = String(d.getUTCSeconds()).padStart(2, '0');
-            return `${yyyy}${mm}${dd}T${hh}${min}${ss}Z`;
-        }
-
-        function buildICSString(title, startDate, endDate, description, location) {
-            const uid = `${Date.now()}-${Math.random().toString(36).substr(2,6)}@coc-akaro`;
-            const dtstamp = formatICSDateUTC(new Date());
-            const dtstart = formatICSDateUTC(startDate);
-            const dtend = formatICSDateUTC(endDate);
-            const lines = [
-                'BEGIN:VCALENDAR',
-                'VERSION:2.0',
-                'PRODID:-//Church of Christ Aka Road//EN',
-                'BEGIN:VEVENT',
-                `UID:${uid}`,
-                `DTSTAMP:${dtstamp}`,
-                `DTSTART:${dtstart}`,
-                `DTEND:${dtend}`,
-                `SUMMARY:${title}`,
-                `DESCRIPTION:${description || ''}`,
-                `LOCATION:${location || ''}`,
-                'END:VEVENT',
-                'END:VCALENDAR'
-            ];
-            return lines.join('\r\n');
-        }
-
-        function downloadICS(content, filename) {
-            const blob = new Blob([content], { type: 'text/calendar;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            setTimeout(() => URL.revokeObjectURL(url), 10000);
-        }
-
         function renderEvents() {
             const grid = document.getElementById('eventsGrid');
             grid.innerHTML = '';
 
-            events.forEach((event, index) => {
-                const eventDate = getNextOccurrence(event.day, event.startHour, event.startMinute);
+            // compute next occurrence for each event and sort by date
+            const upcoming = events.map(ev => {
+                return Object.assign({}, ev, { nextDate: getNextOccurrence(ev.day, ev.startHour, ev.startMinute) });
+            }).sort((a, b) => a.nextDate - b.nextDate).slice(0, 1);
+
+            upcoming.forEach((event, index) => {
+                const eventDate = event.nextDate;
 
                 const card = document.createElement('div');
                 card.className = 'event-detailed-card scroll-reveal';
@@ -401,22 +361,20 @@
                         <p class="event-description">${event.description}</p>
                         <div class="event-actions">
                             <a class="btn btn-secondary" href="${gcalUrl}" target="_blank" rel="noopener noreferrer">Add to Google Calendar</a>
-                            <button class="btn btn-text download-ics" data-index="${index}">Download .ics</button>
                         </div>
                     </div>
                 `;
 
                 grid.appendChild(card);
-
-                const downloadBtn = card.querySelector('.download-ics');
-                if (downloadBtn) {
-                    downloadBtn.addEventListener('click', () => {
-                        const ics = buildICSString(event.title, startDate, endDate, event.description, event.location);
-                        const filename = `${event.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.ics`;
-                        downloadICS(ics, filename);
-                    });
-                }
             });
+
+            // link to full events page
+            const more = document.createElement('div');
+            more.className = 'events-view-all scroll-reveal';
+            more.style.textAlign = 'center';
+            more.style.marginTop = '1.25rem';
+            more.innerHTML = `<a class="btn btn-text" href="events.html">View All Events →</a>`;
+            grid.appendChild(more);
 
             updateCountdowns();
             setInterval(updateCountdowns, 60000);

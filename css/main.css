@@ -296,7 +296,11 @@ a:hover {
     color: #1e3a8a;
     border-color: #e5e7eb;
 }
-.newsletter .daily-verse-controls .copy-btn { background: transparent; border: 1px solid #e5e7eb; }
+.newsletter .daily-verse-controls .copy-btn {
+    background: #f3f4f6;
+    color: #1e3a8a;
+    border: 1px solid #e5e7eb;
+}
 
 /* ===================================
    BUTTONS

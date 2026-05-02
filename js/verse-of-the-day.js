@@ -146,10 +146,11 @@
     function updateShareControls(verse) {
         const controls = document.querySelectorAll('.daily-verse-controls');
         const pageUrl = window.location.href;
-        const shareText = `${verse.text} — ${verse.ref}\n\n${pageUrl}`;
+        const siteName = 'Church of Christ, Aka Road';
+        const shareText = `${verse.text} — ${verse.ref}\n\nFrom ${siteName}\n${pageUrl}`;
         const waLink = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(shareText);
-        const twLink = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(`${verse.text} — ${verse.ref} ${pageUrl}`);
-        const fbLink = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(pageUrl) + '&quote=' + encodeURIComponent(`${verse.text} — ${verse.ref}`);
+        const twLink = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(`${verse.text} — ${verse.ref} — From ${siteName} ${pageUrl}`);
+        const fbLink = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(pageUrl) + '&quote=' + encodeURIComponent(`${verse.text} — ${verse.ref} — From ${siteName}`);
 
         controls.forEach(ctrl => {
             const waEl = ctrl.querySelector('.share-wa');
@@ -164,7 +165,7 @@
                 copyBtn.onclick = async (e) => {
                     e.preventDefault();
                     try {
-                        await copyToClipboard(`${verse.text} — ${verse.ref} ${pageUrl}`);
+                        await copyToClipboard(shareText);
                         showCopied(copyBtn);
                     } catch (err) {
                         console.warn('copy failed', err);
