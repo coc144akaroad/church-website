@@ -51,7 +51,18 @@
     <header class="hero" id="home">
         <div class="hero-content">
             <h1 class="hero-title fade-in-up">Welcome to Church of Christ, 144 Aka Road, Uyo</h1>
-            <p class="hero-subtitle fade-in-up" style="animation-delay: 0.2s">Experience the love of Christ in a vibrant, growing community</p>
+            <p class="hero-subtitle fade-in-up" style="animation-delay: 0.2s" id="daily-verse">
+                <span id="daily-verse-text" class="daily-verse-text">Experience the love of Christ in a vibrant, growing community</span>
+                <br>
+                <small id="daily-verse-ref" class="daily-verse-ref" style="font-style: italic; opacity: 0.9; display:block; margin-top:6px;"></small>
+
+                <div class="daily-verse-controls" style="margin-top:8px;">
+                    <a class="share-btn share-wa" href="#" target="_blank" rel="noopener noreferrer" aria-label="Share on WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+                    <a class="share-btn share-twitter" href="#" target="_blank" rel="noopener noreferrer" aria-label="Share on X/Twitter"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                    <a class="share-btn share-fb" href="#" target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                    <button class="share-btn copy-btn" aria-label="Copy verse"><i class="fas fa-copy" aria-hidden="true"></i></button>
+                </div>
+            </p>
             <div class="hero-buttons fade-in-up" style="animation-delay: 0.4s">
                 <button class="btn btn-primary" onclick="smoothScroll('about-preview')">Learn More</button>
                 <a href="events.html" class="btn btn-secondary">Visit Us</a>
@@ -269,8 +280,73 @@
         }
 
         // =========================
-        // RENDER EVENTS
+        // RENDER EVENTS (with calendar helpers)
         // =========================
+        function formatDateForGoogle(d) {
+            const yyyy = d.getUTCFullYear();
+            const mm = String(d.getUTCMonth() + 1).padStart(2, '0');
+            const dd = String(d.getUTCDate()).padStart(2, '0');
+            const hh = String(d.getUTCHours()).padStart(2, '0');
+            const min = String(d.getUTCMinutes()).padStart(2, '0');
+            const ss = String(d.getUTCSeconds()).padStart(2, '0');
+            return `${yyyy}${mm}${dd}T${hh}${min}${ss}Z`;
+        }
+
+        function buildGoogleCalendarUrl(title, startDate, endDate, description, location) {
+            const start = formatDateForGoogle(startDate);
+            const end = formatDateForGoogle(endDate);
+            return 'https://www.google.com/calendar/render?action=TEMPLATE'
+                + '&text=' + encodeURIComponent(title)
+                + '&dates=' + start + '/' + end
+                + '&details=' + encodeURIComponent(description || '')
+                + '&location=' + encodeURIComponent(location || '');
+        }
+
+        function formatICSDateUTC(d) {
+            const yyyy = d.getUTCFullYear();
+            const mm = String(d.getUTCMonth() + 1).padStart(2, '0');
+            const dd = String(d.getUTCDate()).padStart(2, '0');
+            const hh = String(d.getUTCHours()).padStart(2, '0');
+            const min = String(d.getUTCMinutes()).padStart(2, '0');
+            const ss = String(d.getUTCSeconds()).padStart(2, '0');
+            return `${yyyy}${mm}${dd}T${hh}${min}${ss}Z`;
+        }
+
+        function buildICSString(title, startDate, endDate, description, location) {
+            const uid = `${Date.now()}-${Math.random().toString(36).substr(2,6)}@coc-akaro`;
+            const dtstamp = formatICSDateUTC(new Date());
+            const dtstart = formatICSDateUTC(startDate);
+            const dtend = formatICSDateUTC(endDate);
+            const lines = [
+                'BEGIN:VCALENDAR',
+                'VERSION:2.0',
+                'PRODID:-//Church of Christ Aka Road//EN',
+                'BEGIN:VEVENT',
+                `UID:${uid}`,
+                `DTSTAMP:${dtstamp}`,
+                `DTSTART:${dtstart}`,
+                `DTEND:${dtend}`,
+                `SUMMARY:${title}`,
+                `DESCRIPTION:${description || ''}`,
+                `LOCATION:${location || ''}`,
+                'END:VEVENT',
+                'END:VCALENDAR'
+            ];
+            return lines.join('\r\n');
+        }
+
+        function downloadICS(content, filename) {
+            const blob = new Blob([content], { type: 'text/calendar;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 10000);
+        }
+
         function renderEvents() {
             const grid = document.getElementById('eventsGrid');
             grid.innerHTML = '';
@@ -293,6 +369,12 @@
                     hour: '2-digit', 
                     minute: '2-digit'
                 });
+
+                const startDate = new Date(eventDate);
+                const endDate = new Date(eventDate);
+                endDate.setHours(event.endHour, event.endMinute, 0, 0);
+
+                const gcalUrl = buildGoogleCalendarUrl(event.title, startDate, endDate, event.description, event.location);
 
                 card.innerHTML = `
                     <div class="event-card-header">
@@ -317,10 +399,23 @@
                             <p><strong>📍</strong> ${event.location}</p>
                         </div>
                         <p class="event-description">${event.description}</p>
+                        <div class="event-actions">
+                            <a class="btn btn-secondary" href="${gcalUrl}" target="_blank" rel="noopener noreferrer">Add to Google Calendar</a>
+                            <button class="btn btn-text download-ics" data-index="${index}">Download .ics</button>
+                        </div>
                     </div>
                 `;
 
                 grid.appendChild(card);
+
+                const downloadBtn = card.querySelector('.download-ics');
+                if (downloadBtn) {
+                    downloadBtn.addEventListener('click', () => {
+                        const ics = buildICSString(event.title, startDate, endDate, event.description, event.location);
+                        const filename = `${event.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.ics`;
+                        downloadICS(ics, filename);
+                    });
+                }
             });
 
             updateCountdowns();
@@ -349,23 +444,23 @@
         renderEvents();
     </script>
 
-    <!-- Newsletter Section -->
+    <!-- Daily Verse (replaces newsletter) -->
     <section class="newsletter">
         <div class="container">
             <div class="newsletter-content scroll-reveal">
-                <h2>Stay Connected</h2>
-                <p>Subscribe to our newsletter for weekly messages, church updates, and spiritual resources.</p>
-                
-                <form class="newsletter-form" id="newsletterForm">
-                    <input 
-                        type="email" 
-                        placeholder="Enter your email" 
-                        required 
-                        aria-label="Email for newsletter"
-                    >
-                    <button type="submit" class="btn btn-primary">Subscribe</button>
-                </form>
-                <p class="form-message" id="formMessage"></p>
+                <h2>Daily Verse</h2>
+                <p class="daily-verse" aria-live="polite">
+                    <span class="daily-verse-text">Experience the love of Christ in a vibrant, growing community</span>
+                    <br>
+                    <small class="daily-verse-ref" style="font-style: italic; opacity: 0.9; display:block; margin-top:6px;"></small>
+
+                    <div class="daily-verse-controls" style="margin-top:8px;">
+                        <a class="share-btn share-wa" href="#" target="_blank" rel="noopener noreferrer" aria-label="Share on WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+                        <a class="share-btn share-twitter" href="#" target="_blank" rel="noopener noreferrer" aria-label="Share on X/Twitter"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                        <a class="share-btn share-fb" href="#" target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                        <button class="share-btn copy-btn" aria-label="Copy verse"><i class="fas fa-copy" aria-hidden="true"></i></button>
+                    </div>
+                </p>
             </div>
         </div>
     </section>
@@ -418,6 +513,7 @@
 
     <script src="js/animations.js"></script>
     <script src="js/utils.js"></script>
+    <script src="js/verse-of-the-day.js"></script>
     <script src="js/script.js"></script>
 </body>
 </html>

@@ -254,6 +254,50 @@ a:hover {
     flex-wrap: wrap;
 }
 
+/* Daily verse share controls */
+.daily-verse-controls {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.5rem;
+}
+
+.daily-verse-controls .share-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.06);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.daily-verse-controls .share-btn:hover {
+    transform: translateY(-2px);
+    background: rgba(255,255,255,0.12);
+}
+
+.verse-copied-tip {
+    font-size: 0.9rem;
+    margin-left: 8px;
+    color: #16a34a;
+    font-weight: 600;
+}
+
+/* Footer (newsletter section) variant */
+.newsletter .daily-verse-controls .share-btn {
+    background: #f3f4f6;
+    color: #1e3a8a;
+    border-color: #e5e7eb;
+}
+.newsletter .daily-verse-controls .copy-btn { background: transparent; border: 1px solid #e5e7eb; }
+
 /* ===================================
    BUTTONS
    =================================== */
