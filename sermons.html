@@ -5,6 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sermons - Church of Christ, Aka Road, Uyo</title>
     <meta name="description" content="Browse our sermon library featuring biblical teaching and spiritual growth resources.">
+    <meta name="theme-color" content="#1e3a8a">
+    <link rel="canonical" href="https://churchofchristakaro.com/sermons.html">
+
+
+    <!-- Google Analytics (replace GA_ID with your tracking ID) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'GA_ID');
+    </script>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "name": "Church of Christ, Aka Road, Uyo",
+      "url": "https://churchofchristakaro.com",
+      "logo": "https://churchofchristakaro.com/img/CHURCH%20LOGO%20PNG.png",
+      "sameAs": [
+        "https://www.facebook.com/churchofchristaka/",
+        "https://www.instagram.com/coc_144akard/",
+        "https://x.com/coc_akaroad",
+        "https://wa.me/2349090090481"
+      ],
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "telephone": "+2349090090481",
+          "contactType": "Customer service",
+          "areaServed": "NG"
+        }
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "144 Aka Road",
+        "addressLocality": "Uyo",
+        "addressRegion": "Akwa Ibom",
+        "addressCountry": "NG"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "url": "https://churchofchristakaro.com",
+      "name": "Church of Christ, Aka Road, Uyo",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Church of Christ, Aka Road, Uyo"
+      }
+    }
+  ]
+}
+    </script>
+
+    <meta property="og:title" content="Sermons - Church of Christ, Aka Road, Uyo">
+    <meta property="og:description" content="Browse our sermon library featuring biblical teaching and spiritual growth resources.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://churchofchristakaro.com/sermons.html">
+    <meta property="og:image" content="https://churchofchristakaro.com/img/CHURCH%20LOGO%20PNG.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sermons - Church of Christ, Aka Road, Uyo">
+    <meta name="twitter:description" content="Browse our sermon library featuring biblical teaching and spiritual growth resources.">
+    <meta name="twitter:image" content="https://churchofchristakaro.com/img/CHURCH%20LOGO%20PNG.png">
+
     <link rel="icon" type="image/x-icon" href="img/CHURCH LOGO PNG1.ico">
     
     <link rel="stylesheet" href="css/main.css">
@@ -44,7 +110,7 @@
     </nav>
 
     <!-- Page Header -->
-    <header class="page-header">
+    <header class="page-header" data-parallax="0.12">
         <div class="header-content">
             <h1 class="fade-in-up">Sermon Library</h1>
             <p class="fade-in-up" style="animation-delay: 0.2s">Biblical teaching for spiritual growth</p>
@@ -58,7 +124,34 @@
                 <h2 class="scroll-reveal">Recent Sermons</h2>
                 <p class="scroll-reveal">Explore our latest messages on faith, hope, and biblical truth</p>
             </div>
-            
+
+            <div class="sermon-controls scroll-reveal">
+                <div class="sermon-search">
+                    <label for="sermonSearch" class="sr-only">Search sermons</label>
+                    <input id="sermonSearch" type="search" placeholder="Search title, speaker, series..." aria-label="Search sermons">
+                </div>
+                <div class="sermon-filters" id="sermonFilters" aria-label="Filter sermons by series"></div>
+            </div>
+            <p class="sermon-count" id="sermonCount" aria-live="polite">Showing 0 sermons</p>
+
+            <div class="featured-sermon-preview fade-in-up">
+                <div class="featured-sermon-card">
+                    <div class="video-frame-wrapper">
+                        <iframe id="featuredVideoFrame" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Featured sermon preview" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                    </div>
+                    <div class="featured-sermon-details">
+                        <p class="sermon-series" id="featuredSeries">Faith Foundations</p>
+                        <h2 id="featuredTitle">Living by Faith, Not by Sight</h2>
+                        <p class="sermon-meta" id="featuredMeta">Min. Emmanuel Inyang • March 20, 2026</p>
+                        <p id="featuredDescription">Discover how to navigate life’s uncertainties through unwavering faith in God’s promises.</p>
+                        <div class="featured-buttons">
+                            <a id="featuredWatchLink" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Watch on YouTube</a>
+                            <button class="btn btn-secondary" onclick="showSermonContent(featuredSermonId)">Read Sermon Notes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="sermons-list" id="sermonsList">
                 <!-- Sermons will be dynamically loaded here -->
             </div>
@@ -194,19 +287,102 @@
             }
         ];
 
-        function renderSermons(sermonsToShow = sermons) {
+        let featuredSermonId = 1;
+        let currentSearchQuery = '';
+        let currentSeriesFilter = 'All';
+
+        function getYoutubeVideoId(videoUrl) {
+            const match = videoUrl.match(/(?:embed\/|watch\?v=|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+            return match ? match[1] : '';
+        }
+
+        function getYoutubeThumbnail(videoUrl) {
+            const id = getYoutubeVideoId(videoUrl);
+            return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : '';
+        }
+
+        function setFeaturedSermon(id) {
+            featuredSermonId = id;
+            renderFeaturedSermon();
+            renderSermons();
+            document.getElementById('featuredVideoFrame')?.focus();
+        }
+
+        function updateSermonCount(count) {
+            const countElement = document.getElementById('sermonCount');
+            if (!countElement) return;
+            countElement.textContent = `Showing ${count} sermon${count === 1 ? '' : 's'}`;
+        }
+
+        function renderFeaturedSermon() {
+            const sermon = sermons.find(s => s.id === featuredSermonId) || sermons[0];
+            const featuredVideo = document.getElementById('featuredVideoFrame');
+            const featuredWatchLink = document.getElementById('featuredWatchLink');
+
+            featuredVideo.src = sermon.videoUrl + '?rel=0&modestbranding=1';
+            document.getElementById('featuredSeries').textContent = sermon.series;
+            document.getElementById('featuredTitle').textContent = sermon.title;
+            document.getElementById('featuredMeta').textContent = `${sermon.speaker} • ${sermon.date}`;
+            document.getElementById('featuredDescription').textContent = sermon.description;
+            featuredWatchLink.href = sermon.videoUrl.replace('/embed/', '/watch?v=');
+        }
+
+        function filterSermons() {
+            const query = currentSearchQuery.trim().toLowerCase();
+            return sermons.filter(sermon => {
+                const matchesSearch = query === '' || [sermon.title, sermon.speaker, sermon.series, sermon.description]
+                    .some(text => text.toLowerCase().includes(query));
+                const matchesSeries = currentSeriesFilter === 'All' || sermon.series === currentSeriesFilter;
+                return matchesSearch && matchesSeries;
+            });
+        }
+
+        function renderSeriesFilters() {
+            const filtersContainer = document.getElementById('sermonFilters');
+            if (!filtersContainer) return;
+
+            const allSeries = ['All', ...new Set(sermons.map(sermon => sermon.series))];
+            filtersContainer.innerHTML = '';
+
+            allSeries.forEach(series => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = `sermon-filter-btn ${currentSeriesFilter === series ? 'active' : ''}`;
+                button.textContent = series;
+                button.addEventListener('click', () => {
+                    currentSeriesFilter = series;
+                    renderSeriesFilters();
+                    renderSermons();
+                });
+                filtersContainer.appendChild(button);
+            });
+        }
+
+        function initSermonSearch() {
+            const searchInput = document.getElementById('sermonSearch');
+            if (!searchInput) return;
+
+            searchInput.addEventListener('input', debounce((event) => {
+                currentSearchQuery = event.target.value;
+                renderSermons();
+            }, 200));
+        }
+
+        function renderSermons(sermonsToShow = filterSermons()) {
             const list = document.getElementById('sermonsList');
             list.innerHTML = '';
+            updateSermonCount(sermonsToShow.length);
             
             sermonsToShow.forEach((sermon, index) => {
                 const card = document.createElement('div');
-                card.className = 'sermon-list-item scroll-reveal';
+                card.className = `sermon-list-item scroll-reveal ${sermon.id === featuredSermonId ? 'active' : ''}`;
                 card.style.animationDelay = (index * 0.1) + 's';
-                
+                const thumbnailUrl = getYoutubeThumbnail(sermon.videoUrl);
+
                 card.innerHTML = `
                     <div class="sermon-list-image">
-                        <div class="video-placeholder">
-                            <div class="play-icon-large">▶</div>
+                        <div class="video-placeholder" style="background-image: url('${thumbnailUrl}');">
+                            <div class="play-icon-large" aria-hidden="true">▶</div>
                         </div>
                     </div>
                     <div class="sermon-list-info">
@@ -216,16 +392,20 @@
                         <p class="sermon-date">${sermon.date}</p>
                         <p class="sermon-text">${sermon.description}</p>
                         <div class="sermon-actions">
-                            <a href="${sermon.videoUrl}" target="_blank" class="btn btn-secondary">Watch Video</a>
-                            <a href="#" onclick="showSermonContent(${sermon.id})" class="btn btn-text">Read Sermon Content</a>
+                            <button type="button" class="btn btn-secondary" onclick="setFeaturedSermon(${sermon.id})">Preview</button>
+                            <button type="button" class="btn btn-text" onclick="showSermonContent(${sermon.id})">Read Sermon Notes</button>
                         </div>
                     </div>
                 `;
-                
+
+                card.addEventListener('click', (event) => {
+                    if (event.target.closest('button')) return;
+                    setFeaturedSermon(sermon.id);
+                });
+
                 list.appendChild(card);
             });
             
-            // Reinitialize scroll reveal animations
             initScrollReveal();
         }
 
@@ -346,7 +526,16 @@
             }
         }
 
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+
         // Initial render
+        renderFeaturedSermon();
+        renderSeriesFilters();
+        initSermonSearch();
         renderSermons();
     </script>
     <script src="js/script.js"></script>

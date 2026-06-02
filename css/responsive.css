@@ -12,11 +12,11 @@
     }
 
     h1 {
-        font-size: 2rem;
+        color: var(--color-primary);
     }
 
     h2 {
-        font-size: 1.5rem;
+        border: 2px solid var(--color-primary);
     }
 
     h3 {
@@ -34,6 +34,16 @@
     /* Navigation */
     .nav-menu {
         gap: 1rem;
+    }
+
+    .nav-menu li {
+        width: 100%;
+    }
+
+    .nav-menu li a {
+        display: block;
+        width: 100%;
+        padding: 0.9rem 1.25rem;
     }
 
     .nav-link.highlight {
@@ -75,6 +85,7 @@
         display: none;
         width: 100%;
         z-index: 1002;
+        min-width: 100%;
     }
 
     .nav-menu.active,
@@ -105,11 +116,25 @@
 
     .hero-subtitle {
         font-size: 1rem;
+        max-width: 100%;
+    }
+
+    .hero-verse {
+        margin: 1.5rem auto 0;
+        max-width: 720px;
+        padding-bottom: 0.75rem;
+    }
+
+    .daily-verse-controls {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.75rem;
     }
 
     .hero-buttons {
         flex-direction: column;
         gap: 0.5rem;
+        margin-top: 1rem;
     }
 
     .btn {
@@ -120,9 +145,14 @@
     .two-column,
     .about-content,
     .contact-grid,
-    .sermon-card {
+    .sermon-card,
+    .featured-sermon-card {
         grid-template-columns: 1fr;
         gap: 1.5rem;
+    }
+
+    .video-frame-wrapper {
+        min-height: 260px;
     }
 
     /* Quick Info */
@@ -683,7 +713,7 @@
     }
 
     a {
-        color: #1e3a8a;
+        color: var(--color-primary);
         text-decoration: underline;
     }
 
@@ -733,6 +763,6 @@
     }
 
     .info-card {
-        border: 2px solid #1e3a8a;
+        border: 2px solid var(--color-primary);
     }
 }

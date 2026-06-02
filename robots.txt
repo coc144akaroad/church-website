@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://churchofchristakaro.com/sitemap.xml

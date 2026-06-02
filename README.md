@@ -133,6 +133,12 @@ To add pictures:
 2. Run `npm run generate-gallery` or `node scripts/generate-gallery.js`
 3. Open `gallery.html` from a local server
 
+If `sharp` is installed, you can also generate optimized JPEG and WebP versions automatically:
+1. Install dependencies: `npm install`
+2. Run `npm run prepare-gallery`
+
+If `sharp` fails to install due to network or native dependency issues, you can still run `node scripts/generate-gallery.js` to build the gallery manifest.
+
 This means you do not need to edit the gallery HTML manually after uploading.
 
 ### Replace Placeholder Images

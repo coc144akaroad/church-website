@@ -5,6 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gallery - Church of Christ, Aka Road, Uyo</title>
     <meta name="description" content="View photos and memories from Church of Christ, Aka Road, Uyo events and community gatherings.">
+    <meta name="theme-color" content="#1e3a8a">
+    <link rel="canonical" href="https://churchofchristakaro.com/gallery.html">
+
+
+    <!-- Google Analytics (replace GA_ID with your tracking ID) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'GA_ID');
+    </script>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "name": "Church of Christ, Aka Road, Uyo",
+      "url": "https://churchofchristakaro.com",
+      "logo": "https://churchofchristakaro.com/img/CHURCH%20LOGO%20PNG.png",
+      "sameAs": [
+        "https://www.facebook.com/churchofchristaka/",
+        "https://www.instagram.com/coc_144akard/",
+        "https://x.com/coc_akaroad",
+        "https://wa.me/2349090090481"
+      ],
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "telephone": "+2349090090481",
+          "contactType": "Customer service",
+          "areaServed": "NG"
+        }
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "144 Aka Road",
+        "addressLocality": "Uyo",
+        "addressRegion": "Akwa Ibom",
+        "addressCountry": "NG"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "url": "https://churchofchristakaro.com",
+      "name": "Church of Christ, Aka Road, Uyo",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Church of Christ, Aka Road, Uyo"
+      }
+    }
+  ]
+}
+    </script>
+
+    <meta property="og:title" content="Gallery - Church of Christ, Aka Road, Uyo">
+    <meta property="og:description" content="View photos and memories from Church of Christ, Aka Road, Uyo events and community gatherings.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://churchofchristakaro.com/gallery.html">
+    <meta property="og:image" content="https://churchofchristakaro.com/img/CHURCH%20LOGO%20PNG.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Gallery - Church of Christ, Aka Road, Uyo">
+    <meta name="twitter:description" content="View photos and memories from Church of Christ, Aka Road, Uyo events and community gatherings.">
+    <meta name="twitter:image" content="https://churchofchristakaro.com/img/CHURCH%20LOGO%20PNG.png">
+
     <link rel="icon" type="image/x-icon" href="img/CHURCH LOGO PNG1.ico">
     
     <link rel="stylesheet" href="css/main.css">
@@ -14,160 +80,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
 
-        .gallery-item {
-            position: relative;
-            overflow: hidden;
-            border-radius: 12px;
-            aspect-ratio: 1;
-            cursor: pointer;
-            background: #f0f0f0;
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .gallery-item:hover img {
-            transform: scale(1.1);
-        }
-
-        .gallery-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(30, 58, 138, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .gallery-item:hover .gallery-overlay {
-            opacity: 1;
-        }
-
-        .gallery-icon {
-            font-size: 2.5rem;
-            color: white;
-            animation: bounce 0.6s ease infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        /* Lightbox Modal */
-        .lightbox {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.95);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .lightbox.active {
-            display: flex;
-            opacity: 1;
-        }
-
-        .lightbox-content {
-            position: relative;
-            max-width: 90%;
-            max-height: 90%;
-            margin: auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .lightbox-image {
-            max-width: 100%;
-            max-height: 80vh;
-            object-fit: contain;
-        }
-
-        .lightbox-caption {
-            color: white;
-            margin-top: 1rem;
-            text-align: center;
-            font-size: 1.1rem;
-        }
-
-        .lightbox-close {
-            position: absolute;
-            top: 20px;
-            right: 40px;
-            color: white;
-            font-size: 3rem;
-            cursor: pointer;
-            transition: color 0.3s ease;
-            background: none;
-            border: none;
-            padding: 0;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .lightbox-close:hover {
-            color: #d4af37;
-        }
-
-        .lightbox-nav {
-            position: absolute;
-            top: 50%;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 20px;
-            transform: translateY(-50%);
-            pointer-events: none;
-        }
-
-        .lightbox-nav button {
-            pointer-events: all;
-            background: rgba(255, 255, 255, 0.3);
-            color: white;
-            border: none;
-            padding: 1rem;
-            font-size: 1.5rem;
-            cursor: pointer;
-            border-radius: 50%;
-            transition: background 0.3s ease;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .lightbox-nav button:hover {
-            background: rgba(212, 175, 55, 0.5);
-        }
-    </style>
 </head>
 <body>
     <!-- Navigation -->
@@ -196,10 +109,11 @@
     </nav>
 
     <!-- Page Header -->
-    <header class="page-header">
+    <header class="page-header" data-parallax="0.12">
         <div class="header-content">
             <h1 class="fade-in-up">Church Gallery</h1>
             <p class="fade-in-up" style="animation-delay: 0.2s">Memories from our community and events</p>
+            <p class="fade-in-up" style="animation-delay: 0.4s">Capture the warmth, worship, and fellowship of our church family.</p>
         </div>
     </header>
 
@@ -208,6 +122,7 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="scroll-reveal">Photo Gallery</h2>
+                <p class="scroll-reveal">See community highlights from recent services, events, and outreach.</p>
             </div>
             
             <div class="gallery-grid" id="galleryGrid">
@@ -342,6 +257,8 @@
             const cimg = document.createElement('img');
             cimg.src = img.src;
             cimg.alt = img.title || '';
+            cimg.loading = 'lazy';
+            cimg.decoding = 'async';
             if (idx === 0) cimg.classList.add('active');
             carouselContainer.appendChild(cimg);
         });
@@ -350,11 +267,27 @@
             const galleryItem = document.createElement('div');
             galleryItem.className = 'gallery-item scroll-reveal';
             galleryItem.style.animationDelay = (index * 0.05) + 's';
-            galleryItem.innerHTML = `\
-                <img src="${item.src}" alt="${item.title || ''}">\
-                <div class="gallery-overlay">\
-                  <div class="gallery-icon"><i class="fas fa-search-plus" aria-hidden="true"></i></div>\
-                </div>`;
+                        // build picture element for WebP fallback and lazy loading
+                        const pic = document.createElement('picture');
+                        if (item.webp) {
+                                const s = document.createElement('source');
+                                s.type = 'image/webp';
+                                s.srcset = item.webp;
+                                pic.appendChild(s);
+                        }
+                        const imgEl = document.createElement('img');
+                        imgEl.src = item.src;
+                        imgEl.alt = item.title || '';
+                        imgEl.loading = 'lazy';
+                        imgEl.decoding = 'async';
+                        imgEl.setAttribute('aria-hidden', 'true');
+                        pic.appendChild(imgEl);
+
+                        galleryItem.appendChild(pic);
+                        galleryItem.innerHTML += `\
+                                <div class="gallery-overlay">\
+                                    <div class="gallery-icon"><i class="fas fa-search-plus" aria-hidden="true"></i></div>\
+                                </div>`;
             galleryItem.addEventListener('click', () => openLightbox(index));
             grid.appendChild(galleryItem);
         });
@@ -375,7 +308,13 @@
         window.openLightbox = function(index) {
             window.currentImageIndex = index;
             const item = images[index];
-            document.getElementById('lightboxImage').src = item.src;
+            const lbImg = document.getElementById('lightboxImage');
+            // prefer WebP in lightbox if available
+            if (item.webp) {
+                lbImg.src = item.webp;
+            } else {
+                lbImg.src = item.src;
+            }
             document.getElementById('lightboxCaption').textContent = item.title || '';
             document.getElementById('lightbox').classList.add('active');
             document.body.style.overflow = 'hidden';
