@@ -88,6 +88,88 @@
             background: white;
             border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        <script src="js/donate-config.js"></script>
+        <script>
+            // Simple client-side donation handler (no secrets)
+            (function(){
+                const cfg = window.DonateConfig || { provider: 'hosted', hostedUrl: '' };
+
+                function initDonateUI(){
+                    const amountButtons = document.getElementById('amountButtons');
+                    const donateNow = document.getElementById('donateNow');
+                    const customAmount = document.getElementById('customAmount');
+                    const applyCustom = document.getElementById('applyCustom');
+                    const methods = Array.from(document.querySelectorAll('.method-card'));
+                    const result = document.getElementById('donationResult');
+
+                    const amounts = cfg.defaultAmounts || [1000,5000,10000];
+                    let selectedAmount = amounts[0];
+                    let selectedMethod = 'hosted';
+
+                    amounts.forEach(a => {
+                        const btn = document.createElement('button');
+                        btn.className = 'amount-btn';
+                        btn.textContent = a.toLocaleString();
+                        btn.addEventListener('click', ()=>{
+                            selectedAmount = a;
+                            document.querySelectorAll('.amount-btn').forEach(b=>b.classList.remove('active'));
+                            btn.classList.add('active');
+                        });
+                        amountButtons.appendChild(btn);
+                    });
+
+                    applyCustom.addEventListener('click', ()=>{
+                        const v = parseInt(customAmount.value,10);
+                        if (v>0) selectedAmount = v;
+                        document.querySelectorAll('.amount-btn').forEach(b=>b.classList.remove('active'));
+                    });
+
+                    methods.forEach(m => {
+                        m.addEventListener('click', ()=>{
+                            methods.forEach(x=>x.classList.remove('selected'));
+                            m.classList.add('selected');
+                            selectedMethod = m.dataset.method;
+                        });
+                    });
+
+                    donateNow.addEventListener('click', ()=>{
+                        result.textContent = '';
+                        if (selectedMethod === 'hosted'){
+                            if (cfg.hostedUrl) {
+                                const url = new URL(cfg.hostedUrl);
+                                url.searchParams.set('amount', selectedAmount);
+                                window.open(url.toString(), '_blank');
+                            } else {
+                                result.textContent = 'Hosted donation page not configured.';
+                            }
+                            return;
+                        }
+
+                        if (selectedMethod === 'bank'){
+                            result.textContent = `Please transfer ${selectedAmount.toLocaleString()} ${cfg.currency} to account ${cfg.accountNumber}.`;
+                            return;
+                        }
+
+                        if (selectedMethod === 'paystack'){
+                            if (!cfg.paystack.publicKey){ result.textContent='Paystack not configured.'; return; }
+                            // Minimal Paystack inline flow opener (public key needed)
+                            const handler = (window.PaystackPop && window.PaystackPop.setup) ? window.PaystackPop.setup({key: cfg.paystack.publicKey, email: 'donor@example.com', amount: selectedAmount*100, onClose: function(){}, callback: function(){ result.textContent='Thank you for your donation!'; }}) : null;
+                            if (handler){ handler.openIframe(); } else { result.textContent='Paystack SDK not loaded.'; }
+                            return;
+                        }
+
+                        if (selectedMethod === 'flutterwave'){
+                            if (!cfg.flutterwave.publicKey){ result.textContent='Flutterwave not configured.'; return; }
+                            // Minimal Flutterwave flow (requires script and keys)
+                            result.textContent='Flutterwave integration not yet configured in this build.';
+                            return;
+                        }
+                    });
+                }
+
+                document.addEventListener('DOMContentLoaded', initDonateUI);
+            })();
+        </script>
         }
 
         .donation-section {
@@ -320,31 +402,63 @@
                 </div>
             </div>
 
-            <!-- Donation Form Removed as Requested -->
+            <!-- Donation Form (client-side integration) -->
             <div class="donation-container scroll-reveal" style="margin-top: 3rem; text-align: center;">
-                <h2>Thank you for your interest in giving.</h2>
-                <p style="max-width: 700px; margin: 1rem auto; color: #333;">
-                    The donation form has been taken down. For giving support, please use bank transfer directly to our account below or contact us at <a href="mailto:coc144akaroad@gmail.com">coc144akaroad@gmail.com</a>.
-                </p>
-                <div style="background: #f8f9fa; border-radius: 10px; padding: 1.5rem; display: inline-block; text-align: left; max-width: 700px;">
+                <h2>Give Easily</h2>
+                <p style="max-width: 700px; margin: 1rem auto; color: #333;">Choose an amount and method below to give securely. You can copy our bank details if you prefer a direct transfer.</p>
+
+                <div id="donationApp">
+                    <div class="donation-section">
+                        <h3>Select Amount</h3>
+                        <div class="amount-buttons" id="amountButtons"></div>
+                        <div class="custom-amount" style="margin-top: .75rem;">
+                            <input id="customAmount" type="number" placeholder="Enter custom amount" aria-label="Custom amount">
+                            <button id="applyCustom" class="amount-btn">Apply</button>
+                        </div>
+                    </div>
+
+                    <div class="donation-section">
+                        <h3>Frequency</h3>
+                        <div class="donation-frequency">
+                            <label class="frequency-option"><input type="radio" name="frequency" value="oneoff" checked> One-off</label>
+                            <label class="frequency-option"><input type="radio" name="frequency" value="monthly"> Monthly</label>
+                        </div>
+                    </div>
+
+                    <div class="donation-section">
+                        <h3>Method</h3>
+                        <div class="donation-methods" id="donationMethods">
+                            <div class="method-card" data-method="hosted">
+                                <div class="method-icon">🔗</div>
+                                <div class="method-name">Hosted Page</div>
+                            </div>
+                            <div class="method-card" data-method="paystack">
+                                <div class="method-icon">⚡</div>
+                                <div class="method-name">Paystack</div>
+                            </div>
+                            <div class="method-card" data-method="flutterwave">
+                                <div class="method-icon">🌊</div>
+                                <div class="method-name">Flutterwave</div>
+                            </div>
+                            <div class="method-card" data-method="bank">
+                                <div class="method-icon">🏦</div>
+                                <div class="method-name">Bank Transfer</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="donation-section">
+                        <button id="donateNow" class="btn btn-primary">Proceed to Give</button>
+                    </div>
+
+                    <div id="donationResult" style="margin-top:1rem;color:#333"></div>
+                </div>
+
+                <div style="background: #f8f9fa; border-radius: 10px; padding: 1.5rem; display: inline-block; text-align: left; max-width: 700px; margin-top: 1rem;">
                     <p style="margin: .25rem 0;"><strong>Account Name:</strong> CHURCH OF CHRIST 144 AKA ROAD</p>
                     <p style="margin: .25rem 0;"><strong>Bank Name:</strong> Zenith Bank PLC</p>
+                    <p style="margin: .25rem 0;"><strong>Account Number:</strong> <span id="selectedAccountNumber">1228088119</span></p>
                     <p style="margin: .25rem 0;"><strong>SWIFT:</strong> ZENITHBNK</p>
-
-                    <label for="fundCategory" style="display: block; margin-top: 1rem; font-weight: 600;">Select transfer category:</label>
-                    <select id="fundCategory" style="width: 100%; padding: 0.7rem; border: 1px solid #ccc; border-radius: 8px; margin-top: .5rem;">
-                        <option value="firstDay">First Day of Week Collection</option>
-                        <option value="benevolence">Benevolence</option>
-                        <option value="project">Project</option>
-                        <option value="scholarship">Scholarship</option>
-                    </select>
-
-                    <p style="margin: 1rem 0; font-size: 1.05rem;"><strong>Selected Account Number:</strong> <span id="selectedAccountNumber">1228088119</span></p>
-
-                    <button id="copyAccountBtn" type="button" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.65rem 1rem; background: #d4af37; color: #000; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">Copy Number</button>
-                    <p id="copyStatus" style="display: inline-block; margin-left: 1rem; color: #28a745;"></p>
-
-
                 </div>
             </div>
 

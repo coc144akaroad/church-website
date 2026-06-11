@@ -226,79 +226,7 @@
     </section>
 
     <script>
-        // =========================
-        // EVENTS DATA (RECURRING)
-        // =========================
-        const events = [
-            {
-                id: 1,
-                title: "Sunday Morning Worship Service",
-                day: 0,
-                startHour: 9,
-                startMinute: 0,
-                endHour: 13,
-                endMinute: 0,
-                endTime: "1:00 PM",
-                location: "Church of Christ, Aka Road",
-                category: "Worship",
-                description: "Vibrant worship, dynamic preaching, and powerful presence of the Holy Spirit.",
-                capacity: "500",
-                registered: "350",
-                image: "🙏"
-            },
-            {
-                id: 2,
-                title: "Tuesday Bible Study",
-                day: 2,
-                startHour: 18,
-                startMinute: 0,
-                endHour: 19,
-                endMinute: 30,
-                endTime: "7:30 PM",
-                location: "Church of Christ, Aka Road",
-                category: "Bible Study",
-                description: "Deep dive into God's Word.",
-                capacity: "200",
-                registered: "120",
-                image: "📖"
-            },
-            {
-                id: 3,
-                title: "Thursday Bible Study",
-                day: 4,
-                startHour: 18,
-                startMinute: 0,
-                endHour: 19,
-                endMinute: 30,
-                endTime: "7:30 PM",
-                location: "Church of Christ, Aka Road",
-                category: "Bible Study",
-                description: "Midweek spiritual recharge.",
-                capacity: "200",
-                registered: "100",
-                image: "📖"
-            },
-            {
-                id: 4,
-                title: "Saturday Song Class",
-                day: 6,
-                startHour: 18,
-                startMinute: 0,
-                endHour: 19,
-                endMinute: 0,
-                endTime: "7:00 PM",
-                location: "Church of Christ, Aka Road",
-                category: "Prayer",
-                description: "Powerful time of prayer.",
-                capacity: "150",
-                registered: "80",
-                image: "🙏"
-            }
-        ];
-
-        // =========================
-        // CORE LOGIC
-        // =========================
+        // Events are loaded from data/events.json via js/events.js
         function getNextOccurrence(day, hour, minute) {
             const now = new Date();
             const today = now.getDay();
@@ -503,8 +431,16 @@
             });
         }
 
-        renderEvents();
+        // Use shared renderer (falls back to inline render if JS not available)
+        if (window.renderEventsFromData) {
+            window.renderEventsFromData('#eventsGrid', 'data/events.json', { buildGoogleCalendarUrl: window.buildGoogleCalendarUrl });
+        } else {
+            // fallback: still call existing inline render if present
+            if (typeof renderEvents === 'function') renderEvents();
+        }
     </script>
+
+    <script src="js/events.js"></script>
 
     <!-- Footer -->
     <footer class="footer">
@@ -556,6 +492,7 @@
     <script src="js/animations-scroll.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/verse-of-the-day.js"></script>
+    <script src="js/events.js"></script>
     <script src="js/script.js"></script>
 </body>
 </html>

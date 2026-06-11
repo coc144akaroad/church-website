@@ -49,6 +49,30 @@ function initNavigation() {
 }
 
 // ===================================
+// FLOATING DONATE CTA
+// ===================================
+function initFloatingDonate() {
+    if (document.getElementById('floatingDonate')) return;
+
+    const btn = document.createElement('a');
+    btn.id = 'floatingDonate';
+    btn.className = 'floating-donate';
+    btn.href = 'give.html';
+    btn.setAttribute('aria-label', 'Donate');
+    btn.innerHTML = `<span class="icon">💛</span><span class="label">Donate</span>`;
+
+    btn.addEventListener('click', (e) => {
+        // allow normal navigation; track click event if analytics present
+        if (window.gtag) {
+            try { gtag('event', 'donate_click', { 'event_category': 'engagement' }); } catch (e) {}
+        }
+    });
+
+    document.body.appendChild(btn);
+}
+
+
+// ===================================
 // NAVBAR SCROLL EFFECT
 // ===================================
 
@@ -476,6 +500,9 @@ function initializeApp() {
     initPerformanceMonitoring();
         // Livestream embed handling
         initLivestreamEmbed();
+
+    // Init new floating donate CTA
+    initFloatingDonate();
 
     // Log initialization
     console.log('Church website initialized successfully');
