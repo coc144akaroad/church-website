@@ -266,10 +266,56 @@
             return date;
         }
 
+                // Return the start date for the current occurrence if we're inside
+                // the event window, otherwise return the next occurrence.
+                function getOccurrence(day, hour, minute, endHour, endMinute) {
+                    const now = new Date();
+                    const today = now.getDay();
+
+                    let daysAhead = (day - today + 7) % 7;
+
+                    const date = new Date(now);
+                    date.setDate(now.getDate() + daysAhead);
+                    date.setHours(hour, minute, 0, 0);
+
+                    // default end time: 60 minutes after start if end is missing
+                    const eHour = (typeof endHour === 'number' && !isNaN(endHour)) ? endHour : (hour + 1) % 24;
+                    const eMinute = (typeof endMinute === 'number' && !isNaN(endMinute)) ? endMinute : minute;
+
+                    const endDate = new Date(date);
+                    endDate.setHours(eHour, eMinute, 0, 0);
+
+                    // handle overnight events where end is on the next day
+                    if (endDate <= date) {
+                        endDate.setDate(endDate.getDate() + 1);
+                    }
+
+                    if (daysAhead === 0) {
+                        // Today: if we're before endDate, return today's start so
+                        // formatCountdown can show "Event Ongoing" while it lasts.
+                        if (now <= endDate) {
+                            return date;
+                        }
+
+                        // Today's event already finished — return next week's occurrence
+                        date.setDate(date.getDate() + 7);
+                        return date;
+                    }
+
+                    return date;
+                }
+
         function formatCountdown(startDate, endHour, endMinute) {
             const now = new Date();
+
+            const eHour = (typeof endHour === 'number' && !isNaN(endHour)) ? endHour : (startDate.getHours() + 1) % 24;
+            const eMinute = (typeof endMinute === 'number' && !isNaN(endMinute)) ? endMinute : startDate.getMinutes();
+
             const endDate = new Date(startDate);
-            endDate.setHours(endHour, endMinute, 0, 0);
+            endDate.setHours(eHour, eMinute, 0, 0);
+            if (endDate <= startDate) {
+                endDate.setDate(endDate.getDate() + 1);
+            }
 
             if (now < startDate) {
                 const diff = startDate - now;
@@ -323,7 +369,7 @@
 
             // Render all events (detailed page) with Add-to-Google-Calendar
             events.forEach((event, index) => {
-                const eventDate = getNextOccurrence(event.day, event.startHour, event.startMinute);
+                const eventDate = getOccurrence(event.day, event.startHour, event.startMinute, event.endHour, event.endMinute);
 
                 const card = document.createElement('div');
                 card.className = 'event-detailed-card scroll-reveal';
@@ -397,7 +443,7 @@
                 const endHour = parseInt(el.dataset.endhour);
                 const endMinute = parseInt(el.dataset.endminute);
 
-                const eventDate = getNextOccurrence(day, hour, minute);
+                const eventDate = getOccurrence(day, hour, minute, endHour, endMinute);
                 el.textContent = formatCountdown(eventDate, endHour, endMinute);
             });
         }

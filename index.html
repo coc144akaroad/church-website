@@ -316,10 +316,49 @@
             return date;
         }
 
+        // See events.html:getOccurrence — return current occurrence start
+        // if now is within the event window, otherwise return the next one.
+        function getOccurrence(day, hour, minute, endHour, endMinute) {
+            const now = new Date();
+            const today = now.getDay();
+
+            let daysAhead = (day - today + 7) % 7;
+
+            const date = new Date(now);
+            date.setDate(now.getDate() + daysAhead);
+            date.setHours(hour, minute, 0, 0);
+
+            const eHour = (typeof endHour === 'number' && !isNaN(endHour)) ? endHour : (hour + 1) % 24;
+            const eMinute = (typeof endMinute === 'number' && !isNaN(endMinute)) ? endMinute : minute;
+
+            const endDate = new Date(date);
+            endDate.setHours(eHour, eMinute, 0, 0);
+            if (endDate <= date) {
+                endDate.setDate(endDate.getDate() + 1);
+            }
+
+            if (daysAhead === 0) {
+                if (now <= endDate) {
+                    return date;
+                }
+                date.setDate(date.getDate() + 7);
+                return date;
+            }
+
+            return date;
+        }
+
         function formatCountdown(startDate, endHour, endMinute) {
             const now = new Date();
+
+            const eHour = (typeof endHour === 'number' && !isNaN(endHour)) ? endHour : (startDate.getHours() + 1) % 24;
+            const eMinute = (typeof endMinute === 'number' && !isNaN(endMinute)) ? endMinute : startDate.getMinutes();
+
             const endDate = new Date(startDate);
-            endDate.setHours(endHour, endMinute, 0, 0);
+            endDate.setHours(eHour, eMinute, 0, 0);
+            if (endDate <= startDate) {
+                endDate.setDate(endDate.getDate() + 1);
+            }
 
             if (now < startDate) {
                 const diff = startDate - now;
@@ -333,7 +372,7 @@
             }
 
             if (now >= startDate && now <= endDate) {
-                return "� Event Ongoing";
+                return "Event Ongoing";
             }
 
             const next = getNextOccurrence(startDate.getDay(), startDate.getHours(), startDate.getMinutes());
@@ -373,7 +412,7 @@
 
             // compute next occurrence for each event and sort by date
             const upcoming = events.map(ev => {
-                return Object.assign({}, ev, { nextDate: getNextOccurrence(ev.day, ev.startHour, ev.startMinute) });
+                return Object.assign({}, ev, { nextDate: getOccurrence(ev.day, ev.startHour, ev.startMinute, ev.endHour, ev.endMinute) });
             }).sort((a, b) => a.nextDate - b.nextDate).slice(0, 1);
 
             upcoming.forEach((event, index) => {
@@ -459,7 +498,7 @@
                 const endHour = parseInt(el.dataset.endhour);
                 const endMinute = parseInt(el.dataset.endminute);
 
-                const eventDate = getNextOccurrence(day, hour, minute);
+                const eventDate = getOccurrence(day, hour, minute, endHour, endMinute);
                 el.textContent = formatCountdown(eventDate, endHour, endMinute);
             });
         }
