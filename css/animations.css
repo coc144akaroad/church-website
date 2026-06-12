@@ -386,3 +386,20 @@ select:focus {
 .transform-skew:hover {
     transform: skewX(2deg);
 }
+
+/* Hero rotator text */
+.hero-rotator {
+    margin-top: 1rem;
+    color: rgba(255,255,255,0.95);
+    font-size: 1.05rem;
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+    transition: opacity 0.45s ease-in-out;
+    opacity: 1;
+}
+
+/* Hide video on small screens when JS chooses to */
+.hero-video-hidden .hero-video {
+    display: none !important;
+}

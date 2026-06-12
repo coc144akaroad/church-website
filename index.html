@@ -431,16 +431,21 @@
             });
         }
 
-        // Use shared renderer (falls back to inline render if JS not available)
-        if (window.renderEventsFromData) {
-            window.renderEventsFromData('#eventsGrid', 'data/events.json', { buildGoogleCalendarUrl: window.buildGoogleCalendarUrl });
-        } else {
-            // fallback: still call existing inline render if present
-            if (typeof renderEvents === 'function') renderEvents();
-        }
+        // Use shared renderer (wait for it if necessary), fall back to inline render
+        document.addEventListener('DOMContentLoaded', function tryRenderEvents() {
+            function attempt() {
+                if (window.renderEventsFromData) {
+                    window.renderEventsFromData('#eventsGrid', 'data/events.json', { buildGoogleCalendarUrl: window.buildGoogleCalendarUrl });
+                } else if (typeof renderEvents === 'function') {
+                    renderEvents();
+                } else {
+                    setTimeout(attempt, 150);
+                }
+            }
+            attempt();
+        });
     </script>
 
-    <script src="js/events.js"></script>
 
     <!-- Footer -->
     <footer class="footer">

@@ -235,6 +235,66 @@ function initLoading() {
 }
 
 // ===================================
+// HERO POLISH: rotating microcopy, video fallback, CTA microinteractions
+// ===================================
+function initHeroPolish() {
+    try {
+        const heroContent = document.querySelector('.hero-content');
+        if (!heroContent) return;
+
+        // Rotating microcopy (non-blocking): keep a short set of taglines
+        const lines = [
+            'Experience the love of Christ in a vibrant, growing community',
+            'Join us for worship, fellowship, and spiritual growth',
+            'Real people. Real faith. Real change.'
+        ];
+
+        let rotator = document.getElementById('hero-rotator');
+        if (!rotator) {
+            rotator = document.createElement('p');
+            rotator.id = 'hero-rotator';
+            rotator.className = 'hero-rotator fade-in';
+            // insert before hero-buttons if present
+            const buttons = heroContent.querySelector('.hero-buttons');
+            if (buttons) heroContent.insertBefore(rotator, buttons);
+            else heroContent.appendChild(rotator);
+        }
+
+        let idx = 0;
+        rotator.textContent = lines[idx];
+        rotator.style.opacity = '1';
+        rotator.style.transition = 'opacity 0.45s ease-in-out';
+
+        setInterval(() => {
+            rotator.style.opacity = '0';
+            setTimeout(() => {
+                idx = (idx + 1) % lines.length;
+                rotator.textContent = lines[idx];
+                rotator.style.opacity = '1';
+            }, 450);
+        }, 5000);
+
+        // Mobile-friendly behavior: hide heavy hero video on small screens or reduced motion
+        const hero = document.querySelector('.hero');
+        const video = document.querySelector('.hero-video');
+        const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const isSmall = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+        if ((isSmall || prefersReduced) && hero) {
+            hero.classList.add('hero-video-hidden');
+        }
+
+        // CTA microinteraction: briefly pulse the primary hero button to draw attention
+        const primary = document.querySelector('.hero-buttons .btn-primary');
+        if (primary) {
+            primary.classList.add('pulse');
+            setTimeout(() => primary.classList.remove('pulse'), 3800);
+        }
+    } catch (err) {
+        console.warn('initHeroPolish error', err);
+    }
+}
+
+// ===================================
 // FORM SUBMISSION (Newsletter)
 // ===================================
 
@@ -503,6 +563,8 @@ function initializeApp() {
 
     // Init new floating donate CTA
     initFloatingDonate();
+    // Hero polish features
+    initHeroPolish();
 
     // Log initialization
     console.log('Church website initialized successfully');
