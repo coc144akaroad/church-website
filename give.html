@@ -454,6 +454,12 @@
                             </div>
 
                             <div class="donation-section">
+                                <h3>Your email</h3>
+                                <label class="sr-only" for="donorEmail">Donor email</label>
+                                <input id="donorEmail" type="email" placeholder="Your email (required for Paystack)" aria-label="Donor email" style="width:100%; padding:0.85rem 1rem; border:1px solid var(--color-border); border-radius:var(--radius-sm);">
+                            </div>
+
+                            <div class="donation-section">
                                 <h3>Method</h3>
                                 <div class="donation-methods" id="donationMethods">
                                     <button class="method-card" type="button" data-method="bank">
@@ -487,7 +493,7 @@
                             </div>
 
                             <div class="donation-actions">
-                                <button id="donateNow" class="btn btn-primary" type="button">Proceed to Give</button>
+                                <button id="donateNow" class="btn btn-primary btn-donate" type="button">Donate Now</button>
                                 <button id="copyAccountBtn" class="btn btn-secondary" type="button">Copy Account</button>
                             </div>
                             <p id="donationResult" class="donation-result" role="status"></p>
@@ -552,6 +558,13 @@
     <script src="js/animations.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/script.js"></script>
+    <script>
+        window.DonateConfig = window.DonateConfig || {};
+        // Paystack temporarily disabled on this page — fall back to bank transfer
+        window.DonateConfig.provider = 'bank';
+        window.DonateConfig.paystack = window.DonateConfig.paystack || {};
+        window.DonateConfig.paystack.publicKey = '';
+    </script>
     <script>
         (function(){
             const cfg = window.DonateConfig || {};
@@ -636,7 +649,56 @@
                         setResult('Paystack is not configured yet. Please use bank transfer.');
                         return;
                     }
-                    setResult('Paystack requires the payment SDK and donor email before live processing.');
+
+                    const emailInput = document.getElementById('donorEmail');
+                    const email = emailInput ? emailInput.value.trim() : '';
+                    if (!email) {
+                        setResult('Please enter your email for Paystack receipts.');
+                        return;
+                    }
+
+                    if (typeof PaystackPop === 'undefined') {
+                        setResult('Payment SDK not loaded. Please try again later.');
+                        return;
+                    }
+
+                    const amountKobo = Math.round(state.amount) * 100;
+                    setResult('Opening Paystack...');
+
+                    const handler = PaystackPop.setup({
+                        key: cfg.paystack.publicKey,
+                        email: email,
+                        amount: amountKobo,
+                        currency: cfg.currency || 'NGN',
+                        metadata: {
+                            custom_fields: [
+                                { display_name: 'Fund', variable_name: 'fund', value: selectedFund() }
+                            ]
+                        },
+                        callback: function(response) {
+                            setResult('Payment complete. Verifying...');
+                            fetch('/.netlify/functions/verify-payment', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ reference: response.reference })
+                            }).then(res => res.json()).then(data => {
+                                if (data && data.status === true && data.data && data.data.status === 'success') {
+                                    setResult('Thank you — payment confirmed. Reference: ' + response.reference);
+                                } else if (data && data.data && data.data.status) {
+                                    setResult('Payment status: ' + data.data.status + '. Reference: ' + response.reference);
+                                } else {
+                                    setResult('Verification failed. Reference: ' + response.reference);
+                                }
+                            }).catch(() => {
+                                setResult('Verification request failed. Reference: ' + response.reference);
+                            });
+                        },
+                        onClose: function() {
+                            setResult('Payment window closed.');
+                        }
+                    });
+
+                    handler.openIframe();
                 }
             }
 

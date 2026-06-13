@@ -56,10 +56,11 @@ function initFloatingDonate() {
 
     const btn = document.createElement('a');
     btn.id = 'floatingDonate';
-    btn.className = 'floating-donate';
+    btn.className = 'floating-donate pulse';
     btn.href = 'give.html';
     btn.setAttribute('aria-label', 'Donate');
-    btn.innerHTML = `<span class="icon">💛</span><span class="label">Donate</span>`;
+    btn.setAttribute('title', 'Donate to the church');
+    btn.innerHTML = `<span class="icon" aria-hidden="true">🤝</span><span class="label">Give</span>`;
 
     btn.addEventListener('click', (e) => {
         // allow normal navigation; track click event if analytics present
