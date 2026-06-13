@@ -558,12 +558,13 @@
     <script src="js/animations.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/script.js"></script>
+    <script src="https://js.paystack.co/v1/inline.js"></script>
     <script>
         window.DonateConfig = window.DonateConfig || {};
-        // Paystack temporarily disabled on this page — fall back to bank transfer
-        window.DonateConfig.provider = 'bank';
+        // prefer paystack as provider on this page
+        window.DonateConfig.provider = 'paystack';
         window.DonateConfig.paystack = window.DonateConfig.paystack || {};
-        window.DonateConfig.paystack.publicKey = '';
+        window.DonateConfig.paystack.publicKey = 'pk_test_c1f0f4334235bca02927053cd2fb5be4546c5f2b';
     </script>
     <script>
         (function(){
