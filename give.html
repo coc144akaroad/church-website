@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Give/Donate - Church of Christ, Aka Road, Uyo</title>
-    <meta name="description" content="Support Church of Christ, Aka Road's mission through giving and donation.">
+    <title>Give - Church of Christ, Aka Road, Uyo</title>
+    <meta name="description" content="Support Church of Christ, Aka Road, Uyo through giving, direct bank transfer, and mission-focused donations.">
     <meta name="theme-color" content="#1e3a8a">
     <link rel="canonical" href="https://churchofchristakaro.com/give.html">
 
-
-    <!-- Google Analytics (replace GA_ID with your tracking ID) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=GA_ID"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -61,18 +59,17 @@
 }
     </script>
 
-    <meta property="og:title" content="Give/Donate - Church of Christ, Aka Road, Uyo">
-    <meta property="og:description" content="Support Church of Christ, Aka Road's mission through giving and donation.">
+    <meta property="og:title" content="Give - Church of Christ, Aka Road, Uyo">
+    <meta property="og:description" content="Support Church of Christ, Aka Road, Uyo through giving, direct bank transfer, and mission-focused donations.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://churchofchristakaro.com/give.html">
     <meta property="og:image" content="https://churchofchristakaro.com/img/CHURCH%20LOGO%20PNG.png">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Give/Donate - Church of Christ, Aka Road, Uyo">
-    <meta name="twitter:description" content="Support Church of Christ, Aka Road's mission through giving and donation.">
+    <meta name="twitter:title" content="Give - Church of Christ, Aka Road, Uyo">
+    <meta name="twitter:description" content="Support Church of Christ, Aka Road, Uyo through giving, direct bank transfer, and mission-focused donations.">
     <meta name="twitter:image" content="https://churchofchristakaro.com/img/CHURCH%20LOGO%20PNG.png">
 
     <link rel="icon" type="image/x-icon" href="img/CHURCH LOGO PNG1.ico">
-    
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/responsive.css">
@@ -81,262 +78,289 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        .donation-container {
-            max-width: 800px;
-            margin: 3rem auto;
-            padding: 2rem;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        <script src="js/donate-config.js"></script>
-        <script>
-            // Simple client-side donation handler (no secrets)
-            (function(){
-                const cfg = window.DonateConfig || { provider: 'hosted', hostedUrl: '' };
-
-                function initDonateUI(){
-                    const amountButtons = document.getElementById('amountButtons');
-                    const donateNow = document.getElementById('donateNow');
-                    const customAmount = document.getElementById('customAmount');
-                    const applyCustom = document.getElementById('applyCustom');
-                    const methods = Array.from(document.querySelectorAll('.method-card'));
-                    const result = document.getElementById('donationResult');
-
-                    const amounts = cfg.defaultAmounts || [1000,5000,10000];
-                    let selectedAmount = amounts[0];
-                    let selectedMethod = 'hosted';
-
-                    amounts.forEach(a => {
-                        const btn = document.createElement('button');
-                        btn.className = 'amount-btn';
-                        btn.textContent = a.toLocaleString();
-                        btn.addEventListener('click', ()=>{
-                            selectedAmount = a;
-                            document.querySelectorAll('.amount-btn').forEach(b=>b.classList.remove('active'));
-                            btn.classList.add('active');
-                        });
-                        amountButtons.appendChild(btn);
-                    });
-
-                    applyCustom.addEventListener('click', ()=>{
-                        const v = parseInt(customAmount.value,10);
-                        if (v>0) selectedAmount = v;
-                        document.querySelectorAll('.amount-btn').forEach(b=>b.classList.remove('active'));
-                    });
-
-                    methods.forEach(m => {
-                        m.addEventListener('click', ()=>{
-                            methods.forEach(x=>x.classList.remove('selected'));
-                            m.classList.add('selected');
-                            selectedMethod = m.dataset.method;
-                        });
-                    });
-
-                    donateNow.addEventListener('click', ()=>{
-                        result.textContent = '';
-                        if (selectedMethod === 'hosted'){
-                            if (cfg.hostedUrl) {
-                                const url = new URL(cfg.hostedUrl);
-                                url.searchParams.set('amount', selectedAmount);
-                                window.open(url.toString(), '_blank');
-                            } else {
-                                result.textContent = 'Hosted donation page not configured.';
-                            }
-                            return;
-                        }
-
-                        if (selectedMethod === 'bank'){
-                            result.textContent = `Please transfer ${selectedAmount.toLocaleString()} ${cfg.currency} to account ${cfg.accountNumber}.`;
-                            return;
-                        }
-
-                        if (selectedMethod === 'paystack'){
-                            if (!cfg.paystack.publicKey){ result.textContent='Paystack not configured.'; return; }
-                            // Minimal Paystack inline flow opener (public key needed)
-                            const handler = (window.PaystackPop && window.PaystackPop.setup) ? window.PaystackPop.setup({key: cfg.paystack.publicKey, email: 'donor@example.com', amount: selectedAmount*100, onClose: function(){}, callback: function(){ result.textContent='Thank you for your donation!'; }}) : null;
-                            if (handler){ handler.openIframe(); } else { result.textContent='Paystack SDK not loaded.'; }
-                            return;
-                        }
-
-                        if (selectedMethod === 'flutterwave'){
-                            if (!cfg.flutterwave.publicKey){ result.textContent='Flutterwave not configured.'; return; }
-                            // Minimal Flutterwave flow (requires script and keys)
-                            result.textContent='Flutterwave integration not yet configured in this build.';
-                            return;
-                        }
-                    });
-                }
-
-                document.addEventListener('DOMContentLoaded', initDonateUI);
-            })();
-        </script>
-        }
-
-        .donation-section {
-            margin-bottom: 3rem;
-        }
-
-        .donation-section h3 {
-            color: #1e3a8a;
-            margin-bottom: 1.5rem;
-            font-size: 1.3rem;
-        }
-
-        .amount-buttons {
+        .giving-intro {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 1rem;
+            grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .giving-copy {
+            padding: 0.5rem 0;
+        }
+
+        .giving-eyebrow {
+            color: var(--color-secondary);
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .giving-copy h2 {
+            border: 0;
+            color: var(--color-primary);
             margin-bottom: 1rem;
         }
 
-        .amount-btn {
-            padding: 1rem;
-            border: 2px solid #e0e0e0;
-            background: white;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
+        .giving-copy p {
+            color: var(--color-text-muted);
+            max-width: 680px;
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .impact-item {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            padding: 1.15rem;
+            box-shadow: 0 14px 32px rgba(15, 23, 42, 0.06);
+        }
+
+        .impact-item i {
+            color: var(--color-secondary);
+            font-size: 1.35rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .impact-item h3 {
             font-size: 1rem;
-            transition: all 0.3s ease;
+            margin-bottom: 0.4rem;
         }
 
-        .amount-btn:hover {
-            border-color: #1e3a8a;
-            color: #1e3a8a;
+        .impact-item p {
+            font-size: 0.92rem;
+            margin-bottom: 0;
         }
 
-        .amount-btn.active {
-            background: #1e3a8a;
-            color: white;
-            border-color: #1e3a8a;
+        .donation-panel {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            box-shadow: var(--color-shadow);
+            padding: 1.75rem;
+        }
+
+        .donation-panel h2 {
+            border: 0;
+            font-size: 1.45rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .panel-note {
+            color: var(--color-text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .donation-section {
+            margin-bottom: 1.6rem;
+        }
+
+        .donation-section h3 {
+            font-size: 1rem;
+            color: var(--color-text);
+            margin-bottom: 0.75rem;
+        }
+
+        .amount-buttons,
+        .donation-methods {
+            display: grid;
+            gap: 0.7rem;
+        }
+
+        .amount-buttons {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .amount-btn,
+        .method-card {
+            border: 1px solid var(--color-border);
+            background: var(--color-surface);
+            border-radius: var(--radius-sm);
+            color: var(--color-text);
+            cursor: pointer;
+            font: inherit;
+            font-weight: 700;
+            padding: 0.85rem;
+            text-align: center;
+            transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition), background var(--transition);
+        }
+
+        .amount-btn:hover,
+        .amount-btn.active,
+        .method-card:hover,
+        .method-card.selected {
+            border-color: var(--color-primary);
+            box-shadow: 0 12px 26px rgba(43, 95, 154, 0.14);
+            transform: translateY(-1px);
+        }
+
+        .amount-btn.active,
+        .method-card.selected {
+            background: rgba(43, 95, 154, 0.08);
+            color: var(--color-primary);
         }
 
         .custom-amount {
-            display: flex;
-            gap: 0.5rem;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 0.6rem;
+            margin-top: 0.7rem;
         }
 
-        .custom-amount input {
-            flex: 1;
-            padding: 0.75rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1rem;
+        .custom-amount input,
+        .fund-select {
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            color: var(--color-text);
+            font: inherit;
+            min-width: 0;
+            padding: 0.85rem 1rem;
+            width: 100%;
         }
 
-        .custom-amount input:focus {
-            outline: none;
-            border-color: #1e3a8a;
-        }
-
-        .donation-frequency {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .frequency-option {
-            display: flex;
-            align-items: center;
-        }
-
-        .frequency-option input[type="radio"] {
-            margin-right: 0.5rem;
+        .custom-amount input:focus,
+        .fund-select:focus {
+            border-color: var(--color-primary);
+            outline: 3px solid rgba(43, 95, 154, 0.14);
         }
 
         .donation-methods {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
         .method-card {
-            padding: 1.5rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            align-items: center;
+            display: flex;
+            gap: 0.65rem;
+            justify-content: flex-start;
+            text-align: left;
         }
 
-        .method-card:hover,
-        .method-card.selected {
-            border-color: #1e3a8a;
-            background: rgba(30, 58, 138, 0.05);
+        .method-card i {
+            color: var(--color-secondary);
+            font-size: 1.05rem;
+            width: 1.25rem;
         }
 
-        .method-icon {
-            font-size: 2rem;
+        .bank-details {
+            background: var(--color-surface-soft);
+            border: 1px solid rgba(201, 74, 63, 0.14);
+            border-radius: var(--radius-sm);
+            margin-top: 1.25rem;
+            padding: 1rem;
+        }
+
+        .bank-row {
+            display: grid;
+            grid-template-columns: 130px 1fr;
+            gap: 0.8rem;
             margin-bottom: 0.5rem;
         }
 
-        .method-name {
-            font-weight: 600;
-            color: #1e3a8a;
-        }
-
-        .why-give {
-            background: #f8f9fa;
-            padding: 2rem;
-            border-radius: 12px;
-            margin-bottom: 3rem;
-        }
-
-        .why-give-item {
-            margin-bottom: 1.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .why-give-item:last-child {
-            margin-bottom: 0;
-            padding-bottom: 0;
-            border-bottom: none;
-        }
-
-        .why-give-item h4 {
-            color: #1e3a8a;
-            margin: 0 0 0.5rem 0;
-        }
-
-        .why-give-item p {
-            margin: 0;
-            color: #666;
-        }
-
-        .testimonials {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            border-left: 4px solid #d4af37;
-        }
-
-        .testimonial-item {
-            margin-bottom: 1.5rem;
-            padding: 1.5rem;
-            background: #f8f9fa;
-            border-radius: 8px;
-        }
-
-        .testimonial-item:last-child {
+        .bank-row:last-child {
             margin-bottom: 0;
         }
 
-        .testimonial-text {
-            font-style: italic;
-            color: #555;
-            margin-bottom: 0.5rem;
+        .bank-label {
+            color: var(--color-text-muted);
+            font-size: 0.85rem;
+            font-weight: 700;
         }
 
-        .testimonial-author {
-            font-weight: 600;
-            color: #1e3a8a;
+        .bank-value {
+            color: var(--color-text);
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .donation-result {
+            color: var(--color-text-muted);
+            font-size: 0.95rem;
+            margin-top: 0.9rem;
+            min-height: 1.6rem;
+        }
+
+        .donation-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1.1rem;
+        }
+
+        .donation-actions .btn {
+            min-width: 0;
+        }
+
+        .giving-contact {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+            color: white;
+            margin-top: 3rem;
+            padding: 2rem;
+            border-radius: var(--radius-sm);
+        }
+
+        .giving-contact h2 {
+            border: 0;
+            color: white;
+            font-size: 1.45rem;
+        }
+
+        .page-header h1 {
+            color: white;
+        }
+
+        .giving-contact p {
+            color: rgba(255, 255, 255, 0.86);
+            margin-bottom: 0;
+        }
+
+        .giving-contact a {
+            color: white;
+            font-weight: 700;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 820px) {
+            .giving-intro,
+            .impact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .donation-panel,
+            .giving-contact {
+                padding: 1.2rem;
+            }
+
+            .amount-buttons,
+            .donation-methods,
+            .custom-amount {
+                grid-template-columns: 1fr;
+            }
+
+            .method-card {
+                justify-content: center;
+                text-align: center;
+            }
+
+            .bank-row {
+                grid-template-columns: 1fr;
+                gap: 0.1rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <nav class="navbar" id="navbar">
         <div class="container">
             <div class="nav-content">
@@ -354,119 +378,131 @@
                     <li><a href="sermons.html" class="nav-link">Sermons</a></li>
                     <li><a href="events.html" class="nav-link">Events</a></li>
                     <li><a href="gallery.html" class="nav-link">Gallery</a></li>
-                    <li><a href="livestream.html" class="nav-link">Livestream</a></li>                    <li><a href="radio.html" class="nav-link">Radio</a></li>                    <li><a href="give.html" class="nav-link highlight active">Give</a></li>
+                    <li><a href="livestream.html" class="nav-link">Livestream</a></li>
+                    <li><a href="radio.html" class="nav-link">Radio</a></li>
+                    <li><a href="give.html" class="nav-link highlight active">Give</a></li>
                     <li><a href="contact.html" class="nav-link">Contact</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Page Header -->
     <header class="page-header" data-parallax="0.12">
         <div class="header-content">
             <h1 class="fade-in-up">Give with Purpose</h1>
-            <p class="fade-in-up" style="animation-delay: 0.2s">Support our mission to glorify God and transform lives</p>
+            <p class="fade-in-up" style="animation-delay: 0.2s">Partner with the work of the church in worship, service, outreach, and care.</p>
         </div>
     </header>
 
-    <!-- Giving Section -->
-    <section class="section">
-        <div class="container">
-            <!-- Why Give -->
-            <div class="why-give scroll-reveal">
-                <h2 style="margin-bottom: 2rem; color: #1e3a8a;">Why Give?</h2>
-                
-                <div class="why-give-item">
-                    <h4>🙏 Advance God's Kingdom</h4>
-                    <p>Your gifts enable us to preach the Gospel, grow disciples, and expand God's kingdom locally and globally.</p>
+    <main id="main-content" tabindex="-1">
+        <section class="section">
+            <div class="container">
+                <div class="giving-intro">
+                    <div class="giving-copy scroll-reveal">
+                        <p class="giving-eyebrow">Stewardship and service</p>
+                        <h2>Your giving supports ministry that reaches people.</h2>
+                        <p>Every gift helps the congregation at 144 Aka Road continue worship, teaching, benevolence, evangelism, youth development, missions, and facility care.</p>
+                        <p>Choose a fund, select an amount, then proceed with the available giving method. For direct transfers, use the bank details shown and include your name or chosen fund as the transfer narration where possible.</p>
+
+                        <div class="impact-grid">
+                            <article class="impact-item">
+                                <i class="fa-solid fa-hands-praying" aria-hidden="true"></i>
+                                <h3>Worship and teaching</h3>
+                                <p>Help sustain regular assemblies, Bible classes, and discipleship resources.</p>
+                            </article>
+                            <article class="impact-item">
+                                <i class="fa-solid fa-hand-holding-heart" aria-hidden="true"></i>
+                                <h3>Benevolence</h3>
+                                <p>Support compassionate care for people and families with practical needs.</p>
+                            </article>
+                            <article class="impact-item">
+                                <i class="fa-solid fa-people-group" aria-hidden="true"></i>
+                                <h3>Youth and families</h3>
+                                <p>Invest in programs that strengthen faith, character, and community.</p>
+                            </article>
+                            <article class="impact-item">
+                                <i class="fa-solid fa-globe" aria-hidden="true"></i>
+                                <h3>Mission work</h3>
+                                <p>Partner with outreach efforts in Uyo and beyond.</p>
+                            </article>
+                        </div>
+                    </div>
+
+                    <aside class="donation-panel scroll-reveal" aria-labelledby="donation-panel-title">
+                        <h2 id="donation-panel-title">Give Easily</h2>
+                        <p class="panel-note">Select your giving details. Paystack opens only when it is configured.</p>
+
+                        <div id="donationApp">
+                            <div class="donation-section">
+                                <h3>Fund</h3>
+                                <label class="sr-only" for="fundCategory">Choose fund</label>
+                                <select class="fund-select" id="fundCategory">
+                                    <option value="firstDay">First Day Offering</option>
+                                    <option value="benevolence">Benevolence</option>
+                                    <option value="project">Project / Building Fund</option>
+                                    <option value="scholarship">Scholarship / Education</option>
+                                </select>
+                            </div>
+
+                            <div class="donation-section">
+                                <h3>Amount</h3>
+                                <div class="amount-buttons" id="amountButtons" aria-label="Donation amount options"></div>
+                                <div class="custom-amount">
+                                    <input id="customAmount" type="number" min="1" inputmode="numeric" placeholder="Custom amount" aria-label="Custom amount">
+                                    <button id="applyCustom" class="amount-btn" type="button">Apply</button>
+                                </div>
+                            </div>
+
+                            <div class="donation-section">
+                                <h3>Method</h3>
+                                <div class="donation-methods" id="donationMethods">
+                                    <button class="method-card" type="button" data-method="bank">
+                                        <i class="fa-solid fa-building-columns" aria-hidden="true"></i>
+                                        <span>Bank Transfer</span>
+                                    </button>
+                                    <button class="method-card" type="button" data-method="paystack">
+                                        <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                                        <span>Paystack</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="bank-details" aria-live="polite">
+                                <div class="bank-row">
+                                    <span class="bank-label">Account name</span>
+                                    <span class="bank-value" id="accountName">CHURCH OF CHRIST 144 AKA ROAD</span>
+                                </div>
+                                <div class="bank-row">
+                                    <span class="bank-label">Bank</span>
+                                    <span class="bank-value" id="bankName">Zenith Bank PLC</span>
+                                </div>
+                                <div class="bank-row">
+                                    <span class="bank-label">Account no.</span>
+                                    <span class="bank-value" id="selectedAccountNumber">1228088119</span>
+                                </div>
+                                <div class="bank-row">
+                                    <span class="bank-label">SWIFT</span>
+                                    <span class="bank-value" id="swiftCode">ZENITHBNK</span>
+                                </div>
+                            </div>
+
+                            <div class="donation-actions">
+                                <button id="donateNow" class="btn btn-primary" type="button">Proceed to Give</button>
+                                <button id="copyAccountBtn" class="btn btn-secondary" type="button">Copy Account</button>
+                            </div>
+                            <p id="donationResult" class="donation-result" role="status"></p>
+                        </div>
+                    </aside>
                 </div>
 
-                <div class="why-give-item">
-                    <h4>🤝 Support Community Ministry</h4>
-                    <p>Your donations help us serve our community through outreach programs, food assistance, and compassionate care.</p>
-                </div>
-
-                <div class="why-give-item">
-                    <h4>👥 Build Strong Discipleship</h4>
-                    <p>We invest in discipleship programs, youth ministry, and small group ministries that transform lives in Christ.</p>
-                </div>
-
-                <div class="why-give-item">
-                    <h4>🌍 Fund Global Mission</h4>
-                    <p>Partner with us to support mission work around the world and help reach unreached people groups.</p>
-                </div>
-
-                <div class="why-give-item">
-                    <h4>✨ Support Excellent Ministry</h4>
-                    <p>Enable us to maintain our facility, provide quality resources, and equip our team for effective ministry.</p>
+                <div class="giving-contact scroll-reveal">
+                    <h2>Need help with giving?</h2>
+                    <p>Contact the church office on <a href="https://wa.me/2349090090481" target="_blank" rel="noopener noreferrer">WhatsApp</a> or visit us at 144 Aka Road, Uyo.</p>
                 </div>
             </div>
+        </section>
+    </main>
 
-            <!-- Donation Form (client-side integration) -->
-            <div class="donation-container scroll-reveal" style="margin-top: 3rem; text-align: center;">
-                <h2>Give Easily</h2>
-                <p style="max-width: 700px; margin: 1rem auto; color: #333;">Choose an amount and method below to give securely. You can copy our bank details if you prefer a direct transfer.</p>
-
-                <div id="donationApp">
-                    <div class="donation-section">
-                        <h3>Select Amount</h3>
-                        <div class="amount-buttons" id="amountButtons"></div>
-                        <div class="custom-amount" style="margin-top: .75rem;">
-                            <input id="customAmount" type="number" placeholder="Enter custom amount" aria-label="Custom amount">
-                            <button id="applyCustom" class="amount-btn">Apply</button>
-                        </div>
-                    </div>
-
-                    <div class="donation-section">
-                        <h3>Frequency</h3>
-                        <div class="donation-frequency">
-                            <label class="frequency-option"><input type="radio" name="frequency" value="oneoff" checked> One-off</label>
-                            <label class="frequency-option"><input type="radio" name="frequency" value="monthly"> Monthly</label>
-                        </div>
-                    </div>
-
-                    <div class="donation-section">
-                        <h3>Method</h3>
-                        <div class="donation-methods" id="donationMethods">
-                            <div class="method-card" data-method="hosted">
-                                <div class="method-icon">🔗</div>
-                                <div class="method-name">Hosted Page</div>
-                            </div>
-                            <div class="method-card" data-method="paystack">
-                                <div class="method-icon">⚡</div>
-                                <div class="method-name">Paystack</div>
-                            </div>
-                            <div class="method-card" data-method="flutterwave">
-                                <div class="method-icon">🌊</div>
-                                <div class="method-name">Flutterwave</div>
-                            </div>
-                            <div class="method-card" data-method="bank">
-                                <div class="method-icon">🏦</div>
-                                <div class="method-name">Bank Transfer</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="donation-section">
-                        <button id="donateNow" class="btn btn-primary">Proceed to Give</button>
-                    </div>
-
-                    <div id="donationResult" style="margin-top:1rem;color:#333"></div>
-                </div>
-
-                <div style="background: #f8f9fa; border-radius: 10px; padding: 1.5rem; display: inline-block; text-align: left; max-width: 700px; margin-top: 1rem;">
-                    <p style="margin: .25rem 0;"><strong>Account Name:</strong> CHURCH OF CHRIST 144 AKA ROAD</p>
-                    <p style="margin: .25rem 0;"><strong>Bank Name:</strong> Zenith Bank PLC</p>
-                    <p style="margin: .25rem 0;"><strong>Account Number:</strong> <span id="selectedAccountNumber">1228088119</span></p>
-                    <p style="margin: .25rem 0;"><strong>SWIFT:</strong> ZENITHBNK</p>
-                </div>
-            </div>
-
-
-        </div>
-    </section>
-
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -474,12 +510,12 @@
                     <h3>Church of Christ<br>Aka Road, Uyo</h3>
                     <p>144 Aka Road,<br>Uyo, Akwa Ibom State<br>Nigeria</p>
                 </div>
-                
+
                 <div class="footer-section">
                     <h3>Hours</h3>
                     <p><strong>Sunday:</strong> 9:00 AM - 1:00 PM<br><strong>Tue/Thu:</strong> 6:00 PM - 7:30 PM<br><strong>Saturday:</strong> 6:00 PM - 7:00 PM</p>
                 </div>
-                
+
                 <div class="footer-section">
                     <h3>Quick Links</h3>
                     <ul>
@@ -494,7 +530,7 @@
                         <li><a href="contact.html">Contact</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="footer-section">
                     <h3>Connect</h3>
                     <div class="social-links">
@@ -505,51 +541,146 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="footer-bottom">
-                <p>© 2026 Church of Christ, Aka Road, Uyo • <a href="https://linktr.ee/eagletech1" target="_blank" rel="noopener noreferrer">EagleTech</a></p>
+                <p>&copy; 2026 Church of Christ, Aka Road, Uyo &bull; <a href="https://linktr.ee/eagletech1" target="_blank" rel="noopener noreferrer">EagleTech</a></p>
             </div>
         </div>
     </footer>
 
+    <script src="js/donate-config.js"></script>
     <script src="js/animations.js"></script>
     <script src="js/utils.js"></script>
+    <script src="js/script.js"></script>
     <script>
-        const accountMap = {
-            firstDay: '1228088119',
-            benevolence: '1228598269',
-            project: '1013838701',
-            scholarship: '1012254173'
-        };
+        (function(){
+            const cfg = window.DonateConfig || {};
+            const currency = cfg.currency || 'NGN';
+            const accounts = cfg.accounts || {};
+            const defaultAccount = accounts.firstDay || {
+                label: 'First Day Offering',
+                accountName: cfg.accountName || 'CHURCH OF CHRIST 144 AKA ROAD',
+                bankName: cfg.bankName || 'Zenith Bank PLC',
+                accountNumber: cfg.accountNumber || '1228088119',
+                swift: cfg.swift || 'ZENITHBNK'
+            };
 
-        function updateSelectedAccount() {
-            const category = document.getElementById('fundCategory').value;
-            const number = accountMap[category] || '';
-            document.getElementById('selectedAccountNumber').textContent = number;
-            document.getElementById('copyStatus').textContent = '';
-        }
+            const state = {
+                amount: (cfg.defaultAmounts && cfg.defaultAmounts[0]) || 1000,
+                method: cfg.provider || 'bank'
+            };
 
-        function copyAccountNumber() {
-            const number = document.getElementById('selectedAccountNumber').textContent;
-            navigator.clipboard.writeText(number).then(() => {
-                const status = document.getElementById('copyStatus');
-                status.textContent = 'Copied!';
-                setTimeout(() => { status.textContent = ''; }, 2000);
-            }).catch(() => {
-                alert('Copy failed. Please select and copy manually.');
+            function formatAmount(amount) {
+                return new Intl.NumberFormat('en-NG', {
+                    style: 'currency',
+                    currency,
+                    maximumFractionDigits: 0
+                }).format(amount);
+            }
+
+            function selectedFund() {
+                const fund = document.getElementById('fundCategory');
+                return fund ? fund.value : 'firstDay';
+            }
+
+            function updateBankDetails() {
+                const details = accounts[selectedFund()] || defaultAccount;
+                document.getElementById('accountName').textContent = details.accountName || defaultAccount.accountName;
+                document.getElementById('bankName').textContent = details.bankName || defaultAccount.bankName;
+                document.getElementById('selectedAccountNumber').textContent = details.accountNumber || defaultAccount.accountNumber;
+                document.getElementById('swiftCode').textContent = details.swift || defaultAccount.swift || 'ZENITHBNK';
+                setResult('');
+            }
+
+            function setResult(message) {
+                const result = document.getElementById('donationResult');
+                if (result) result.textContent = message;
+            }
+
+            function initAmountButtons() {
+                const amountButtons = document.getElementById('amountButtons');
+                const amounts = cfg.defaultAmounts || [1000, 5000, 10000, 20000];
+                amountButtons.innerHTML = '';
+
+                amounts.forEach((amount, index) => {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = 'amount-btn' + (index === 0 ? ' active' : '');
+                    button.textContent = formatAmount(amount);
+                    button.addEventListener('click', () => {
+                        state.amount = amount;
+                        document.querySelectorAll('.amount-btn').forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+                        setResult('');
+                    });
+                    amountButtons.appendChild(button);
+                });
+            }
+
+            function initMethodSelection() {
+                const methods = Array.from(document.querySelectorAll('.method-card'));
+                const selected = methods.find(card => card.dataset.method === state.method) || methods[0];
+                if (!selected) return;
+                state.method = selected.dataset.method;
+                methods.forEach(card => card.classList.toggle('selected', card === selected));
+            }
+
+            function proceedToGive() {
+                if (state.method === 'bank') {
+                    setResult('Transfer ' + formatAmount(state.amount) + ' to the account shown above. Use your name or fund as the narration.');
+                    return;
+                }
+
+                if (state.method === 'paystack') {
+                    if (!cfg.paystack || !cfg.paystack.publicKey) {
+                        setResult('Paystack is not configured yet. Please use bank transfer.');
+                        return;
+                    }
+                    setResult('Paystack requires the payment SDK and donor email before live processing.');
+                }
+            }
+
+            function copyAccountNumber() {
+                const number = document.getElementById('selectedAccountNumber').textContent.trim();
+                navigator.clipboard.writeText(number).then(() => {
+                    setResult('Account number copied.');
+                }).catch(() => {
+                    setResult('Copy failed. Please select and copy the account number manually.');
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                initAmountButtons();
+                initMethodSelection();
+                updateBankDetails();
+
+                document.getElementById('fundCategory').addEventListener('change', updateBankDetails);
+
+                document.getElementById('applyCustom').addEventListener('click', () => {
+                    const input = document.getElementById('customAmount');
+                    const amount = parseInt(input.value, 10);
+                    if (!Number.isFinite(amount) || amount < 1) {
+                        setResult('Enter a valid amount.');
+                        return;
+                    }
+                    state.amount = amount;
+                    document.querySelectorAll('.amount-btn').forEach(btn => btn.classList.remove('active'));
+                    setResult('Custom amount set to ' + formatAmount(amount) + '.');
+                });
+
+                document.querySelectorAll('.method-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        state.method = card.dataset.method;
+                        document.querySelectorAll('.method-card').forEach(item => item.classList.remove('selected'));
+                        card.classList.add('selected');
+                        setResult('');
+                    });
+                });
+
+                document.getElementById('donateNow').addEventListener('click', proceedToGive);
+                document.getElementById('copyAccountBtn').addEventListener('click', copyAccountNumber);
             });
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const select = document.getElementById('fundCategory');
-            const copyBtn = document.getElementById('copyAccountBtn');
-            if (select) {
-                select.addEventListener('change', updateSelectedAccount);
-                updateSelectedAccount();
-            }
-            if (copyBtn) {
-                copyBtn.addEventListener('click', copyAccountNumber);
-            }
-        });
+        })();
     </script>
-    <script src="js/animations-scroll.js"></script>
+</body>
+</html>
