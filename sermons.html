@@ -130,7 +130,7 @@
             <div class="featured-sermon-preview fade-in-up">
                 <div class="featured-sermon-card">
                     <div class="video-frame-wrapper">
-                        <iframe id="featuredVideoFrame" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Featured sermon preview" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                        <iframe id="featuredVideoFrame" src="https://www.youtube.com/embed/YdkNEJ8r1V8" title="Featured sermon preview" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
                     </div>
                     <div class="featured-sermon-details">
                         <p class="sermon-series" id="featuredSeries">Faith Foundations</p>
@@ -138,7 +138,7 @@
                         <p class="sermon-meta" id="featuredMeta">Min. Emmanuel Inyang • March 20, 2026</p>
                         <p id="featuredDescription">Discover how to navigate life’s uncertainties through unwavering faith in God’s promises.</p>
                         <div class="featured-buttons">
-                            <a id="featuredWatchLink" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Watch on YouTube</a>
+                            <a id="featuredWatchLink" href="https://www.youtube.com/watch?v=YdkNEJ8r1V8" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Watch on YouTube</a>
                             <button class="btn btn-secondary" onclick="showSermonContent(featuredSermonId)">Read Sermon Notes</button>
                         </div>
                     </div>
@@ -214,19 +214,20 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="js/animations.js"></script>
     <script src="js/utils.js"></script>
     <script>
         // Sample sermon data
         const sermons = [
-            {
+                {
                 id: 1,
                 title: "Living by Faith, Not by Sight",
                 speaker: "Min. Emmanuel Inyang",
                 date: "March 20, 2026",
                 series: "Faith Foundations",
                 description: "Discover how to navigate life's uncertainties through unwavering faith in God's promises. This powerful message explores 2 Corinthians 5:7 and offers practical insights for daily Christian living.",
-                videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                videoUrl: "https://www.youtube.com/embed/YdkNEJ8r1V8",
                 audioUrl: "#"
             },
             {
@@ -236,7 +237,7 @@
                 date: "March 13, 2026",
                 series: "Faith Foundations",
                 description: "Learn how prayer transforms our relationship with God and impacts the world around us. Discover the principles of effective prayer and how to develop a dynamic prayer life.",
-                videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                videoUrl: "https://www.youtube.com/embed/YdkNEJ8r1V8",
                 audioUrl: "#"
             },
             {
@@ -246,7 +247,7 @@
                 date: "March 6, 2026",
                 series: "Grace in Action",
                 description: "God's grace is not just for salvation; it sustains us daily. Explore how grace empowers us to overcome challenges and live victoriously in Christ.",
-                videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                videoUrl: "https://www.youtube.com/embed/YdkNEJ8r1V8",
                 audioUrl: "#"
             },
             {
@@ -256,7 +257,7 @@
                 date: "February 27, 2026",
                 series: "Living Abundantly",
                 description: "Discover how to align your life with God's purpose and experience the joy of fulfilling His call on your life.",
-                videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                videoUrl: "https://www.youtube.com/embed/YdkNEJ8r1V8",
                 audioUrl: "#"
             },
             {
@@ -266,7 +267,7 @@
                 date: "February 20, 2026",
                 series: "The Gospel Story",
                 description: "The resurrection of Jesus is the foundation of our faith. Understand what the resurrection means for our present and future.",
-                videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                videoUrl: "https://www.youtube.com/embed/YdkNEJ8r1V8",
                 audioUrl: "#"
             },
             {
@@ -276,7 +277,7 @@
                 date: "February 13, 2026",
                 series: "Living Abundantly",
                 description: "Love is more than a feeling; it's a choice and an action. Learn how to express God's love authentically in your relationships.",
-                videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                videoUrl: "https://www.youtube.com/embed/YdkNEJ8r1V8",
                 audioUrl: "#"
             }
         ];
@@ -492,20 +493,177 @@
             document.getElementById('modalSpeaker').textContent = `Speaker: ${sermon.speaker}`;
             document.getElementById('modalDate').textContent = `Date: ${sermon.date}`;
             document.getElementById('modalContent').innerHTML = content;
-            document.getElementById('pdfDownload').onclick = () => downloadAsPDF(sermon);
+            document.getElementById('pdfDownload').onclick = () => downloadStyledPDF(sermon);
             document.getElementById('sermonModal').style.display = 'block';
         }
 
         function downloadAsPDF(sermon) {
-            const element = document.getElementById('modalContent');
-            const opt = {
-                margin: 10,
-                filename: `${sermon.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
-            };
-            html2pdf().set(opt).from(element).save();
+            const modalContentEl = document.getElementById('modalContent');
+            const title = sermon.title || '';
+            const speaker = sermon.speaker || '';
+            const date = sermon.date || '';
+            const contentText = modalContentEl ? modalContentEl.innerText.trim() : '';
+
+            const header = `${title}\n\nSpeaker: ${speaker}\nDate: ${date}\n\n`;
+            const fullText = header + contentText;
+
+            // Use jsPDF to generate a plain-text PDF (more reliable for simple text)
+            const jspdfGlobal = window.jspdf || window.jsPDF || null;
+            const jsPDF = jspdfGlobal && jspdfGlobal.jsPDF ? jspdfGlobal.jsPDF : (window.jsPDF || null);
+            if (!jsPDF) {
+                alert('PDF library not available.');
+                return;
+            }
+
+            const doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+            const margin = 15;
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const pageHeight = doc.internal.pageSize.getHeight();
+            const maxLineWidth = pageWidth - margin * 2;
+
+            const fontSize = 12;
+            doc.setFont('helvetica');
+            doc.setFontSize(fontSize);
+
+            const lines = doc.splitTextToSize(fullText, maxLineWidth);
+            let cursorY = margin;
+            const lineHeight = fontSize * 0.352777778 * 1.15; // approximate mm per pt
+
+            const btn = document.getElementById('pdfDownload');
+            if (btn) btn.disabled = true;
+
+            for (let i = 0; i < lines.length; i++) {
+                if (cursorY + lineHeight > pageHeight - margin) {
+                    doc.addPage();
+                    cursorY = margin;
+                }
+                doc.text(String(lines[i]), margin, cursorY);
+                cursorY += lineHeight;
+            }
+
+            const filename = `${title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.pdf`;
+            doc.save(filename);
+
+            if (btn) btn.disabled = false;
+        }
+
+        async function downloadStyledPDF(sermon) {
+            const modalContentEl = document.getElementById('modalContent');
+            const title = sermon.title || '';
+            const speaker = sermon.speaker || '';
+            const date = sermon.date || '';
+            const contentText = modalContentEl ? modalContentEl.innerText.trim() : '';
+
+            function loadWatermark(src, opacity = 0.08, maxSize = 1200) {
+                return new Promise((resolve) => {
+                    const img = new Image();
+                    img.crossOrigin = 'anonymous';
+                    img.onload = function () {
+                        const scale = Math.min(maxSize / img.width, maxSize / img.height, 1);
+                        const cw = Math.round(img.width * scale);
+                        const ch = Math.round(img.height * scale);
+                        const canvas = document.createElement('canvas');
+                        canvas.width = cw;
+                        canvas.height = ch;
+                        const ctx = canvas.getContext('2d');
+                        ctx.clearRect(0, 0, cw, ch);
+                        ctx.globalAlpha = opacity;
+                        ctx.drawImage(img, 0, 0, cw, ch);
+                        resolve({ dataUrl: canvas.toDataURL('image/png'), width: cw, height: ch });
+                    };
+                    img.onerror = function () { resolve(null); };
+                    img.src = 'img/CHURCH LOGO PNG.png';
+                });
+            }
+
+            const jspdfGlobal = window.jspdf || window.jsPDF || null;
+            const jsPDF = jspdfGlobal && jspdfGlobal.jsPDF ? jspdfGlobal.jsPDF : (window.jsPDF || null);
+            if (!jsPDF) { alert('PDF library not available.'); return; }
+
+            const watermark = await loadWatermark('img/CHURCH LOGO PNG.png', 0.08);
+
+            const doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+            const margin = 18;
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const pageHeight = doc.internal.pageSize.getHeight();
+            const maxLineWidth = pageWidth - margin * 2;
+
+            const titleSize = 16;
+            const metaSize = 11;
+            const bodySize = 12;
+
+            const btn = document.getElementById('pdfDownload');
+            if (btn) btn.disabled = true;
+
+            const bodyLines = doc.splitTextToSize(contentText, maxLineWidth);
+
+            let pageNum = 1;
+            let cursorY = margin;
+
+            function drawWatermark() {
+                if (!watermark) return;
+                const wmWidth = pageWidth * 0.8;
+                const wmHeight = (watermark.height / watermark.width) * wmWidth;
+                const x = (pageWidth - wmWidth) / 2;
+                const y = (pageHeight - wmHeight) / 2;
+                try { doc.addImage(watermark.dataUrl, 'PNG', x, y, wmWidth, wmHeight); } catch (e) { /* ignore */ }
+            }
+
+            drawWatermark();
+
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(titleSize);
+            doc.setTextColor(20);
+            const titleLines = doc.splitTextToSize(title, maxLineWidth);
+            titleLines.forEach((line) => {
+                if (cursorY + 8 > pageHeight - margin) { doc.addPage(); pageNum++; cursorY = margin; drawWatermark(); }
+                doc.text(line, margin, cursorY);
+                cursorY += 8;
+            });
+
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(metaSize);
+            if (cursorY + 6 > pageHeight - margin) { doc.addPage(); pageNum++; cursorY = margin; drawWatermark(); }
+            doc.text(`Speaker: ${speaker}`, margin, cursorY);
+            cursorY += 6;
+            if (cursorY + 6 > pageHeight - margin) { doc.addPage(); pageNum++; cursorY = margin; drawWatermark(); }
+            doc.text(`Date: ${date}`, margin, cursorY);
+            cursorY += 8;
+
+            doc.setDrawColor(200);
+            doc.setLineWidth(0.5);
+            doc.line(margin, cursorY, pageWidth - margin, cursorY);
+            cursorY += 8;
+
+            doc.setFontSize(bodySize);
+            doc.setTextColor(60);
+            const lineHeight = bodySize * 0.352777778 * 1.25;
+
+            for (let i = 0; i < bodyLines.length; i++) {
+                if (cursorY + lineHeight > pageHeight - margin - 12) {
+                    doc.setFontSize(10);
+                    doc.setTextColor(120);
+                    doc.text(`Page ${pageNum}`, pageWidth / 2, pageHeight - 10, { align: 'center' });
+                    doc.addPage();
+                    pageNum++;
+                    cursorY = margin;
+                    drawWatermark();
+                    doc.setFontSize(bodySize);
+                    doc.setTextColor(60);
+                }
+                const text = String(bodyLines[i]);
+                doc.text(text, margin, cursorY);
+                cursorY += lineHeight;
+            }
+
+            doc.setFontSize(10);
+            doc.setTextColor(120);
+            doc.text(`Page ${pageNum}`, pageWidth / 2, pageHeight - 10, { align: 'center' });
+
+            const filename = `${title.replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'sermon'}.pdf`;
+            doc.save(filename);
+
+            if (btn) btn.disabled = false;
         }
 
         function closeModal() {

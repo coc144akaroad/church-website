@@ -7,12 +7,14 @@
     "build-images": "node scripts/generate-gallery.js --build",
     "prepare-gallery": "npm run build-images && npm run generate-gallery",
     "generate-sitemap": "node scripts/generate-sitemap.js",
-    "prepare-seo": "node scripts/apply-seo.js && node scripts/generate-sitemap.js"
+    "prepare-seo": "node scripts/apply-seo.js && node scripts/generate-sitemap.js",
+    "generate-pdfs": "node scripts/generate-pdfs.js"
   },
   "engines": {
     "node": ">=14"
   },
   "dependencies": {
-    "sharp": "^0.32.0"
+    "sharp": "^0.32.0",
+    "puppeteer": "^20.0.0"
   }
 }
