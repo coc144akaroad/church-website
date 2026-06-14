@@ -70,6 +70,10 @@ function initFloatingDonate() {
     });
 
     document.body.appendChild(btn);
+    // If back-to-top exists, adjust its position to avoid overlap
+    if (window.adjustBackToTopPosition) {
+        window.adjustBackToTopPosition();
+    }
 }
 
 
@@ -183,11 +187,29 @@ function initBackToTop() {
             font-size: 24px;
             cursor: pointer;
             display: none;
-            z-index: 999;
+            z-index: 1301;
             transition: all 0.3s ease;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         `;
         document.body.appendChild(backToTopBtn);
+        // Expose an adjuster so other scripts (eg. floating donate) can reposition the button
+        window.adjustBackToTopPosition = function() {
+            try {
+                const fd = document.getElementById('floatingDonate') || document.querySelector('.floating-donate');
+                if (fd) {
+                    const fdWidth = Math.round(fd.getBoundingClientRect().width || 0);
+                    // place back-to-top to the left of the floating donate with a small gap
+                    backToTopBtn.style.right = (fdWidth + 36) + 'px';
+                } else {
+                    backToTopBtn.style.right = '30px';
+                }
+                backToTopBtn.style.zIndex = '1301';
+            } catch (e) {
+                // ignore
+            }
+        };
+        // adjust on resize
+        window.addEventListener('resize', () => { window.adjustBackToTopPosition && window.adjustBackToTopPosition(); });
     }
 
     window.addEventListener('scroll', () => {
