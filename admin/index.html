@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Admin — Church CMS</title>
+    <style>
+      :root{font-family:Arial,Helvetica,sans-serif}
+      body{margin:0;background:#f4f6f8;color:#222}
+      header{background:#1e3a8a;color:#fff;padding:12px 18px}
+      .wrap{display:flex;height:calc(100vh - 56px)}
+      .sidebar{width:320px;background:#fff;border-right:1px solid #e6e9ee;overflow:auto;padding:12px}
+      .main{flex:1;overflow:auto;padding:16px}
+      .list-item{padding:10px;border-bottom:1px solid #eee;cursor:pointer}
+      .list-item:hover{background:#f7f9fc}
+      .controls{margin-top:12px}
+      .form-row{margin-bottom:10px}
+      label{display:block;font-size:13px;margin-bottom:4px}
+      input[type=text],textarea,select{width:100%;padding:8px;border:1px solid #d8dde6;border-radius:4px}
+      button{background:#1e3a8a;color:#fff;border:none;padding:8px 12px;border-radius:4px;cursor:pointer}
+      button.secondary{background:#6b7280}
+    </style>
+  </head>
+  <body>
+    <header>
+      <strong>Church CMS</strong>
+    </header>
+
+    <div class="wrap">
+      <aside class="sidebar" id="sidebar">
+        <h3>Sermons</h3>
+        <div id="sermonList"></div>
+        <div class="controls">
+          <button id="refreshBtn">Refresh list</button>
+        </div>
+      </aside>
+
+      <main class="main" id="main">
+        <div id="editorArea">
+          <p>Select a sermon to edit or refresh the list.</p>
+        </div>
+      </main>
+    </div>
+
+    <script src="admin/app.js"></script>
+  </body>
+</html>

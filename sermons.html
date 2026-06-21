@@ -219,68 +219,7 @@
     <script src="js/utils.js"></script>
     <script>
         // Sample sermon data
-        const sermons = [
-                {
-                id: 1,
-                title: "Living by Faith, Not by Sight",
-                speaker: "Min. Emmanuel Inyang",
-                date: "March 20, 2026",
-                series: "Faith Foundations",
-                description: "Discover how to navigate life's uncertainties through unwavering faith in God's promises. This powerful message explores 2 Corinthians 5:7 and offers practical insights for daily Christian living.",
-                videoUrl: "https://www.youtube.com/embed/YdkNEJ8r1V8",
-                audioUrl: "#"
-            },
-            {
-                id: 2,
-                title: "The Power of Prayer",
-                speaker: "Min. Anietie Etuk",
-                date: "March 13, 2026",
-                series: "Faith Foundations",
-                description: "Learn how prayer transforms our relationship with God and impacts the world around us. Discover the principles of effective prayer and how to develop a dynamic prayer life.",
-                videoUrl: "https://www.youtube.com/embed/YdkNEJ8r1V8",
-                audioUrl: "#"
-            },
-            {
-                id: 3,
-                title: "Grace That Sustains",
-                speaker: "Bro. Uyobong Uko",
-                date: "March 6, 2026",
-                series: "Grace in Action",
-                description: "God's grace is not just for salvation; it sustains us daily. Explore how grace empowers us to overcome challenges and live victoriously in Christ.",
-                videoUrl: "https://www.youtube.com/embed/YdkNEJ8r1V8",
-                audioUrl: "#"
-            },
-            {
-                id: 4,
-                title: "Finding Your Purpose",
-                speaker: "Bro. Sandy Sandy",
-                date: "February 27, 2026",
-                series: "Living Abundantly",
-                description: "Discover how to align your life with God's purpose and experience the joy of fulfilling His call on your life.",
-                videoUrl: "https://www.youtube.com/embed/YdkNEJ8r1V8",
-                audioUrl: "#"
-            },
-            {
-                id: 5,
-                title: "The Resurrection Hope",
-                speaker: "Bro. Wisdom Johnson",
-                date: "February 20, 2026",
-                series: "The Gospel Story",
-                description: "The resurrection of Jesus is the foundation of our faith. Understand what the resurrection means for our present and future.",
-                videoUrl: "https://www.youtube.com/embed/YdkNEJ8r1V8",
-                audioUrl: "#"
-            },
-            {
-                id: 6,
-                title: "Love in Action",
-                speaker: "Min. Anietie Etuk",
-                date: "February 13, 2026",
-                series: "Living Abundantly",
-                description: "Love is more than a feeling; it's a choice and an action. Learn how to express God's love authentically in your relationships.",
-                videoUrl: "https://www.youtube.com/embed/YdkNEJ8r1V8",
-                audioUrl: "#"
-            }
-        ];
+        let sermons = [];
 
         let featuredSermonId = 1;
         let currentSearchQuery = '';
@@ -684,11 +623,25 @@
             }
         });
 
-        // Initial render
-        renderFeaturedSermon();
-        renderSeriesFilters();
-        initSermonSearch();
-        renderSermons();
+        // Initial render: load data then render
+        async function initSermonData() {
+            try {
+                const resp = await fetch('data/sermons.json');
+                const data = await resp.json();
+                // ensure array
+                sermons = Array.isArray(data) ? data : [];
+            } catch (err) {
+                console.error('Failed to load sermons.json', err);
+                sermons = [];
+            }
+
+            renderFeaturedSermon();
+            renderSeriesFilters();
+            initSermonSearch();
+            renderSermons();
+        }
+
+        initSermonData();
     </script>
     <script src="js/script.js"></script>
 </body>

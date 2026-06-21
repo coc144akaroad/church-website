@@ -1,0 +1,30 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "img/uploads"
+public_folder: "/img/uploads"
+
+collections:
+  - name: "pages"
+    label: "Pages"
+    files:
+      - label: "Home"
+        name: "home"
+        file: "content/pages/home.md"
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "events"
+    label: "Events"
+    folder: "data"
+    create: false
+    slug: "{{slug}}"
+    format: "json"
+    fields:
+      - { label: "Events JSON (edit with caution)", name: "events", widget: "object" }
+
+# Note: This is a starter config. For full CMS features (per-item sermons, gallery uploads)
+# we'll migrate sermon items into `content/sermons/` (one file per sermon) and update
+# collections accordingly. Configure Netlify Identity + Git Gateway on Netlify for auth.

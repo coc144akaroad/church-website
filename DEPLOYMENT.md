@@ -41,6 +41,18 @@
    - Update DNS records with Netlify nameservers
    - Wait 24-48 hours for DNS to propagate
 
+   #### Netlify CMS & Identity Setup (recommended)
+
+   1. Enable Netlify Identity in your site dashboard (Site settings → Identity). Turn on "Registration: Invite only" for controlled access.
+   2. Enable Git Gateway (Identity → Services → Git Gateway) and connect to your Git provider.
+   3. Add the following environment variables in Netlify (Site settings → Build & deploy → Environment):
+      - `GITHUB_TOKEN` — a personal access token with `repo` scope (used by `netlify/functions/save-file` when committing edits).
+      - `GITHUB_REPO` — repository slug like `username/repo`.
+      - `GITHUB_BRANCH` — branch to commit to (default: `main`).
+   4. Place the `admin/` folder in the repo (already added). Visit `https://<your-site>/.netlify/functions/` to verify functions, and `https://<your-site>/admin/` to open the CMS.
+
+   Security note: Prefer using Git Gateway rather than direct `GITHUB_TOKEN` when possible. If using `GITHUB_TOKEN`, store it securely in Netlify env and rotate regularly.
+
 #### Benefits:
 - ✅ Free hosting
 - ✅ Automatic deployments on code push
