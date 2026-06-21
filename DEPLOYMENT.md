@@ -53,6 +53,18 @@
 
    Security note: Prefer using Git Gateway rather than direct `GITHUB_TOKEN` when possible. If using `GITHUB_TOKEN`, store it securely in Netlify env and rotate regularly.
 
+   #### Additional environment variables for media uploads and build triggers
+
+   If you want the admin upload flow to commit images and trigger an automated rebuild (so `scripts/generate-gallery.js` runs during build), add these environment variables to your Netlify site:
+
+   - `GITHUB_TOKEN` — personal access token with `repo` scope (used by `netlify/functions/save-file`).
+   - `GITHUB_REPO` — repository slug like `username/repo` (used by `save-file`).
+   - `GITHUB_BRANCH` — branch to commit to (default: `main`).
+   - `NETLIFY_TOKEN` — personal access token for Netlify (used by `netlify/functions/trigger-build`).
+   - `NETLIFY_SITE_ID` — your Netlify site ID (used to trigger builds).
+
+   Make sure tokens are stored in Netlify environment variables (Site settings → Build & deploy → Environment).
+
 #### Benefits:
 - ✅ Free hosting
 - ✅ Automatic deployments on code push

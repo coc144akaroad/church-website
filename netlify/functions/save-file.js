@@ -1,9 +1,8 @@
 const fetch = require('node-fetch');
-const Buffer = require('buffer').Buffer;
 
 exports.handler = async function (event) {
-  // This function expects a POST with JSON { path: "content/sermons/1.md", content: "..." }
-  // It uses the GitHub Contents API to create/update a file on the repository. Configure GITHUB_TOKEN in Netlify env.
+  // This function expects a POST with JSON { path: "content/sermons/1.md", content: "...", isBase64: true }
+  // It uses the GitHub Contents API to create/update a file on the repository. Configure GITHUB_TOKEN and GITHUB_REPO in Netlify env.
   if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
 
   const token = process.env.GITHUB_TOKEN;
@@ -15,11 +14,11 @@ exports.handler = async function (event) {
   let payload;
   try { payload = JSON.parse(event.body || '{}'); } catch (e) { return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON' }) }; }
 
-  const { path, content, message } = payload;
+  const { path, content, message, isBase64 } = payload;
   if (!path || typeof content !== 'string') return { statusCode: 400, body: JSON.stringify({ error: 'Missing path or content' }) };
 
   const apiBase = 'https://api.github.com/repos/' + repo + '/contents/';
-  const fileUrl = apiBase + encodeURIComponent(path);
+  const fileUrl = apiBase + path.split('/').map(encodeURIComponent).join('/');
 
   // First get the file to retrieve sha if exists
   let sha = null;
@@ -33,9 +32,17 @@ exports.handler = async function (event) {
     }
   } catch (e) { console.error('get file error', e); }
 
+  // If caller already provided base64 content (for binary files), use it directly
+  let encodedContent;
+  if (isBase64) {
+    encodedContent = content.replace(/\r?\n/g, '');
+  } else {
+    encodedContent = Buffer.from(content, 'utf8').toString('base64');
+  }
+
   const putBody = {
     message: message || `CMS update: ${path}`,
-    content: Buffer.from(content, 'utf8').toString('base64'),
+    content: encodedContent,
     branch
   };
   if (sha) putBody.sha = sha;

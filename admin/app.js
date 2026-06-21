@@ -84,3 +84,68 @@
   (async ()=>{ const items = await loadSermons(); renderList(items); })();
 
 })();
+
+// Media upload handlers
+(function(){
+  const mediaInput = document.getElementById('mediaInput');
+  const uploadBtn = document.getElementById('uploadMediaBtn');
+
+  if (!mediaInput || !uploadBtn) return;
+
+  uploadBtn.addEventListener('click', async () => {
+    const files = mediaInput.files;
+    if (!files || files.length === 0) {
+      alert('Please select one or more images to upload.');
+      return;
+    }
+
+    uploadBtn.disabled = true;
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      try {
+        const dataUrl = await readFileAsDataURL(file);
+        const base64 = dataUrl.split(',')[1];
+        const filename = file.name.replace(/\s+/g, '_');
+        const path = `img/gallery/${filename}`;
+
+        const res = await fetch('/.netlify/functions/save-file', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ path, content: base64, isBase64: true, message: `Add gallery image ${filename}` })
+        });
+
+        const json = await res.json();
+        if (!res.ok) {
+          console.error('Upload failed:', json);
+          alert('Upload failed for ' + filename + '. See console for details.');
+        } else {
+          console.log('Uploaded', filename);
+        }
+      } catch (err) {
+        console.error('Error uploading file', file.name, err);
+        alert('Error uploading ' + file.name + '. See console for details.');
+      }
+    }
+
+    // Trigger a Netlify build so the gallery generator runs on deploy
+    try {
+      const buildRes = await fetch('/.netlify/functions/trigger-build', { method: 'POST' });
+      if (buildRes.ok) alert('Upload complete. Build triggered.');
+      else alert('Upload complete. Build trigger request failed.');
+    } catch (err) {
+      console.error('trigger build error', err);
+      alert('Upload complete. Build trigger request failed.');
+    }
+
+    uploadBtn.disabled = false;
+  });
+
+  function readFileAsDataURL(file) {
+    return new Promise((resolve, reject) => {
+      const fr = new FileReader();
+      fr.onload = () => resolve(fr.result);
+      fr.onerror = reject;
+      fr.readAsDataURL(file);
+    });
+  }
+})();
