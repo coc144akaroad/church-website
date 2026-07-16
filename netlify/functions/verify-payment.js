@@ -1,4 +1,5 @@
 const https = require('https');
+const { buildVerificationResponse } = require('./payment-utils');
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -35,7 +36,8 @@ exports.handler = async (event) => {
       res.on('end', () => {
         try {
           const parsed = JSON.parse(data);
-          resolve({ statusCode: 200, body: JSON.stringify(parsed) });
+          const responseBody = buildVerificationResponse(parsed, reference);
+          resolve({ statusCode: 200, body: JSON.stringify(responseBody) });
         } catch (err) {
           resolve({ statusCode: 502, body: JSON.stringify({ error: 'Invalid response from Paystack', raw: data }) });
         }

@@ -190,8 +190,6 @@
     <script>
     (async function(){
         const grid = document.getElementById('galleryGrid');
-        grid.innerHTML = '';
-
         const galleryItemsFallback = [
             { title: "Sunday Worship Service", emoji: "🙏" },
             { title: "Community Outreach", emoji: "🤝" },
@@ -226,85 +224,99 @@
             return canvas.toDataURL();
         }
 
-        let images = [];
-        try {
-            const res = await fetch('img/gallery/gallery.json', { cache: 'no-cache' });
-            if (res.ok) {
-                const data = await res.json();
-                images = data.map(item => (typeof item === 'string') ? { src: item, title: item.split('/').pop() } : item);
+        function ensureGalleryContainer() {
+            let carouselContainer = document.getElementById('galleryCarousel');
+            if (!carouselContainer) {
+                carouselContainer = document.createElement('div');
+                carouselContainer.id = 'galleryCarousel';
+                carouselContainer.className = 'gallery-carousel';
+                const sectionContainer = document.querySelector('.section .container') || document.querySelector('.container');
+                sectionContainer.insertBefore(carouselContainer, document.getElementById('galleryGrid'));
             }
-        } catch (err) {
-            console.warn('Could not load gallery.json:', err);
+            return carouselContainer;
         }
 
-        if (!images.length) {
-            images = galleryItemsFallback.map(item => ({ src: createPlaceholderImage(item.emoji, item.title), title: item.title }));
+        function renderGallery(images) {
+            grid.innerHTML = '';
+            const carouselContainer = ensureGalleryContainer();
+            carouselContainer.innerHTML = '';
+
+            images.forEach((img, idx) => {
+                const cimg = document.createElement('img');
+                cimg.src = img.src;
+                cimg.alt = img.title || '';
+                cimg.loading = 'lazy';
+                cimg.decoding = 'async';
+                if (idx === 0) cimg.classList.add('active');
+                carouselContainer.appendChild(cimg);
+            });
+
+            images.forEach((item, index) => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item scroll-reveal';
+                galleryItem.style.animationDelay = (index * 0.05) + 's';
+                const pic = document.createElement('picture');
+                if (item.webp) {
+                    const s = document.createElement('source');
+                    s.type = 'image/webp';
+                    s.srcset = item.webp;
+                    pic.appendChild(s);
+                }
+                const imgEl = document.createElement('img');
+                imgEl.src = item.src;
+                imgEl.alt = item.title || '';
+                imgEl.loading = 'lazy';
+                imgEl.decoding = 'async';
+                imgEl.setAttribute('aria-hidden', 'true');
+                pic.appendChild(imgEl);
+
+                galleryItem.appendChild(pic);
+                galleryItem.innerHTML += `\
+                    <div class="gallery-overlay">\
+                        <div class="gallery-icon"><i class="fas fa-search-plus" aria-hidden="true"></i></div>\
+                    </div>`;
+                galleryItem.addEventListener('click', () => openLightbox(index));
+                grid.appendChild(galleryItem);
+            });
+
+            if (typeof initScrollReveal === 'function') initScrollReveal();
+
+            let carouselIndex = 0;
+            const carouselImgs = carouselContainer.querySelectorAll('img');
+            if (carouselImgs.length > 1) {
+                clearInterval(window.galleryCarouselInterval);
+                window.galleryCarouselInterval = setInterval(() => {
+                    carouselImgs[carouselIndex].classList.remove('active');
+                    carouselIndex = (carouselIndex + 1) % carouselImgs.length;
+                    carouselImgs[carouselIndex].classList.add('active');
+                }, 5000);
+            }
         }
 
-        // insert carousel before grid
-        const carouselContainer = document.createElement('div');
-        carouselContainer.id = 'galleryCarousel';
-        carouselContainer.className = 'gallery-carousel';
-        const sectionContainer = document.querySelector('.section .container') || document.querySelector('.container');
-        sectionContainer.insertBefore(carouselContainer, document.getElementById('galleryGrid'));
+        async function loadGalleryImages() {
+            let images = [];
+            try {
+                const res = await fetch('img/gallery/gallery.json', { cache: 'no-cache' });
+                if (res.ok) {
+                    const data = await res.json();
+                    images = data.map(item => (typeof item === 'string') ? { src: item, title: item.split('/').pop() } : item);
+                }
+            } catch (err) {
+                console.warn('Could not load gallery.json:', err);
+            }
 
-        images.forEach((img, idx) => {
-            const cimg = document.createElement('img');
-            cimg.src = img.src;
-            cimg.alt = img.title || '';
-            cimg.loading = 'lazy';
-            cimg.decoding = 'async';
-            if (idx === 0) cimg.classList.add('active');
-            carouselContainer.appendChild(cimg);
-        });
+            if (!images.length) {
+                images = galleryItemsFallback.map(item => ({ src: createPlaceholderImage(item.emoji, item.title), title: item.title }));
+            }
 
-        images.forEach((item, index) => {
-            const galleryItem = document.createElement('div');
-            galleryItem.className = 'gallery-item scroll-reveal';
-            galleryItem.style.animationDelay = (index * 0.05) + 's';
-                        // build picture element for WebP fallback and lazy loading
-                        const pic = document.createElement('picture');
-                        if (item.webp) {
-                                const s = document.createElement('source');
-                                s.type = 'image/webp';
-                                s.srcset = item.webp;
-                                pic.appendChild(s);
-                        }
-                        const imgEl = document.createElement('img');
-                        imgEl.src = item.src;
-                        imgEl.alt = item.title || '';
-                        imgEl.loading = 'lazy';
-                        imgEl.decoding = 'async';
-                        imgEl.setAttribute('aria-hidden', 'true');
-                        pic.appendChild(imgEl);
-
-                        galleryItem.appendChild(pic);
-                        galleryItem.innerHTML += `\
-                                <div class="gallery-overlay">\
-                                    <div class="gallery-icon"><i class="fas fa-search-plus" aria-hidden="true"></i></div>\
-                                </div>`;
-            galleryItem.addEventListener('click', () => openLightbox(index));
-            grid.appendChild(galleryItem);
-        });
-
-        initScrollReveal();
-
-        let carouselIndex = 0;
-        const carouselImgs = carouselContainer.querySelectorAll('img');
-        if (carouselImgs.length > 1) {
-            setInterval(() => {
-                carouselImgs[carouselIndex].classList.remove('active');
-                carouselIndex = (carouselIndex + 1) % carouselImgs.length;
-                carouselImgs[carouselIndex].classList.add('active');
-            }, 5000);
+            return images;
         }
 
         window.currentImageIndex = 0;
         window.openLightbox = function(index) {
             window.currentImageIndex = index;
-            const item = images[index];
+            const item = window.galleryImages[index];
             const lbImg = document.getElementById('lightboxImage');
-            // prefer WebP in lightbox if available
             if (item.webp) {
                 lbImg.src = item.webp;
             } else {
@@ -319,11 +331,11 @@
             document.body.style.overflow = 'auto';
         };
         window.nextImage = function() {
-            window.currentImageIndex = (window.currentImageIndex + 1) % images.length;
+            window.currentImageIndex = (window.currentImageIndex + 1) % window.galleryImages.length;
             openLightbox(window.currentImageIndex);
         };
         window.previousImage = function() {
-            window.currentImageIndex = (window.currentImageIndex - 1 + images.length) % images.length;
+            window.currentImageIndex = (window.currentImageIndex - 1 + window.galleryImages.length) % window.galleryImages.length;
             openLightbox(window.currentImageIndex);
         };
 
@@ -337,6 +349,26 @@
 
         document.getElementById('lightbox').addEventListener('click', (e) => {
             if (e.target.id === 'lightbox') closeLightbox();
+        });
+
+        window.galleryImages = [];
+        const images = await loadGalleryImages();
+        window.galleryImages = images;
+        renderGallery(images);
+
+        window.refreshGallery = async function() {
+            const refreshedImages = await loadGalleryImages();
+            window.galleryImages = refreshedImages;
+            renderGallery(refreshedImages);
+        };
+
+        window.addEventListener('focus', () => {
+            refreshGallery();
+        });
+        window.addEventListener('storage', (event) => {
+            if (event.key === 'churchGalleryRefresh') {
+                refreshGallery();
+            }
         });
 
     })();

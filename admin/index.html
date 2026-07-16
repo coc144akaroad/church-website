@@ -5,48 +5,191 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Admin — Church CMS</title>
     <style>
-      :root{font-family:Arial,Helvetica,sans-serif}
-      body{margin:0;background:#f4f6f8;color:#222}
-      header{background:#1e3a8a;color:#fff;padding:12px 18px}
-      .wrap{display:flex;height:calc(100vh - 56px)}
-      .sidebar{width:320px;background:#fff;border-right:1px solid #e6e9ee;overflow:auto;padding:12px}
-      .main{flex:1;overflow:auto;padding:16px}
-      .list-item{padding:10px;border-bottom:1px solid #eee;cursor:pointer}
-      .list-item:hover{background:#f7f9fc}
-      .controls{margin-top:12px}
-      .form-row{margin-bottom:10px}
-      label{display:block;font-size:13px;margin-bottom:4px}
-      input[type=text],textarea,select{width:100%;padding:8px;border:1px solid #d8dde6;border-radius:4px}
-      button{background:#1e3a8a;color:#fff;border:none;padding:8px 12px;border-radius:4px;cursor:pointer}
-      button.secondary{background:#6b7280}
+      :root {
+        color-scheme: light;
+        --bg: #f4f7fb;
+        --panel: rgba(255,255,255,0.92);
+        --panel-strong: #ffffff;
+        --text: #152033;
+        --muted: #5d6b82;
+        --border: #e4eaf2;
+        --primary: #2056c7;
+        --primary-dark: #153a8d;
+        --accent: #8b5cf6;
+        --shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+        font-family: "Inter", "Segoe UI", Arial, sans-serif;
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: radial-gradient(circle at top left, #eef4ff 0%, var(--bg) 45%, #f7f9fd 100%);
+        color: var(--text);
+      }
+      .page-shell { padding: 24px; }
+      .topbar {
+        display: flex; justify-content: space-between; align-items: center; gap: 16px;
+        padding: 22px 24px; margin-bottom: 18px;
+        background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+        color: #fff; border-radius: 24px; box-shadow: var(--shadow);
+      }
+      .eyebrow { margin: 0 0 6px; font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.9; }
+      .topbar h1 { margin: 0; font-size: 1.45rem; }
+      .topbar p { margin: 6px 0 0; opacity: 0.92; max-width: 520px; }
+      .topbar-pill {
+        background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); padding: 10px 14px; border-radius: 999px; font-weight: 600; white-space: nowrap;
+      }
+      .app-shell { display: flex; gap: 18px; min-height: calc(100vh - 176px); }
+      .sidebar { width: 330px; display: flex; flex-direction: column; gap: 16px; }
+      .panel {
+        background: var(--panel); border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow); backdrop-filter: blur(8px);
+      }
+      .panel-body { padding: 18px; }
+      .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 18px 0; }
+      .section-label { margin: 0 0 4px; color: var(--muted); font-size: 0.78rem; letter-spacing: 0.16em; text-transform: uppercase; }
+      .panel h3, .panel h4 { margin: 0; font-size: 1.02rem; }
+      .ghost-btn, .primary-btn, .secondary-btn {
+        border: none; cursor: pointer; border-radius: 999px; padding: 10px 14px; font-weight: 600; transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .ghost-btn { background: #eff4ff; color: var(--primary); }
+      .primary-btn { background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; }
+      .secondary-btn { background: #eef2f7; color: var(--text); }
+      .ghost-btn:hover, .primary-btn:hover, .secondary-btn:hover { transform: translateY(-1px); }
+      .list-stack { display: flex; flex-direction: column; gap: 8px; padding: 16px 18px 18px; }
+      .list-item {
+        width: 100%; text-align: left; padding: 12px 14px; border: 1px solid var(--border); border-radius: 14px; background: var(--panel-strong); cursor: pointer; display: flex; flex-direction: column; gap: 4px;
+      }
+      .list-item:hover, .list-item.active { border-color: rgba(32,86,199,0.4); box-shadow: 0 10px 25px rgba(32,86,199,0.11); }
+      .list-title { font-weight: 700; color: var(--text); }
+      .list-meta { font-size: 0.9rem; color: var(--muted); }
+      .empty-list { padding: 12px 14px; color: var(--muted); background: #f8fafc; border-radius: 12px; border: 1px dashed var(--border); }
+      .main { flex: 1; min-width: 0; }
+      .editor-panel { height: 100%; }
+      .editor-body { padding: 18px; }
+      .editor-header {
+        display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--border);
+      }
+      .editor-header h2 { margin: 4px 0 0; font-size: 1.2rem; }
+      .meta-chip { padding: 8px 12px; border-radius: 999px; background: #f3f6ff; color: var(--primary); font-weight: 700; }
+      .empty-state {
+        min-height: 320px; display: grid; place-items: center; text-align: center; padding: 28px; border: 1px dashed var(--border); border-radius: 18px; background: linear-gradient(135deg, rgba(32,86,199,0.04), rgba(139,92,246,0.05)); color: var(--muted);
+      }
+      .empty-icon { font-size: 2.2rem; margin-bottom: 10px; color: var(--primary); }
+      .form-card { background: var(--panel-strong); border: 1px solid var(--border); border-radius: 16px; padding: 16px; }
+      .form-row { margin-bottom: 12px; }
+      .form-row label { display: block; font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; color: var(--muted); }
+      input[type=text], textarea, select, input[type=file] { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 12px; background: #fcfdff; color: var(--text); }
+      textarea { min-height: 220px; resize: vertical; }
+      .form-actions { display: flex; gap: 10px; margin-top: 16px; }
+      .upload-panel .panel-body { display: flex; flex-direction: column; gap: 10px; }
+      .upload-panel input[type=file] { padding: 8px; }
+      .field-row { display: flex; flex-direction: column; gap: 6px; }
+      .field-row label { font-size: 0.85rem; color: var(--muted); font-weight: 700; }
+      .status-banner { display: none; padding: 10px 12px; border-radius: 12px; font-size: 0.95rem; margin-top: 8px; }
+      .status-banner.show { display: block; }
+      .status-banner.info { background: #f3f6ff; color: var(--primary); }
+      .status-banner.success { background: #ecfdf3; color: #047857; }
+      .status-banner.error { background: #fef2f2; color: #b91c1c; }
+      .preview-grid { display: grid; gap: 10px; margin-top: 10px; }
+      .preview-card { display: flex; gap: 10px; align-items: center; padding: 10px; border: 1px solid var(--border); border-radius: 12px; background: #fcfdff; }
+      .preview-thumb { width: 56px; height: 56px; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); }
+      .preview-meta { flex: 1; min-width: 0; }
+      .preview-name { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .preview-caption { font-size: 0.84rem; color: var(--muted); margin-top: 3px; }
+      .preview-status { font-size: 0.78rem; color: var(--primary); margin-top: 4px; }
+      .preview-actions { display: flex; gap: 6px; }
+      .preview-actions button { border: none; background: #eef2f7; color: var(--text); border-radius: 999px; padding: 6px 8px; cursor: pointer; font-size: 0.8rem; }
+      .hidden { display: none !important; }
+      .auth-gate { position: fixed; inset: 0; background: rgba(10, 18, 34, 0.78); display: grid; place-items: center; padding: 20px; z-index: 20; }
+      .auth-gate-card { width: min(100%, 420px); background: #fff; border-radius: 20px; padding: 24px; box-shadow: var(--shadow); }
+      .auth-gate-card h2 { margin: 0 0 8px; }
+      .auth-gate-card p { margin: 0 0 14px; color: var(--muted); }
+      @media (max-width: 960px) {
+        .app-shell { flex-direction: column; }
+        .sidebar { width: 100%; }
+      }
+      @media (max-width: 640px) {
+        .page-shell { padding: 14px; }
+        .topbar { flex-direction: column; align-items: flex-start; }
+        .editor-header { flex-direction: column; align-items: flex-start; }
+      }
     </style>
   </head>
   <body>
-    <header>
-      <strong>Church CMS</strong>
-    </header>
-
-    <div class="wrap">
-      <aside class="sidebar" id="sidebar">
-        <h3>Sermons</h3>
-        <div id="sermonList"></div>
-        <div class="controls">
-          <button id="refreshBtn">Refresh list</button>
+    <div class="page-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Church Admin Console</p>
+          <h1>Content &amp; Media Studio</h1>
+          <p>Manage sermons and gallery uploads from one calm, focused workspace.</p>
         </div>
+        <div class="topbar-pill">Live editing</div>
+      </header>
 
-        <hr />
-        <h4>Upload Media</h4>
-        <input type="file" id="mediaInput" accept="image/*" multiple />
-        <div style="margin-top:8px"><button id="uploadMediaBtn">Upload Selected</button></div>
-      </aside>
+      <div class="app-shell">
+        <aside class="sidebar" id="sidebar">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="section-label">Content</p>
+                <h3>Sermons</h3>
+              </div>
+              <button id="refreshBtn" class="ghost-btn" type="button">Refresh</button>
+            </div>
+            <div id="sermonList" class="list-stack"></div>
+          </section>
 
-      <main class="main" id="main">
-        <div id="editorArea">
-          <p>Select a sermon to edit or refresh the list.</p>
-        </div>
-      </main>
+          <section class="panel upload-panel">
+            <div class="panel-head">
+              <div>
+                <p class="section-label">Media</p>
+                <h4>Upload gallery images</h4>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="field-row">
+                <label for="imageTitle">Image caption</label>
+                <input id="imageTitle" type="text" placeholder="Optional caption for the gallery" />
+              </div>
+              <input type="file" id="mediaInput" accept="image/*" multiple />
+              <button id="uploadMediaBtn" class="primary-btn" type="button">Upload selected</button>
+              <div id="uploadStatus" class="status-banner" role="status"></div>
+              <div id="uploadPreview" class="preview-grid"></div>
+            </div>
+          </section>
+        </aside>
+
+        <main class="main" id="main">
+          <section class="panel editor-panel">
+            <div class="editor-body" id="editorArea">
+              <div class="empty-state">
+                <div>
+                  <div class="empty-icon">✦</div>
+                  <h2>Open a sermon to begin</h2>
+                  <p>Select a sermon from the left to edit its content, or refresh the list when new material is added.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
     </div>
 
-    <script src="admin/app.js"></script>
+    <div id="authGate" class="auth-gate">
+      <div class="auth-gate-card">
+        <h2>Admin access</h2>
+        <p>Enter the access code to manage gallery content.</p>
+        <div class="field-row">
+          <label for="authPassword">Access code</label>
+          <input id="authPassword" type="password" placeholder="Enter code" />
+        </div>
+        <div class="form-actions">
+          <button id="unlockBtn" class="primary-btn" type="button">Unlock admin</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="./app.js"></script>
   </body>
 </html>

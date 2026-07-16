@@ -3,6 +3,7 @@ const path = require('path');
 
 const galleryDir = path.join(process.cwd(), 'img', 'gallery');
 const outFile = path.join(galleryDir, 'gallery.json');
+const metadataFile = path.join(galleryDir, 'metadata.json');
 
 if (!fs.existsSync(galleryDir)) {
   console.warn('Gallery directory not found:', galleryDir);
@@ -25,6 +26,15 @@ const sharp = sharpAvailable ? require('sharp') : null;
 const files = fs.readdirSync(galleryDir)
   .filter(f => allowedExt.includes(path.extname(f).toLowerCase()))
   .sort();
+
+let metadata = {};
+if (fs.existsSync(metadataFile)) {
+  try {
+    metadata = JSON.parse(fs.readFileSync(metadataFile, 'utf8'));
+  } catch (err) {
+    console.warn('Could not parse gallery metadata:', err.message || err);
+  }
+}
 
 async function ensureOptimized() {
   const optimizedDir = path.join(galleryDir, 'optimized');
@@ -80,7 +90,7 @@ async function buildGalleryJson() {
   for (const f of files) {
     const ext = path.extname(f).toLowerCase();
     const basename = path.basename(f, ext);
-    const title = basename.replace(/[-_]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    const title = metadata[basename] || basename.replace(/[-_]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
     const optimizedBase = path.posix.join('img/gallery/optimized', basename);
     const item = { title };
