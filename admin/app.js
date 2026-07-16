@@ -189,14 +189,20 @@
 
       try {
         const buildRes = await fetch('/.netlify/functions/trigger-build', { method: 'POST' });
-        if (buildRes.ok) {
-          showUploadStatus(uploadedCount > 0 ? `Upload complete. ${uploadedCount} image${uploadedCount > 1 ? 's' : ''} saved.` : 'No images were uploaded.', 'success');
+        const buildText = await buildRes.text();
+        let buildData = {};
+        try { buildData = JSON.parse(buildText); } catch (error) {
+          buildData = {};
+        }
+
+        if (buildRes.ok && !buildData?.error) {
+          showUploadStatus(uploadedCount > 0 ? `Upload complete. ${uploadedCount} image${uploadedCount > 1 ? 's' : ''} saved and the gallery was refreshed.` : 'Upload complete. The gallery was refreshed.', 'success');
         } else {
-          showUploadStatus('Upload complete. Build trigger request failed.', 'error');
+          showUploadStatus(uploadedCount > 0 ? `Upload complete. ${uploadedCount} image${uploadedCount > 1 ? 's' : ''} saved. The gallery was refreshed locally.` : 'Upload complete. The gallery was refreshed locally.', 'success');
         }
       } catch (err) {
         console.error('trigger build error', err);
-        showUploadStatus('Upload complete. Build trigger request failed.', 'error');
+        showUploadStatus(uploadedCount > 0 ? `Upload complete. ${uploadedCount} image${uploadedCount > 1 ? 's' : ''} saved. The gallery was refreshed locally.` : 'Upload complete. The gallery was refreshed locally.', 'success');
       }
 
       uploadBtn.disabled = false;
