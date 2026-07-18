@@ -253,6 +253,14 @@
             const carouselContainer = ensureGalleryContainer();
             carouselContainer.innerHTML = '';
 
+            if (!Array.isArray(images) || !images.length) {
+                const emptyState = document.createElement('div');
+                emptyState.className = 'empty-list';
+                emptyState.textContent = 'No gallery images are available yet. Add images from the admin to populate this section.';
+                grid.appendChild(emptyState);
+                return;
+            }
+
             images.forEach((img, idx) => {
                 const cimg = document.createElement('img');
                 cimg.src = resolveImageSrc(img.src);
