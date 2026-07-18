@@ -187,6 +187,7 @@
 
     <script src="js/animations.js"></script>
     <script src="js/utils.js"></script>
+    <script src="img/gallery/gallery-data.js"></script>
     <script>
     (async function(){
         const grid = document.getElementById('galleryGrid');
@@ -263,7 +264,9 @@
                     pic.appendChild(s);
                 }
                 const imgEl = document.createElement('img');
-                imgEl.src = item.src;
+                const normalizedSrc = item.src && item.src.startsWith('http') ? item.src : item.src;
+                const resolvedSrc = normalizedSrc.startsWith('/') ? normalizedSrc : `./${normalizedSrc}`;
+                imgEl.src = resolvedSrc;
                 imgEl.alt = item.title || '';
                 imgEl.loading = 'lazy';
                 imgEl.decoding = 'async';
@@ -293,16 +296,49 @@
             }
         }
 
+        function loadLocalGalleryImages() {
+            try {
+                const raw = window.localStorage.getItem('church-gallery-local-images');
+                if (!raw) return [];
+                const parsed = JSON.parse(raw);
+                if (!Array.isArray(parsed)) return [];
+                return parsed
+                    .filter(Boolean)
+                    .map(item => ({
+                        title: item.title || 'Gallery image',
+                        src: item.src || item.url || '',
+                        path: item.path || item.src || item.url || '',
+                        local: true
+                    }))
+                    .filter(item => item.src);
+            } catch (err) {
+                console.warn('Could not load local gallery images:', err);
+                return [];
+            }
+        }
+
         async function loadGalleryImages() {
             let images = [];
-            try {
-                const res = await fetch('img/gallery/gallery.json', { cache: 'no-cache' });
-                if (res.ok) {
-                    const data = await res.json();
-                    images = data.map(item => (typeof item === 'string') ? { src: item, title: item.split('/').pop() } : item);
+            const manifest = Array.isArray(window.galleryData) ? window.galleryData : [];
+            if (manifest.length) {
+                images = manifest.map(item => (typeof item === 'string') ? { src: item, title: item.split('/').pop() } : item);
+            }
+
+            if (!images.length) {
+                try {
+                    const res = await fetch('img/gallery/gallery.json', { cache: 'no-cache' });
+                    if (res.ok) {
+                        const data = await res.json();
+                        images = data.map(item => (typeof item === 'string') ? { src: item, title: item.split('/').pop() } : item);
+                    }
+                } catch (err) {
+                    console.warn('Could not load gallery.json:', err);
                 }
-            } catch (err) {
-                console.warn('Could not load gallery.json:', err);
+            }
+
+            const localImages = loadLocalGalleryImages();
+            if (localImages.length) {
+                images = images.concat(localImages);
             }
 
             if (!images.length) {
@@ -317,10 +353,12 @@
             window.currentImageIndex = index;
             const item = window.galleryImages[index];
             const lbImg = document.getElementById('lightboxImage');
+            const normalizedSrc = item.src && item.src.startsWith('http') ? item.src : item.src;
+            const resolvedSrc = normalizedSrc.startsWith('/') ? normalizedSrc : `./${normalizedSrc}`;
             if (item.webp) {
                 lbImg.src = item.webp;
             } else {
-                lbImg.src = item.src;
+                lbImg.src = `${resolvedSrc}?v=${Date.now()}`;
             }
             document.getElementById('lightboxCaption').textContent = item.title || '';
             document.getElementById('lightbox').classList.add('active');

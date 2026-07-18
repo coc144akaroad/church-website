@@ -3,6 +3,7 @@ const path = require('path');
 
 const galleryDir = path.join(process.cwd(), 'img', 'gallery');
 const outFile = path.join(galleryDir, 'gallery.json');
+const dataScriptFile = path.join(galleryDir, 'gallery-data.js');
 const metadataFile = path.join(galleryDir, 'metadata.json');
 
 if (!fs.existsSync(galleryDir)) {
@@ -98,20 +99,22 @@ async function buildGalleryJson() {
     if (ext === '.svg') {
       item.src = path.posix.join('img/gallery', f);
     } else {
-      // prefer optimized files if generated
+      const fileBuffer = fs.readFileSync(path.join(galleryDir, f));
+      const mimeType = ext === '.png' ? 'image/png' : ext === '.gif' ? 'image/gif' : ext === '.webp' ? 'image/webp' : 'image/jpeg';
+      item.src = `data:${mimeType};base64,${fileBuffer.toString('base64')}`;
       const outJpeg = path.join(optimizedDir, basename + '.jpg');
       const outWebp = path.join(optimizedDir, basename + '.webp');
-      if (fs.existsSync(outJpeg)) item.src = optimizedBase + '.jpg';
-      else item.src = path.posix.join('img/gallery', f);
-
-      if (fs.existsSync(outWebp)) item.webp = optimizedBase + '.webp';
+      if (fs.existsSync(outJpeg)) item.src = `data:image/jpeg;base64,${fs.readFileSync(outJpeg).toString('base64')}`;
+      if (fs.existsSync(outWebp)) item.webp = `data:image/webp;base64,${fs.readFileSync(outWebp).toString('base64')}`;
     }
 
     items.push(item);
   }
 
   fs.writeFileSync(outFile, JSON.stringify(items, null, 2), 'utf8');
+  fs.writeFileSync(dataScriptFile, `window.galleryData = ${JSON.stringify(items, null, 2)};\n`, 'utf8');
   console.log(`Wrote ${outFile} with ${items.length} items.`);
+  console.log(`Wrote ${dataScriptFile} with ${items.length} items.`);
 }
 
 (async () => {
