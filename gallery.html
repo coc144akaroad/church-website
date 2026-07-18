@@ -237,6 +237,17 @@
             return carouselContainer;
         }
 
+        function resolveImageSrc(src) {
+            if (!src) return '';
+            if (/^(data:|blob:|https?:|file:|\\/\\/)/i.test(src)) {
+                return src;
+            }
+            if (src.startsWith('/')) {
+                return src;
+            }
+            return `./${src}`;
+        }
+
         function renderGallery(images) {
             grid.innerHTML = '';
             const carouselContainer = ensureGalleryContainer();
@@ -244,7 +255,7 @@
 
             images.forEach((img, idx) => {
                 const cimg = document.createElement('img');
-                cimg.src = img.src;
+                cimg.src = resolveImageSrc(img.src);
                 cimg.alt = img.title || '';
                 cimg.loading = 'lazy';
                 cimg.decoding = 'async';
@@ -264,8 +275,7 @@
                     pic.appendChild(s);
                 }
                 const imgEl = document.createElement('img');
-                const normalizedSrc = item.src && item.src.startsWith('http') ? item.src : item.src;
-                const resolvedSrc = normalizedSrc.startsWith('/') ? normalizedSrc : `./${normalizedSrc}`;
+                const resolvedSrc = resolveImageSrc(item.src);
                 imgEl.src = resolvedSrc;
                 imgEl.alt = item.title || '';
                 imgEl.loading = 'lazy';
@@ -353,8 +363,7 @@
             window.currentImageIndex = index;
             const item = window.galleryImages[index];
             const lbImg = document.getElementById('lightboxImage');
-            const normalizedSrc = item.src && item.src.startsWith('http') ? item.src : item.src;
-            const resolvedSrc = normalizedSrc.startsWith('/') ? normalizedSrc : `./${normalizedSrc}`;
+            const resolvedSrc = resolveImageSrc(item.src);
             if (item.webp) {
                 lbImg.src = item.webp;
             } else {
