@@ -10,6 +10,7 @@
   const ADMIN_PASSWORD = 'churchadmin2026';
   const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
   const GALLERY_STORAGE_KEY = 'church-gallery-local-images';
+  const GALLERY_REFRESH_STORAGE_KEY = 'churchGalleryRefresh';
   let galleryImages = [];
   let pendingUploads = [];
 
@@ -147,21 +148,82 @@
   }
 
   function saveLocalGalleryEntries(entries) {
-    localStorage.setItem(GALLERY_STORAGE_KEY, JSON.stringify(entries));
+    try {
+      localStorage.setItem(GALLERY_STORAGE_KEY, JSON.stringify(entries));
+    } catch (error) {
+      console.warn('Unable to save local gallery images', error);
+    }
   }
 
   function normalizeGalleryEntry(item, fallbackId = 'gallery-item') {
     if (typeof item === 'string') {
-      return { id: fallbackId, title: item.split('/').pop(), src: item, path: item, local: false };
+      return { id: fallbackId, title: item.split('/').pop(), src: item, path: item, local: false, source: 'manifest' };
     }
     return {
       id: item.id || `${fallbackId}-${String(item.src || item.title || 'item')}`,
-      title: item.title || 'Gallery image',
+      title: item.title || item.name || 'Gallery image',
       src: item.src || item.url || '',
       path: item.path || item.src || item.url || '',
       local: Boolean(item.local),
-      replaceTarget: item.replaceTarget || null
+      replaceTarget: item.replaceTarget || null,
+      modifiedAt: item.modifiedAt || item.updatedAt || null,
+      source: item.source || (item.local ? 'local' : 'manifest')
     };
+  }
+
+  async function persistGalleryImage(item) {
+    const fileName = item.file.name;
+    const baseName = fileName.split('.')[0].replace(/[-_]+/g, ' ');
+    const payload = {
+      action: item.mode === 'replace' ? 'replace' : 'upload',
+      fileName,
+      content: await readFileAsDataURL(item.file),
+      isBase64: true,
+      mimeType: item.file.type || 'image/jpeg',
+      title: baseName,
+      currentPath: item.existingImage ? (item.existingImage.path || item.existingImage.src || item.existingImage.title || '') : '',
+      targetPath: item.existingImage ? (item.existingImage.path || item.existingImage.src || item.existingImage.title || '') : ''
+    };
+
+    const endpoints = [resolveSiteUrl('/api/image-management'), resolveSiteUrl('/.netlify/functions/image-management')];
+
+    try {
+      let response;
+      let data = {};
+      let lastError;
+
+      for (const endpoint of endpoints) {
+        try {
+          response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          data = await response.json().catch(() => ({}));
+          if (response.ok) {
+            return data;
+          }
+          lastError = new Error(data && data.error ? data.error : 'Unable to save image.');
+        } catch (error) {
+          lastError = error;
+        }
+      }
+
+      throw lastError || new Error('Unable to save image.');
+    } catch (error) {
+      console.warn('Image management endpoint unavailable, using local gallery fallback.', error);
+      return {
+        ok: true,
+        path: `local:${fileName}`,
+        title: baseName,
+        image: {
+          title: baseName,
+          path: `local:${fileName}`,
+          url: payload.content,
+          modifiedAt: new Date().toISOString()
+        }
+      };
+    }
   }
 
   async function savePendingUploads() {
@@ -189,18 +251,20 @@
       item.status = 'uploading';
       renderPendingUploads();
       try {
-        const dataUrl = await readFileAsDataURL(item.file);
+        const savedEntry = await persistGalleryImage(item);
         const nextEntry = {
           id: `local-${Date.now()}-${index}`,
-          title: item.file.name.split('.')[0].replace(/[-_]+/g, ' '),
-          src: dataUrl,
-          path: `local:${item.file.name}`,
+          title: savedEntry.title || item.file.name.split('.')[0].replace(/[-_]+/g, ' '),
+          src: savedEntry.image && savedEntry.image.url ? savedEntry.image.url : savedEntry.path || '',
+          path: savedEntry.path || '',
           local: true,
-          replaceTarget: item.mode === 'replace' && item.existingImage ? (item.existingImage.id || item.existingImage.path || item.existingImage.src || item.existingImage.title) : null
+          modifiedAt: savedEntry.image && savedEntry.image.modifiedAt ? savedEntry.image.modifiedAt : new Date().toISOString(),
+          replaceTarget: item.mode === 'replace' && item.existingImage ? (item.existingImage.id || item.existingImage.path || item.existingImage.src || item.existingImage.title) : null,
+          source: 'local'
         };
 
         if (item.mode === 'replace' && item.existingImage) {
-          const existingIndex = localEntries.findIndex(entry => entry.id === nextEntry.replaceTarget || entry.replaceTarget === nextEntry.replaceTarget || entry.path === nextEntry.replaceTarget || entry.src === nextEntry.replaceTarget);
+          const existingIndex = localEntries.findIndex(entry => entry.id === nextEntry.replaceTarget || entry.replaceTarget === nextEntry.replaceTarget || entry.path === nextEntry.replaceTarget || entry.src === nextEntry.replaceTarget || entry.path === item.existingImage?.path || entry.src === item.existingImage?.src);
           if (existingIndex >= 0) {
             localEntries[existingIndex] = nextEntry;
           } else {
@@ -221,6 +285,8 @@
       renderPendingUploads();
     }
 
+    window.localStorage.setItem(GALLERY_REFRESH_STORAGE_KEY, String(Date.now()));
+    window.dispatchEvent(new Event('gallery:refresh'));
     await refreshGalleryImages();
     pendingUploads.forEach(item => URL.revokeObjectURL(item.previewUrl));
     pendingUploads = [];
@@ -387,7 +453,7 @@
 
       baseEntries.forEach((item, index) => {
         const override = localEntries.find(entry => entry.replaceTarget && (entry.replaceTarget === item.id || entry.replaceTarget === item.path || entry.replaceTarget === item.src || entry.replaceTarget === item.title));
-        const resolved = override ? { ...item, ...override, id: item.id, title: override.title || item.title, src: override.src || item.src, path: override.path || item.path, local: true } : item;
+        const resolved = override ? { ...item, ...override, id: item.id, title: override.title || item.title, src: override.src || item.src, path: override.path || item.path, local: true, source: 'local' } : item;
         const key = resolved.src || resolved.title || `${index}`;
         if (!seen.has(key)) {
           seen.add(key);
@@ -425,7 +491,7 @@
 
   async function loadSermons(){
     try{
-      const res = await fetch('/data/sermons.json');
+      const res = await fetch(resolveSiteUrl('/data/sermons.json'));
       const data = await res.json();
       return Array.isArray(data) ? data : [];
     } catch(e) {
@@ -474,7 +540,7 @@
     `;
     const editorForm = document.getElementById('editorForm');
     try{
-      const mdRes = await fetch(`/content/sermons/${item.id}.md`);
+      const mdRes = await fetch(resolveSiteUrl(`/content/sermons/${item.id}.md`));
       let md = '';
       if (mdRes.ok) md = await mdRes.text();
       editorForm.innerHTML = `
@@ -482,7 +548,11 @@
           <div class="form-row"><label>Title</label><input id="eTitle" type="text" value="${escapeHtml(item.title)}"></div>
           <div class="form-row"><label>Speaker</label><input id="eSpeaker" type="text" value="${escapeHtml(item.speaker)}"></div>
           <div class="form-row"><label>Date</label><input id="eDate" type="text" value="${escapeHtml(item.date)}"></div>
-          <div class="form-row"><label>Body (markdown)</label><textarea id="eBody" rows="15">${escapeHtml(stripFrontmatter(md) || '')}</textarea></div>
+          <div class="form-row">
+            <label>Body</label>
+            <textarea id="eBody" rows="15" placeholder="Type the sermon content here. You can use plain paragraphs and line breaks.">${escapeHtml(stripFrontmatter(md) || '')}</textarea>
+            <div class="preview-caption" style="margin-top: 6px;">Simple text editor — no Markdown required.</div>
+          </div>
           <div class="form-actions">
             <button id="saveBtn" class="primary-btn" type="button">Save sermon</button>
             <button id="cancelBtn" class="secondary-btn" type="button">Cancel</button>
@@ -502,22 +572,53 @@
     const title = document.getElementById('eTitle').value.trim();
     const speaker = document.getElementById('eSpeaker').value.trim();
     const date = document.getElementById('eDate').value.trim();
-    const body = document.getElementById('eBody').value;
+    const body = normalizeBodyText(document.getElementById('eBody').value);
 
     const md = `---\nid: ${id}\ntitle: "${escapeYaml(title)}"\nspeaker: "${escapeYaml(speaker)}"\ndate: "${escapeYaml(date)}"\n---\n\n${body}\n`;
 
-    try{
-      const res = await fetch('/.netlify/functions/save-file', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ path:`content/sermons/${id}.md`, content: md })
-      });
+    try {
+      if (window.location.protocol === 'file:') {
+        const filePath = `content/sermons/${id}.md`;
+        const result = await fetch(resolveSiteUrl('/api/save-file'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ path: filePath, content: md })
+        });
+        const data = await result.json().catch(() => ({}));
+        if (result.ok) {
+          showToast('Sermon saved successfully.', 'success');
+        } else {
+          showToast('Save failed: ' + (data && data.error ? data.error : result.statusText), 'error');
+        }
+        return;
+      }
 
-      const data = await res.json().catch(() => ({}));
-      if (res.ok) {
+      const endpoints = [resolveSiteUrl('/api/save-file'), resolveSiteUrl('/.netlify/functions/save-file')];
+      let res;
+      let data = {};
+      let lastError;
+
+      for (const endpoint of endpoints) {
+        try {
+          res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ path:`content/sermons/${id}.md`, content: md })
+          });
+          data = await res.json().catch(() => ({}));
+          if (res.ok) {
+            break;
+          }
+          lastError = new Error(data && data.error ? data.error : res.statusText);
+        } catch (error) {
+          lastError = error;
+        }
+      }
+
+      if (res && res.ok) {
         showToast('Sermon saved successfully.', 'success');
       } else {
-        showToast('Save failed: ' + (data && data.error ? data.error : res.statusText), 'error');
+        showToast('Save failed: ' + (data && data.error ? data.error : (lastError ? lastError.message : 'Unknown error')), 'error');
       }
     } catch(e) {
       console.error(e);
@@ -532,7 +633,17 @@
 
   function escapeHtml(str){ return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function escapeYaml(str){ return String(str).replace(/"/g,'\\"'); }
-
+  function normalizeBodyText(value){
+    return String(value || '').replace(/\r\n?/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+  }
+  function resolveSiteUrl(pathname) {
+    if (!pathname || typeof pathname !== 'string') return pathname;
+    const normalized = pathname.startsWith('/') ? pathname : `/${pathname}`;
+    if (window.location.protocol === 'file:') {
+      return `http://localhost:3000${normalized}`;
+    }
+    return normalized;
+  }
   refreshBtn.addEventListener('click', async ()=>{ const items = await loadSermons(); renderList(items); });
 
   (async ()=>{ const items = await loadSermons(); renderList(items); renderEmptyState(); renderImageManager(); await refreshGalleryImages(); })();

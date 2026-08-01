@@ -187,6 +187,7 @@
 
     <script src="js/animations.js"></script>
     <script src="js/utils.js"></script>
+    <script src="js/gallery-utils.js"></script>
     <script src="img/gallery/gallery-data.js"></script>
     <script>
     (async function(){
@@ -238,14 +239,7 @@
         }
 
         function resolveImageSrc(src) {
-            if (!src) return '';
-            if (/^(data:|blob:|https?:|file:|\\/\\/)/i.test(src)) {
-                return src;
-            }
-            if (src.startsWith('/')) {
-                return src;
-            }
-            return `./${src}`;
+            return window.GalleryUtils ? window.GalleryUtils.resolveImageSrc(src) : src;
         }
 
         function renderGallery(images) {
@@ -355,15 +349,10 @@
             }
 
             const localImages = loadLocalGalleryImages();
-            if (localImages.length) {
-                images = images.concat(localImages);
-            }
+            const mergedImages = window.GalleryUtils ? window.GalleryUtils.mergeGalleryItems(images, localImages) : images.concat(localImages);
+            const nextImages = mergedImages.length ? mergedImages : galleryItemsFallback.map(item => ({ src: createPlaceholderImage(item.emoji, item.title), title: item.title }));
 
-            if (!images.length) {
-                images = galleryItemsFallback.map(item => ({ src: createPlaceholderImage(item.emoji, item.title), title: item.title }));
-            }
-
-            return images;
+            return nextImages;
         }
 
         window.currentImageIndex = 0;
@@ -421,9 +410,12 @@
             refreshGallery();
         });
         window.addEventListener('storage', (event) => {
-            if (event.key === 'churchGalleryRefresh') {
+            if (event.key === 'churchGalleryRefresh' || event.key === 'church-gallery-local-images') {
                 refreshGallery();
             }
+        });
+        window.addEventListener('gallery:refresh', () => {
+            refreshGallery();
         });
 
     })();

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Static church website with automated gallery manifest generation.",
   "scripts": {
+    "start": "node server.js",
     "generate-gallery": "node scripts/generate-gallery.js",
     "build-images": "node scripts/generate-gallery.js --build",
     "prepare-gallery": "npm run build-images && npm run generate-gallery",
