@@ -104,6 +104,15 @@ Added to `css/main.css`:
 
 This ensures the official church logo displays properly across all devices and screen sizes.
 
+### 11. Floating Give (CSS Updates)
+Added to `give.html`:
+```css
+.floating-donate {
+    all: revert; 
+}
+```
+
+This Erases all external CSS for this class only on this page as there is no need for a give link on the give page
 ---
 
 ## 📁 Files Updated
@@ -115,7 +124,7 @@ This ensures the official church logo displays properly across all devices and s
 - ✅ events.html (Events) - **with new Nigerian church events**
 - ✅ gallery.html (Gallery)
 - ✅ contact.html (Contact) - **with new contact info**
-- ✅ give.html (Donations)
+- ✅ give.html (Donations) - **give floating link button removed**
 - ✅ leadership.html (Team)
 - ✅ livestream.html (NEW - Livestream page)
 
@@ -222,6 +231,6 @@ The website is now fully updated and ready to:
 
 ---
 
-**Last Updated**: March 20, 2026
+**Last Updated**: August 4, 2026
 **Status**: All updates complete and verified
 **Next Step**: Deploy to production server
