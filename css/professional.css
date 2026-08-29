@@ -1,0 +1,163 @@
+/* ===================================
+   PROFESSIONAL UI/UX ENHANCEMENTS
+   =================================== */
+
+/* Professional Focus States & Accessibility */
+button:focus,
+input:focus,
+textarea:focus,
+select:focus {
+    outline: 2px solid #2b5f9a;
+    outline-offset: 2px;
+}
+
+.nav-link:focus {
+    outline: 2px solid #2b5f9a;
+    outline-offset: 4px;
+    border-radius: 2px;
+}
+
+.btn:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 3px;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Professional link styling */
+a {
+    transition: color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced focus-visible for better keyboard navigation */
+:focus-visible {
+    outline: 2px solid #2b5f9a;
+    outline-offset: 2px;
+}
+
+/* Professional hover state consistency */
+.nav-link,
+.btn,
+.info-card,
+.feature-card,
+.event-mini-card,
+.sermon-mini-card {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Improved form styling for professional appearance */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+textarea,
+select {
+    border: 1px solid rgba(43, 95, 154, 0.2);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    transition: all 0.25s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+textarea:focus,
+select:focus {
+    border-color: #2b5f9a;
+    box-shadow: 0 0 0 3px rgba(43, 95, 154, 0.1);
+    outline: none;
+}
+
+/* Professional placeholder styling */
+::placeholder {
+    color: rgba(91, 107, 122, 0.6);
+    font-size: 0.95rem;
+}
+
+/* Enhanced scrollbar styling */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(43, 95, 154, 0.04);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(43, 95, 154, 0.3);
+    border-radius: 6px;
+    transition: background 0.25s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(43, 95, 154, 0.5);
+}
+
+/* Professional selection styling */
+::selection {
+    background: rgba(43, 95, 154, 0.25);
+    color: inherit;
+}
+
+/* Improved animation performance */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Professional dark mode support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-bg: #0f1419;
+        --color-surface: #1a1f2e;
+        --color-surface-alt: #242a3a;
+        --color-text: #f5f7fa;
+        --color-text-muted: #b0b8c1;
+        --color-border: rgba(255, 255, 255, 0.08);
+    }
+    
+    body {
+        background: linear-gradient(180deg, var(--color-bg) 0%, var(--color-surface) 100%);
+    }
+}
+
+/* Mobile-first responsive improvements */
+@media (max-width: 1024px) {
+    .btn {
+        padding: 0.9rem 1.8rem;
+        font-size: 0.9rem;
+    }
+    
+    h1 {
+        font-size: clamp(1.8rem, 5vw, 3rem);
+    }
+    
+    h2 {
+        font-size: clamp(1.4rem, 4vw, 2.2rem);
+    }
+}
+
+@media (max-width: 768px) {
+    .btn {
+        padding: 0.85rem 1.6rem;
+        font-size: 0.85rem;
+        min-width: 120px;
+    }
+    
+    .section {
+        padding: 4rem 0;
+    }
+    
+    h1 {
+        font-size: clamp(1.6rem, 5vw, 2.4rem);
+    }
+}
