@@ -161,6 +161,25 @@
         gap: 1rem;
     }
 
+    .live-banner-box,
+    .home-feature-grid,
+    .sermon-mini-grid,
+    .home-events-grid,
+    .cta-panel {
+        grid-template-columns: 1fr;
+    }
+
+    .live-banner-box {
+        gap: 1rem;
+        padding: 1.5rem 1.25rem;
+    }
+
+    .cta-panel {
+        display: grid;
+        text-align: center;
+        justify-items: center;
+    }
+
     /* Gallery Grid */
     .gallery-grid {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
