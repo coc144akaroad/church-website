@@ -115,7 +115,7 @@
     }
 
     .hero-subtitle {
-        font-size: 1rem;
+        font-size: 1.1rem;
         max-width: 100%;
     }
 
@@ -399,7 +399,7 @@
     }
 
     .hero-subtitle {
-        font-size: 0.9rem;
+        font-size: 1rem;
         margin-bottom: 1rem;
     }
 
@@ -536,7 +536,7 @@
 
     .footer-bottom {
         padding-top: 1rem;
-        font-size: 0.8rem;
+        font-size: 0.9rem;
     }
 
     /* Page Header */
