@@ -256,8 +256,8 @@
                             <span class="error-message"></span>
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-large">Send Message</button>
-                        <p id="formStatus" style="margin-top: 1rem; text-align: center;"></p>
+                        <button type="submit" class="btn btn-primary btn-large">Prepare Email</button>
+                        <p id="formStatus" role="status" aria-live="polite" style="margin-top: 1rem; text-align: center;"></p>
                     </form>
                 </div>
 
@@ -427,17 +427,15 @@
             }
 
             if (isValid) {
-                // Show success message
                 const statusDiv = document.getElementById('formStatus');
-                statusDiv.innerHTML = '<span style="color: #16a34a; font-weight: 600;">✓ Message sent successfully! We will get back to you soon.</span>';
-                
-                // Reset form
-                document.getElementById('contactForm').reset();
-
-                // Clear message after 5 seconds
-                setTimeout(() => {
-                    statusDiv.innerHTML = '';
-                }, 5000);
+                const emailLink = document.createElement('a');
+                const emailBody = `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\n\n${message}`;
+                emailLink.href = `mailto:coc144akaroad@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
+                emailLink.textContent = 'Open your email app to send it.';
+                statusDiv.replaceChildren(
+                    document.createTextNode('Your message is ready, but has not been sent. '),
+                    emailLink
+                );
             }
         }
 

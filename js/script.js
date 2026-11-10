@@ -46,6 +46,13 @@ function initNavigation() {
             closeMenu();
         });
     });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && navMenu.classList.contains('active')) {
+            closeMenu();
+            hamburger.focus();
+        }
+    });
 }
 
 // ===================================
@@ -419,15 +426,6 @@ function initKeyboardShortcuts() {
         if ((e.ctrlKey || e.metaKey) && e.key === '/') {
             e.preventDefault();
             console.log('Search activated');
-        }
-
-        // Escape key to close modals
-        if (e.key === 'Escape') {
-            const navbar = document.getElementById('navMenu');
-            if (navbar && navbar.classList.contains('active')) {
-                navbar.classList.remove('active');
-                document.getElementById('hamburger').classList.remove('active');
-            }
         }
 
         // Home key to go to top
