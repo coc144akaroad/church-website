@@ -76,6 +76,7 @@
         min-height: 320px; display: grid; place-items: center; text-align: center; padding: 28px; border: 1px dashed var(--border); border-radius: 18px; background: linear-gradient(135deg, rgba(32,86,199,0.04), rgba(139,92,246,0.05)); color: var(--muted);
       }
       .empty-icon { font-size: 2.2rem; margin-bottom: 10px; color: var(--primary); }
+      .empty-icon i { font-size: 2.2rem; }
       .form-card { background: var(--panel-strong); border: 1px solid var(--border); border-radius: 16px; padding: 16px; }
       .form-row { margin-bottom: 12px; }
       .form-row label { display: block; font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; color: var(--muted); }
@@ -176,7 +177,7 @@
             <div class="editor-body" id="editorArea">
               <div class="empty-state">
                 <div>
-                  <div class="empty-icon">✦</div>
+                  <div class="empty-icon"><i class="fa-solid fa-star" aria-hidden="true"></i></div>
                   <h2>Open a sermon to begin</h2>
                   <p>Select a sermon from the left to edit its content, or refresh the list when new material is added.</p>
                 </div>

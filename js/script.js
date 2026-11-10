@@ -341,7 +341,7 @@ function initNewsletter() {
         if (emailInput && Validation.isEmail(emailInput.value)) {
             // Show success message
             messageDiv.style.color = '#16a34a';
-            messageDiv.textContent = '✓ Thank you for subscribing!';
+            messageDiv.innerHTML = '<i class="fa-solid fa-circle-check" aria-hidden="true"></i> Thank you for subscribing!';
 
             // Reset form
             form.reset();
@@ -352,7 +352,7 @@ function initNewsletter() {
             }, 3000);
         } else {
             messageDiv.style.color = '#dc2626';
-            messageDiv.textContent = '✗ Please enter a valid email address';
+            messageDiv.innerHTML = '<i class="fa-solid fa-circle-xmark" aria-hidden="true"></i> Please enter a valid email address';
         }
     });
 }

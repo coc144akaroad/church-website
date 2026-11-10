@@ -127,10 +127,10 @@
     <!-- Lightbox Modal -->
     <div class="lightbox" id="lightbox">
         <div class="lightbox-content">
-            <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+        <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close gallery"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
             <div class="lightbox-nav">
-                <button onclick="previousImage()">❮</button>
-                <button onclick="nextImage()">❯</button>
+            <button onclick="previousImage()" aria-label="Previous image"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+            <button onclick="nextImage()" aria-label="Next image"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
             </div>
             <img class="lightbox-image" id="lightboxImage" src="" alt="Gallery image">
             <div class="lightbox-caption" id="lightboxCaption"></div>
@@ -193,37 +193,39 @@
     (async function(){
         const grid = document.getElementById('galleryGrid');
         const galleryItemsFallback = [
-            { title: "Sunday Worship Service", emoji: "🙏" },
-            { title: "Community Outreach", emoji: "🤝" },
-            { title: "Youth Group Activities", emoji: "🎉" },
-            { title: "Prayer Meeting", emoji: "📖" },
-            { title: "Baptism Service", emoji: "💧" },
-            { title: "Bible Study Group", emoji: "📚" },
-            { title: "Children's Ministry", emoji: "👶" },
-            { title: "Church Building", emoji: "🏢" }
+            { title: "Sunday Worship Service", iconClass: "fa-solid fa-church" },
+            { title: "Community Outreach", iconClass: "fa-solid fa-hands-helping" },
+            { title: "Youth Group Activities", iconClass: "fa-solid fa-people-group" },
+            { title: "Prayer Meeting", iconClass: "fa-solid fa-book-bible" },
+            { title: "Baptism Service", iconClass: "fa-solid fa-water" },
+            { title: "Bible Study Group", iconClass: "fa-solid fa-book-open" },
+            { title: "Children's Ministry", iconClass: "fa-solid fa-child-reaching" },
+            { title: "Church Building", iconClass: "fa-solid fa-building-columns" }
         ];
 
-        function createPlaceholderImage(emoji, title) {
-            const canvas = document.createElement('canvas');
-            canvas.width = 800;
-            canvas.height = 600;
-            const ctx = canvas.getContext('2d');
-            const gradient = ctx.createLinearGradient(0,0,canvas.width,canvas.height);
-            gradient.addColorStop(0, '#1e3a8a');
-            gradient.addColorStop(1, '#d4af37');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0,0,canvas.width,canvas.height);
+        function escapeXml(str) {
+            return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+        }
 
-            ctx.font = '120px Arial';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillStyle = 'white';
-            ctx.fillText(emoji, canvas.width/2, canvas.height/2 - 20);
-
-            ctx.font = '28px Arial';
-            ctx.fillText(title, canvas.width/2, canvas.height - 60);
-
-            return canvas.toDataURL();
+        function createPlaceholderImage(iconClass, title) {
+            const svg = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+                    <defs>
+                        <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+                            <stop offset="0%" stop-color="#1e3a8a"/>
+                            <stop offset="100%" stop-color="#d4af37"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="800" height="600" fill="url(#bg)"/>
+                    <foreignObject x="260" y="140" width="280" height="260">
+                        <div xmlns="http://www.w3.org/1999/xhtml" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:120px;">
+                            <i class="${iconClass}" style="font-family: 'Font Awesome 6 Free'; font-weight: 900; font-style: normal;"></i>
+                        </div>
+                    </foreignObject>
+                    <text x="400" y="500" font-size="30" text-anchor="middle" fill="white" font-family="Arial, sans-serif">${escapeXml(title)}</text>
+                </svg>
+            `;
+            return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
         }
 
         function ensureGalleryContainer() {
@@ -350,7 +352,7 @@
 
             const localImages = loadLocalGalleryImages();
             const mergedImages = window.GalleryUtils ? window.GalleryUtils.mergeGalleryItems(images, localImages) : images.concat(localImages);
-            const nextImages = mergedImages.length ? mergedImages : galleryItemsFallback.map(item => ({ src: createPlaceholderImage(item.emoji, item.title), title: item.title }));
+            const nextImages = mergedImages.length ? mergedImages : galleryItemsFallback.map(item => ({ src: createPlaceholderImage(item.iconClass, item.title), title: item.title }));
 
             return nextImages;
         }

@@ -481,7 +481,7 @@
     editorArea.innerHTML = `
       <div class="empty-state">
         <div>
-          <div class="empty-icon">✦</div>
+          <div class="empty-icon"><i class="fa-solid fa-star" aria-hidden="true"></i></div>
           <h2>Open a sermon to begin</h2>
           <p>Select a sermon from the left to edit its content, or refresh the list when new material is added.</p>
         </div>
